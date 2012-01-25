@@ -1,0 +1,60 @@
+kraken 	 -> blacklight
+ok
+ok
+kraken 	 -> ranger
+ok
+ok
+kraken 	 -> lonestar
+ok
+ok
+kraken 	 -> trestles
+ok
+ok
+blacklight 	 -> kraken
+ok
+ok
+blacklight 	 -> ranger
+ok
+ok
+blacklight 	 -> lonestar
+ok
+ok
+blacklight 	 -> trestles
+ok
+ok
+ranger 	 -> kraken
+ok
+ok
+ranger 	 -> blacklight
+ok
+ok
+ranger 	 -> lonestar
+ok
+ok
+ranger 	 -> trestles
+ok
+ok
+lonestar 	 -> kraken
+ok
+ok
+lonestar 	 -> blacklight
+ok
+ok
+lonestar 	 -> ranger
+ok
+ok
+lonestar 	 -> trestles
+ok
+ok
+trestles 	 -> kraken
+ok
+ok
+trestles 	 -> blacklight
+ok
+ok
+trestles 	 -> ranger
+ok
+ok
+trestles 	 -> lonestar
+ok
+ok

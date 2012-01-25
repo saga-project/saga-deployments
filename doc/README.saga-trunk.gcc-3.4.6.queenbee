@@ -1,0 +1,51 @@
+
+The TeraGrid CSA SAGA installation
+----------------------------------
+
+
+  In order to use this installation of SAGA (version 'trunk'), you
+  need to set the following environment variables:
+
+
+
+  C++:
+  
+    Settings for C++ bindings
+  
+      export SAGA_LOCATION=/project/tg_csa/saga/saga/trunk/gcc-3.4.6/
+      export LD_LIBRARY_PATH=:/project/tg_csa/saga/external/python/2.7.1/gcc-3.4.6//lib/:/project/tg_csa/saga/external/boost/1.44.0/gcc-3.4.6//lib/::/project/tg_csa/saga/external/postgresql/9.0.2/gcc-3.4.6//lib/::/project/tg_csa/saga/external/sqlite3/3.6.13/gcc-3.4.6//lib/::/project/tg_csa/saga/saga/trunk/gcc-3.4.6//lib/:$LD_LIBRARY_PATH
+
+
+
+  Python:
+
+    Please use /project/tg_csa/saga/external/python/2.7.1/gcc-3.4.6//bin/python as python interpreter.
+    BigJob is installed in /project/tg_csa/saga/saga/trunk/gcc-3.4.6/lib/python2.7.1/site-packages//bigjob .
+
+    Settings for Python bindings
+
+      export PYTHONPATH=/project/tg_csa/saga/saga/trunk/gcc-3.4.6/lib/python2.7.1/site-packages/:/project/tg_csa/saga/external/python/2.7.1/gcc-3.4.6//lib/python2.7/site-packages/:$PYTHONPATH
+
+
+
+
+  For more information about SAGA-C++ and SAGA-Python, see 
+      
+    www : http://saga.cct.lsu.edu/ .
+
+
+
+  For general SAGA user support, please subscribe to the saga-users mailing
+  list:
+
+    www : https://mail.cct.lsu.edu/mailman/listinfo/saga-users
+    mail: saga-users@cct.lsu.edu
+
+
+
+  Please help to improve this software!  Report bugs and feature requests via
+  the TG ticket tracker (select SAGA component), or directly via the SAGA project 
+  tracker, at
+   
+    www : http://faust.cct.lsu.edu/trac/saga/  (login/pass: guest/guest)
+ 

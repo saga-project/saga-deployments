@@ -1,0 +1,32 @@
+
+# TODO: sites and components should get registered in the advert service... ;-)
+
+# Format of this file:  
+# name       full.qualified.host.name               /saga/csa/location                   access mechanism
+
+# checks
+localhost    localhost                              /home/merzky/saga/csa/deploy         ssh -l  merzky -q
+# boskop       boskop                                 /home/merzky/saga/csa/deploy         ssh -l  merzky -q
+# cyder        cyder.cct.lsu.edu                      /home/amerzky/csa/                   ssh -l amerzky -q
+
+# TeraGrid / XSEDE
+# queenbee	 login1-qb.loni-lsu.teragrid.org        /project/tg_csa/saga/                gsissh -q
+kraken       kraken-gsi.nics.utk.edu                /nics/a/proj/saga/                   gsissh -q
+ranger       tg-login.ranger.tacc.teragrid.org      /scratch/projects/tg/SAGA/           gsissh -q
+lonestar     tg-login.lonestar.tacc.teragrid.org    /share1/projects/tg/SAGA/            gsissh -q
+blacklight   tg-login.blacklight.psc.teragrid.org   /usr/local/packages/tg/csasaga/      gsissh -q
+trestles     trestles-login.sdsc.edu                /phase1/saga-project/                gsissh -q
+steele       tg-steele.purdue.teragrid.org          /tg_community/saga/                  gsissh -q
+
+# FutureGrid
+india        india.futuregrid.org                   /N/soft/SAGA/                        ssh -l merzky -q
+sierra       sierra.futuregrid.org                  /N/soft/SAGA/                        ssh -l merzky -q
+alamo        alamo.futuregrid.org                   /N/soft/SAGA/                        ssh -l merzky -q
+hotel        hotel.futuregrid.org                   /N/soft/x86_64/el5/hotel/SAGA        ssh -l merzky -q
+
+# EGI
+
+# GIN
+
+# LONI
+

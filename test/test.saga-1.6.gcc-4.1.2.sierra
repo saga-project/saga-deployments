@@ -1,0 +1,22 @@
+base                      install              : ok
+saga-core                 local job 1          : ok
+saga-core                 local job 2          : ok
+saga-binding-python       install              : ok
+saga-adaptor-x509         install              : ok
+saga-adaptor-globus       install              : nok
+saga-adaptor-ssh          install              : ok
+saga-adaptor-ssh          ssh job 1            : ok
+saga-adaptor-ssh          ssh job 2            : ok
+saga-adaptor-bes          install              : ok
+saga-adaptor-glite        install              : nok
+saga-adaptor-aws          install              : ok
+saga-adaptor-drmaa        install              : nok
+saga-adaptor-torque       install              : nok
+saga-adaptor-pbspro       install              : ok
+saga-adaptor-condor       install              : ok
+saga-client-mandelbrot    install              : ok
+saga-client-bigjob        install              : ok
+saga-client-bigjob        loading              : 01/19/2012 01:43:06 AM - bigjob - DEBUG - Loading BigJob version: 0.4.23
+01/19/2012 01:43:06 AM - bigjob - DEBUG - read configfile: /N/soft/SAGA/saga/1.6/gcc-4.1.2/lib/python2.7/site-packages/BigJob-0.4.23-py2.7.egg/bigjob/../bigjob.conf
+01/19/2012 01:43:06 AM - bigjob - DEBUG - Using SAGA C++/Python.
+ok

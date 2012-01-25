@@ -1,0 +1,40 @@
+
+CSA deployment policies.
+------------------------
+
+The current default version of the CSA deployment is '1.6' (see csa_packages,
+default) That version is called CSA-version, and is usually the same as the
+respectively used version of saga-core.
+
+Older deployments are kept, and will not be deleted, but will also not see any
+updates and fixes, unless specifically requested by end users.
+
+A 'unstable' CSA-version is also deployed, which may contain unstable and
+experimental code (e.g. from svn trunk), and which is *not* recommended for
+production usage.  That version may see frequent and unexpected updates.
+
+The components and component-version to be installed for each CSA version are
+defined in 'csa_packages'.  The target hosts for all CSA deployments are defined
+in csa_hosts.
+
+Some adaptors are not to be installed on certain hosts.  That list is also
+defined in 'csa_packages', as exceptions after the individual components, like
+this:
+
+  ----------------------------------------------------------------------------
+  # component-name          component-source                                           target-hosts
+    saga-adaptor-pbspro     https://svn.cct.lsu.edu/repos/saga-adaptors/pbspro/trunk   !ranger !lonestar
+  ----------------------------------------------------------------------------
+
+Additional CSA target hosts, CSA modules, module updates and fixes can be
+requested via the saga-users mailing list.  New CSA-versions and changes to
+existing CSA-versions are also announced on the saga-users mailing list, if
+possible with an advanced notice.  Out-of-band communication is discouraged, to
+keep the CSA users in sync about the state of deployments.
+
+It is up to the target system's administrators to specify what CSA-version (if
+any) is the default on their system, and gets a system level module file or
+similar - that should also be announced on the saga-user mailing list.
+
+Contact: saga-users@cct.lsu.edu
+

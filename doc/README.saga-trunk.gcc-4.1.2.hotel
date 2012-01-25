@@ -1,0 +1,51 @@
+
+The TeraGrid CSA SAGA installation
+----------------------------------
+
+
+  In order to use this installation of SAGA (version 'trunk'), you
+  need to set the following environment variables:
+
+
+
+  C++:
+  
+    Settings for C++ bindings
+  
+      export SAGA_LOCATION=/gpfs/software/x86_64/el5/hotel/SAGA/saga/trunk/gcc-4.1.2/
+      export LD_LIBRARY_PATH=:/gpfs/software/x86_64/el5/hotel/SAGA/external/python/2.7.1/gcc-4.1.2//lib/:/gpfs/software/x86_64/el5/hotel/SAGA/external/boost/1.44.0/gcc-4.1.2//lib/::/gpfs/software/x86_64/el5/hotel/SAGA/external/postgresql/9.0.2/gcc-4.1.2//lib/::/gpfs/software/x86_64/el5/hotel/SAGA/external/sqlite3/3.6.13/gcc-4.1.2//lib/::/gpfs/software/x86_64/el5/hotel/SAGA/saga/trunk/gcc-4.1.2//lib/:$LD_LIBRARY_PATH
+
+
+
+  Python:
+
+    Please use /gpfs/software/x86_64/el5/hotel/SAGA/external/python/2.7.1/gcc-4.1.2//bin/python as python interpreter.
+    BigJob is installed in /gpfs/software/x86_64/el5/hotel/SAGA/saga/trunk/gcc-4.1.2/lib/python2.7.1/site-packages//bigjob .
+
+    Settings for Python bindings
+
+      export PYTHONPATH=/gpfs/software/x86_64/el5/hotel/SAGA/saga/trunk/gcc-4.1.2/lib/python2.7.1/site-packages/:/gpfs/software/x86_64/el5/hotel/SAGA/external/python/2.7.1/gcc-4.1.2//lib/python2.7/site-packages/:$PYTHONPATH
+
+
+
+
+  For more information about SAGA-C++ and SAGA-Python, see 
+      
+    www : http://saga.cct.lsu.edu/ .
+
+
+
+  For general SAGA user support, please subscribe to the saga-users mailing
+  list:
+
+    www : https://mail.cct.lsu.edu/mailman/listinfo/saga-users
+    mail: saga-users@cct.lsu.edu
+
+
+
+  Please help to improve this software!  Report bugs and feature requests via
+  the TG ticket tracker (select SAGA component), or directly via the SAGA project 
+  tracker, at
+   
+    www : http://faust.cct.lsu.edu/trac/saga/  (login/pass: guest/guest)
+ 

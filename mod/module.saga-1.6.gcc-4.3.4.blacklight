@@ -1,0 +1,18 @@
+#%Module
+# saga, grid software
+
+proc ModulesHelp { } {
+  puts stderr "Sets up environment for SAGA"
+  puts stderr "It is recommended to get approval for GRAM usage"
+  puts stderr "Contact help@xsede.org for any questions"
+}
+
+module-whatis "Sets up environment for SAGA"
+module-whatis "It is recommended to get approval for GRAM usage"
+module-whatis "Contact help@xsede.org for any questions"
+
+setenv       SAGA_LOCATION   /brashear/csasaga/saga/1.6/gcc-4.3.4/
+prepend-path PATH            /brashear/csasaga/saga/1.6/gcc-4.3.4//bin/:/brashear/csasaga/external/python/2.7.1/gcc-4.3.4//bin/
+prepend-path LD_LIBRARY_PATH :/brashear/csasaga/external/python/2.7.1/gcc-4.3.4//lib/:/brashear/csasaga/external/boost/1.44.0/gcc-4.3.4//lib/::/brashear/csasaga/external/postgresql/9.0.2/gcc-4.3.4//lib/::/brashear/csasaga/external/sqlite3/3.6.13/gcc-4.3.4//lib/::/brashear/csasaga/saga/1.6/gcc-4.3.4//lib/:$LD_LIBRARY_PATH
+prepend-path PYTHONPATH      /brashear/csasaga/saga/1.6/gcc-4.3.4//lib/python2.7/site-packages/:/brashear/csasaga/saga/1.6/gcc-4.3.4//lib/python2.7/site-packages///:/brashear/csasaga/external/python/2.7.1/gcc-4.3.4//lib/2.7/site-packages/
+
