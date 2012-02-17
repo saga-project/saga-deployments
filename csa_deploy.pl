@@ -11,7 +11,7 @@ BEGIN {
 my $CSA_HOSTS   = "./csa_hosts";
 my $CSA_PACK    = "./csa_packages";
 my $ENV         = `which env`;
-my $svn         = "https://svn.cct.lsu.edu/repos/saga-projects/deployment/tg-csa";
+my $svn         = "https://github.com/saga-project/saga-deployments.git"
 my %csa_hosts   = ();
 my %csa_packs   = ();
 my @modules     = ();

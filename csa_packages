@@ -67,7 +67,7 @@ version: 1.6
   saga-binding-python     https://svn.cct.lsu.edu/repos/saga/bindings/python/branches/egi-release
   saga-adaptor-x509       https://svn.cct.lsu.edu/repos/saga-adaptors/x509/branches/egi-release
   saga-adaptor-globus     https://svn.cct.lsu.edu/repos/saga-adaptors/globus/branches/egi-release
-  saga-adaptor-ssh        https://svn.cct.lsu.edu/repos/saga-adaptors/ssh/branches/egi-release
+  saga-adaptor-ssh        https://github.com/saga-project/saga-adaptors-ssh.git
   saga-adaptor-bes        https://svn.cct.lsu.edu/repos/saga-adaptors/bes/branches/egi-release       !ranger !lonestar !kraken 
   saga-adaptor-glite      https://svn.cct.lsu.edu/repos/saga-adaptors/glite/branches/egi-release     !ranger !lonestar !kraken 
   saga-adaptor-aws        https://svn.cct.lsu.edu/repos/saga-adaptors/aws/trunk                      !ranger !lonestar !kraken 
