@@ -11,7 +11,7 @@ BEGIN {
 my $CSA_HOSTS   = "./csa_hosts";
 my $CSA_PACK    = "./csa_packages";
 my $ENV         = `which env`;
-my $svn         = "https://github.com/saga-project/saga-deployments.git"
+my $svn         = "https://github.com/saga-project/saga-deployments.git";
 my %csa_hosts   = ();
 my %csa_packs   = ();
 my @modules     = ();
@@ -364,9 +364,10 @@ if ( $do_exe )
     #              "       $path/saga/$version/$CPP/lib/python*/site-packages/* " .
     #              "       $path/external/python/2.7.1/$CPP/lib/python*/site-packages/*" .
     #              "       $path/saga/$version/$CPP/share/saga/config/python.m4" ;
-      my $exe    = "rm -rv $path/csa/{doc,mod,test}/ ; " .
-                   "cd     $path/     ; test -d csa || svn co https://svn.cct.lsu.edu/repos/saga-projects/deployment/tg-csa csa ; " .
-                   "cd     $path/csa/ ; svn up";
+    # my $exe    = "rm -rv $path/csa/{doc,mod,test}/ ; " .
+    #              "cd     $path/     ; test -d csa || svn co https://svn.cct.lsu.edu/repos/saga-projects/deployment/tg-csa csa ; " .
+    #              "cd     $path/csa/ ; svn up";
+      my $exe    = "rm -rv $path/src/saga-adaptor-ssh-*";
 
       print "+-----------------+------------------------------------------+-------------------------------------+\n";
       printf "| %-15s | %-40s | %-35s |\n", $host, $fqhn, $path;
