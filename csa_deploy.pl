@@ -8,10 +8,8 @@ BEGIN {
 }
 
 
-my $CSA_HOSTS   = "./csa_hosts";
-my $CSA_PACK    = "./csa_packages";
 my $ENV         = `which env`;
-my $svn         = "https://github.com/saga-project/saga-deployments.git";
+my $svn         = "https://github.com/saga-project/saga-deployments.git/trunk/";
 my %csa_hosts   = ();
 my %csa_packs   = ();
 my @modules     = ();
@@ -22,7 +20,7 @@ my $do_exe      = 0;
 my $do_list     = 0;
 my $do_check    = 0;
 my $do_deploy   = 0;
-my $be_strict   = 0;
+my $experiment  = 0;
 my $do_force    = 0;
 my $force       = "";
 my $fake        = 0;
@@ -79,9 +77,9 @@ while ( my $arg = shift )
   {
     $show = 1;
   }
-  elsif ( $arg =~ /^(-e|--error|--exit)$/io )
+  elsif ( $arg =~ /^(-e|--exp|--esa|--experimental)$/io )
   {
-    $be_strict = 1;
+    $experiment = 1;
   }
   elsif ( $arg =~ /^(-f|--force)$/io )
   {
@@ -125,10 +123,22 @@ if ( ! scalar (@modules) )
 }
 
 
-my $SVNCI = "svn --no-auth-cache";
-if ( $svnuser ) { $SVNCI .= " --username '$svnuser'"; }
-if ( $svnpass ) { $SVNCI .= " --password '$svnpass'"; }
-$SVNCI .= " ci";
+my $SVNCI = "";
+
+if ( $svnpass )
+{
+  $SVNCI = "svn --no-auth-cache";
+  if ( $svnuser ) { $SVNCI .= " --username '$svnuser'"; }
+  if ( $svnpass ) { $SVNCI .= " --password '$svnpass'"; }
+  $SVNCI .= " ci";
+}
+else
+{
+  $SVNCI = "echo -- ";
+}
+
+my $CSA_HOSTS   = "./csa_hosts";
+my $CSA_PACK    = "./csa_packages";
 
 # read and parse csa packages file
 {
@@ -163,8 +173,24 @@ $SVNCI .= " ci";
     {
       my $tmp_mod  = $1;
       my $tmp_src  = $2;
-      my $tmp_tgt  = $3 || "*";
+      my $tmp_tgt  = $3 || "";
       my @tmp_tgts = split (/[\s,]+/, $tmp_tgt);
+
+      # if tgt's have only negatives, add star as default positive
+      my $has_positive = 0;
+      foreach my $tgt ( @tmp_tgts )
+      {
+        if ( $tgt !~ /^\!/o )
+        {
+          $has_positive = 1;
+        }
+      }
+
+      if ( 0 == $has_positive )
+      {
+        splice (@tmp_tgts, 0, 0, '*');
+      }
+
 
       push ( @{$csa_packs{$tmp_version}{'modules'}}, {'name' => $tmp_mod,
                                                       'src'  => $tmp_src, 
@@ -286,17 +312,17 @@ foreach my $entry ( @modules )
 print <<EOT;
 +-------------------------------------------------------------------
 |
-| targets  : @hosts
-| modules  : $modstring
-| version  : $version
+| targets       : @hosts
+| modules       : $modstring
+| version       : $version
 |
-| exec     : $do_exe
-| remove   : $do_remove
-| deploy   : $do_deploy
-| check    : $do_check
+| exec          : $do_exe
+| remove        : $do_remove
+| deploy        : $do_deploy
+| check         : $do_check
 |
-| force    : $do_force
-| strict   : $be_strict
+| force         : $do_force
+| experimental  : $experiment
 |
 +-------------------------------------------------------------------
 EOT
@@ -385,7 +411,6 @@ if ( $do_exe )
         if ( 0 != system ($cmd) )
         {
           print " -- error: cannot run $cmd\n";
-          exit -1 if $be_strict;
         }
       }
     }
@@ -434,7 +459,6 @@ if ( $do_remove )
         if ( 0 != system ($cmd) )
         {
           print " -- error: cannot remove csa installation\n";
-          exit -1 if $be_strict;
         }
       }
     }
@@ -483,6 +507,7 @@ if ( $do_deploy )
           my $cmd = "$access $fqhn 'mkdir -p $path ; " .
                                    "cd $path && test -d csa && (cd csa && svn up) || svn co $svn csa; ". 
                                    "$ENV CSA_HOST=$host                 " .
+                                   "     CSA_ESA=$experiment            " .
                                    "     CSA_LOCATION=$path             " .
                                    "     CSA_SAGA_VERSION=$version      " .
                                    "     CSA_SAGA_SRC=\"$mod_src\"      " .
@@ -502,18 +527,17 @@ if ( $do_deploy )
             if ( 0 != system ($cmd) )
             {
               print " -- error: cannot deploy $mod_name on $host\n";
-              exit -1 if $be_strict;
             }
           }
 
           if ( $mod_name eq "documentation" )
           {
-            my $cmd = "$access $fqhn ' cd $path/csa/                            && " .
-                                     " svn add doc/README.saga-$version.*.$host && " .
-                                     " svn add mod/module.saga-$version.*.$host && " .
-                                     " $SVNCI -m \"automated update\"              " .
-                                     "   doc/README.saga-$version.*.$host          " .
-                                     "   mod/module.saga-$version.*.$host       '  " ;
+            my $cmd = "$access $fqhn ' cd $path/csa/                             && " .
+                                     " svn add doc/README.saga-$version.*.$host* && " .
+                                     " svn add mod/module.saga-$version.*.$host* && " .
+                                     " $SVNCI -m \"automated update\"               " .
+                                     "   doc/README.saga-$version.*.$host*          " .
+                                     "   mod/module.saga-$version.*.$host*'         " ;
             if ( $show || $fake )
             {
               print " -- $cmd\n";
@@ -524,7 +548,6 @@ if ( $do_deploy )
               if ( 0 != system ($cmd) )
               {
                 print " -- error: cannot commit documentation\n";
-                exit -1 if $be_strict;
               }
             }
           }
@@ -571,6 +594,7 @@ if ( $do_check )
         my $cmd = "$access $fqhn 'mkdir -p $path ; " .
                   "cd $path && test -d csa && (cd csa && svn up) || svn co $svn csa; ". 
                   "$ENV CSA_HOST=$host                 " .
+                  "     CSA_ESA=$experiment            " .
                   "     CSA_LOCATION=$path             " .
                   "     CSA_SAGA_VERSION=$version      " .
                   "     CSA_SAGA_CHECK=yes             " .
@@ -589,16 +613,15 @@ if ( $do_check )
           if ( 0 != system ($cmd) )
           {
             print " -- error: cannot run csa checks\n";
-            exit -1 if $be_strict;
           }
         }
       }
 
       {
-        my $cmd = "$access $fqhn ' cd $path/csa/                           && " .
-                                 " svn add test/test.saga-$version.*.$host && " .
-                                 " $SVNCI -m \"automated update\"             " .
-                                 "    test/test.saga-$version.*.$host      '  " ;
+        my $cmd = "$access $fqhn ' cd $path/csa/                               && " .
+                                 " svn add test/test.saga-$version.*.$host*    && " .
+                                 " $SVNCI -m \"automated update\"                 " .
+                                 "    test/test.saga-$version.*.$host*'           " ;
         if ( $show || $fake )
         {
           print " -- $cmd\n";
@@ -609,7 +632,6 @@ if ( $do_check )
           if ( 0 != system ($cmd) )
           {
             print " -- error: cannot commit csa checks\n";
-            exit -1 if $be_strict;
           }
         }
       }
@@ -632,7 +654,7 @@ sub help (;$)
        [-c|--check] 
        [-v|--version version=all] 
        [-n|--no]
-       [-e|--exit|--error]
+       [-e|--experimental]
        [-f|--force]
        [-s|--show]
        [-d|--deploy]
@@ -652,7 +674,7 @@ sub help (;$)
     -p : svn password                               (default: "")
     -n : run 'make -n' to show what *would* be done (default: off)
     -s : show commands to be run                    (default: off)
-    -e : exit on errors                             (default: off)
+    -e : experimental software deployment           (default: off)
     -f : force re-deploy                            (default: off)
     -d : deploy version/modules on targets          (default: off)
     -r : remove deployment on target host           (default: off)

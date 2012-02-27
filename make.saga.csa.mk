@@ -1,15 +1,15 @@
 
-# this makefile supportes the CSA deployment procedure on different DCIs.  
+# this makefile supports the CSA deployment procedure on different DCIs.  
 # It requires the environment variable CSA_LOCATION to be set (will complain
 # otherwise), and needs 'wget', 'svn co', and the usual basic SAGA compilation
-# requirements (compiler, linker etc).  Boost, sqlite3 and postgresql are
+# requirements (compiler, linker etc.).  Boost, sqlite3 and postgresql are
 # installed in external/.  We also expect the SAGA version to be set as
 # CSA_SAGA_VERSION, which should be available as release tag in svn.  Otherwise,
 # we are going to install trunk.   Finally, CSA_SAGA_CHECK will not install
 # anything, but print status information for an existing deployment.
 #
 # NOTE: this makefile should only be used in conjunction with csa_deploy.pl, 
-# and won't be of much use oherwise...
+# and won't be of much use otherwise...
 #
 
 ifndef CSA_LOCATION
@@ -20,18 +20,38 @@ endif
 CSA_TMP_LOCATION  = $(shell cd $(CSA_LOCATION) && pwd -P)
 CSA_LOCATION     := $(CSA_TMP_LOCATION)
 
+ifdef CSA_ESA
+ ESA              = $(CSA_ESA)
+else
+ ESA              = 0
+endif
+
+ifeq "$(ESA)" "0"
+	CSA_ROOT        = $(CSA_LOCATION)/csa/
+	CSA_EXT_DIR     = $(CSA_LOCATION)/external/
+	CSA_SRC_DIR     = $(CSA_LOCATION)/src/
+	CSA_TGT_DIR     = $(CSA_LOCATION)/saga/
+	CSA_SUFFIX      =
+else
+	CSA_ROOT        = $(CSA_LOCATION)/csa/
+	CSA_EXT_DIR     = $(CSA_LOCATION)/external/
+	CSA_SRC_DIR     = $(CSA_LOCATION)/src/
+	CSA_TGT_DIR     = $(CSA_LOCATION)/saga-esa/
+	CSA_SUFFIX      = .esa
+endif
+
 
 # never ever build parallel
 .NOTPARALLEL:
 
-SRCDIR         = $(CSA_LOCATION)/src/
-EXTDIR         = $(CSA_LOCATION)/external/
+SRCDIR         = $(CSA_SRC_DIR)
+EXTDIR         = $(CSA_EXT_DIR)
 
 HOSTNAME       = $(shell hostname)
 DATE           = $(shell date '+%M:%H-%d.%m.%Y')
-LOG            = $(CSA_LOCATION)/csa/test/test.saga-$(CSA_SAGA_VERSION).$(CC_NAME).$(HOSTNAME)
+LOG            = $(CSA_ROOT)/test/test.saga-$(CSA_SAGA_VERSION).$(CC_NAME).$(HOSTNAME)$(CSA_SUFFIX)
 
-# to be call'ed by individual tests.  the first check expects the call to
+# to be call'ed by individual tests.  The first check expects the call to
 # succeed, the second expects it to fail (like running /bin/false).  
 # Parameters:
 #  $1: module to check
@@ -73,7 +93,7 @@ CXX        = g++
 # find out gcc version
 #
 # gcc --version is stupidly formatted.  Worse, that format is inconsistent over
-# different distrubution channels.  Thus this detour to get the version directly
+# different distribution channels.  Thus this detour to get the version directly
 # via gcc compiler macros:
 #
 CC_VERSION   = $(shell (rm -f cpp_version ; make cpp_version ; ./cpp_version) | tail -n 1)
@@ -86,17 +106,19 @@ MAKE_VERSION = $(shell make --version | head -1)
 # report setup
 #
 ifdef CSA_SAGA_CHECK
-$(shell echo "time stamp                $(DATE)"             1>&2 | tee -a $(LOG))
-$(shell echo "csa  location             $(CSA_LOCATION)"     1>&2 | tee -a $(LOG))
-$(shell echo "saga version              $(CSA_SAGA_VERSION)" 1>&2 | tee -a $(LOG))
-$(shell echo "make version              $(MAKE_VERSION)"     1>&2 | tee -a $(LOG))
-$(shell echo "compiler version          $(CC_NAME)"          1>&2 | tee -a $(LOG))
+$(shell echo "time stamp                $(DATE)"                 1>&2 | tee -a $(LOG))
+$(shell echo "csa  location             $(CSA_LOCATION)"         1>&2 | tee -a $(LOG))
+$(shell echo "csa  target               $(CSA_TGT_DIR)"          1>&2 | tee -a $(LOG))
+$(shell echo "saga version              $(CSA_SAGA_VERSION)"     1>&2 | tee -a $(LOG))
+$(shell echo "make version              $(MAKE_VERSION)"         1>&2 | tee -a $(LOG))
+$(shell echo "compiler version          $(CC_NAME)"              1>&2 | tee -a $(LOG))
 else
-$(shell echo "time stamp                $(DATE)"             1>&2 )
-$(shell echo "csa  location             $(CSA_LOCATION)"     1>&2 )
-$(shell echo "saga version              $(CSA_SAGA_VERSION)" 1>&2 )
-$(shell echo "make version              $(MAKE_VERSION)"     1>&2 )
-$(shell echo "compiler version          $(CC_NAME)"          1>&2 )
+$(shell echo "time stamp                $(DATE)"                 1>&2 )
+$(shell echo "csa  location             $(CSA_LOCATION)"         1>&2 | tee -a $(LOG))
+$(shell echo "csa  target               $(CSA_TGT_DIR)"          1>&2 | tee -a $(LOG))
+$(shell echo "saga version              $(CSA_SAGA_VERSION)"     1>&2 )
+$(shell echo "make version              $(MAKE_VERSION)"         1>&2 )
+$(shell echo "compiler version          $(CC_NAME)"              1>&2 )
 endif
 
 
@@ -179,25 +201,25 @@ endif
 # create the basic directory infrastructure, documentation, etc
 #
 .PHONY: base
-base:: $(CSA_LOCATION)/src/ $(CSA_LOCATION)/external/ $(CSA_LOCATION)/csa/
+base:: $(CSA_SRC_DIR) $(CSA_EXT_DIR) $(CSA_ROOT)
 ifdef CSA_SAGA_CHECK
 	@rm -f $(LOG)
-	@$(call CHECK, $@, install, test -d $(CSA_LOCATION)/src/ && test -d $(CSA_LOCATION)/external/ && test -d $(CSA_LOCATION)/csa/)
+	@$(call CHECK, $@, install, test -d $(CSA_SRC_DIR) && test -d $(CSA_EXT_DIR) && test -d $(CSA_ROOT))
 endif
 
-$(CSA_LOCATION)/src/:
+$(CSA_SRC_DIR):
 ifndef CSA_SAGA_CHECK
 	@mkdir $@
 endif
 
-$(CSA_LOCATION)/external/:
+$(CSA_EXT_DIR):
 ifndef CSA_SAGA_CHECK
 	@mkdir $@
 endif
 
 # always do an svn up, on check
-.PHONY: $(CSA_LOCATION)/csa/ 
-$(CSA_LOCATION)/csa/:
+.PHONY: $(CSA_ROOT) 
+$(CSA_ROOT):
 ifdef CSA_SAGA_CHECK
 	@test -d $@ || $(SVNCO) https://svn.cct.lsu.edu/repos/saga-projects/deployment/tg-csa $@
 	@test -d $@ && cd $@ && $(SVNUP)
@@ -213,7 +235,7 @@ endif
 # python
 PYTHON_VERSION  = 2.7.1
 PYTHON_SVERSION = 2.7
-PYTHON_LOCATION = $(CSA_LOCATION)/external/python/$(PYTHON_VERSION)/gcc-$(CC_VERSION)/
+PYTHON_LOCATION = $(CSA_EXT_DIR)/python/$(PYTHON_VERSION)/gcc-$(CC_VERSION)/
 PYTHON_PATH     = $(PYTHON_LOCATION)/bin
 PYTHON_MODPATH  = $(PYTHON_LOCATION)/lib/$(PYTHON_SVERSION)/site-packages/
 PYTHON_CHECK    = $(PYTHON_PATH)/python
@@ -230,7 +252,7 @@ endif
 
 $(PYTHON_CHECK)$(FORCE):
 ifndef CSA_SAGA_CHECK
-	@echo "python                    installing ($(PYTHON_CHECK))"
+	@echo "python                    installing"
 	@cd $(SRCDIR) ; $(WGET) $(PYTHON_SRC)
 	@cd $(SRCDIR) ; tar jxvf Python-$(PYTHON_VERSION).tar.bz2
 	@cd $(SRCDIR)/Python-$(PYTHON_VERSION)/ ; \
@@ -240,7 +262,7 @@ endif
 
 ########################################################################
 # boost
-BOOST_LOCATION  = $(CSA_LOCATION)/external/boost/1.44.0/$(CC_NAME)/
+BOOST_LOCATION  = $(CSA_EXT_DIR)boost/1.44.0/$(CC_NAME)/
 BOOST_CHECK     = $(BOOST_LOCATION)/include/boost/version.hpp
 BOOST_SRC       = http://garr.dl.sourceforge.net/project/boost/boost/1.44.0/boost_1_44_0.tar.bz2
 SAGA_ENV_VARS  += BOOST_LOCATION=$(BOOST_LOCATION)
@@ -271,7 +293,7 @@ endif
 
 ########################################################################
 # postgresql
-POSTGRESQL_LOCATION = $(CSA_LOCATION)/external/postgresql/9.0.2/$(CC_NAME)/
+POSTGRESQL_LOCATION = $(CSA_EXT_DIR)postgresql/9.0.2/$(CC_NAME)/
 POSTGRESQL_CHECK    = $(POSTGRESQL_LOCATION)/include/pg_config.h
 POSTGRESQL_SRC      = http://ftp7.de.postgresql.org/ftp.postgresql.org/source/v9.0.2/postgresql-9.0.2.tar.bz2
 SAGA_ENV_VARS      += POSTGRESQL_LOCATION=$(POSTGRESQL_LOCATION)
@@ -294,7 +316,7 @@ endif
 
 ########################################################################
 # sqlite3
-SQLITE3_LOCATION = $(CSA_LOCATION)/external/sqlite3/3.6.13/$(CC_NAME)/
+SQLITE3_LOCATION = $(CSA_EXT_DIR)sqlite3/3.6.13/$(CC_NAME)/
 SQLITE3_CHECK    = $(SQLITE3_LOCATION)/include/sqlite3.h
 SQLITE3_SRC      = http://www.sqlite.org/sqlite-amalgamation-3.6.13.tar.gz
 SAGA_ENV_VARS   += SQLITE3_LOCATION=$(SQLITE3_LOCATION)
@@ -319,7 +341,7 @@ endif
 #
 # saga-core
 #
-SAGA_LOCATION   = $(CSA_LOCATION)/saga/$(CSA_SAGA_VERSION)/$(CC_NAME)/
+SAGA_LOCATION   = $(CSA_TGT_DIR)/$(CSA_SAGA_VERSION)/$(CC_NAME)/
 SAGA_CORE_CHECK = $(SAGA_LOCATION)/include/saga/saga.hpp
 SAGA_ENV_VARS  += SAGA_LOCATION=$(SAGA_LOCATION)
 SAGA_ENV_LIBS  += :$(SAGA_LOCATION)/lib/
@@ -689,10 +711,10 @@ endif
 #
 # create some basic documentation about the installed software packages
 #
-CSA_README_SRC   = $(CSA_LOCATION)/csa/doc/README.stub
-CSA_README_CHECK = $(CSA_LOCATION)/csa/doc/README.saga-$(CSA_SAGA_VERSION).$(CC_NAME).$(HOSTNAME)
-CSA_MODULE_SRC   = $(CSA_LOCATION)/csa/mod/module.stub
-CSA_MODULE_CHECK = $(CSA_LOCATION)/csa/mod/module.saga-$(CSA_SAGA_VERSION).$(CC_NAME).$(HOSTNAME)
+CSA_README_SRC   = $(CSA_ROOT)/doc/README.stub
+CSA_README_CHECK = $(CSA_ROOT)/doc/README.saga-$(CSA_SAGA_VERSION).$(CC_NAME).$(HOSTNAME)$(CSA_SUFFIX)
+CSA_MODULE_SRC   = $(CSA_ROOT)/mod/module.stub
+CSA_MODULE_CHECK = $(CSA_ROOT)/mod/module.saga-$(CSA_SAGA_VERSION).$(CC_NAME).$(HOSTNAME)$(CSA_SUFFIX)
 
 .PHONY: documentation
 documentation:: base $(CSA_README_CHECK)$(FORCE) $(CSA_MODULE_CHECK)$(FORCE) permissions
@@ -718,7 +740,7 @@ ifndef CSA_SAGA_CHECK
 	@$(SED) -i -e 's|###SAGA_PYSVERSION###|$(PYTHON_SVERSION)|ig;'        $(CSA_README_CHECK)
 	@$(SED) -i -e 's|###CSA_LOCATION###|$(CSA_LOCATION)|ig;'              $(CSA_README_CHECK)
 	@$(SED) -i -e 's|###CC_NAME###|$(CC_NAME)|ig;'                        $(CSA_README_CHECK)
-	@cp -fv $(CSA_README_CHECK) $(CSA_LOCATION)
+	@cp -fv $(CSA_README_CHECK) $(CSA_TGT_DIR)/
 endif
 	
 $(CSA_MODULE_CHECK)$(FORCE): $(CSA_MODULE_SRC)

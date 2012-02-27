@@ -30,37 +30,6 @@ version: trunk
   saga-client-bigjob      https://github.com/drelu/BigJob.git/trunk/
   documentation           none
 
-version: 1.5.3
-  externals               none
-  saga-core               https://svn.cct.lsu.edu/repos/saga/core/tags/releases/saga-core-1.5.3
-  saga-binding-python     https://svn.cct.lsu.edu/repos/saga/bindings/python/
-  saga-adaptor-x509       https://svn.cct.lsu.edu/repos/saga-adaptors/x509/trunk
-  saga-adaptor-globus     https://svn.cct.lsu.edu/repos/saga-adaptors/globus/trunk
-  saga-adaptor-ssh        https://svn.cct.lsu.edu/repos/saga-adaptors/ssh/trunk
-  saga-adaptor-bes        https://svn.cct.lsu.edu/repos/saga-adaptors/bes/trunk
-  saga-adaptor-aws        https://svn.cct.lsu.edu/repos/saga-adaptors/aws/trunk
-  saga-adaptor-condor     https://svn.cct.lsu.edu/repos/saga-adaptors/condor/trunk
-  saga-adaptor-glite      https://svn.cct.lsu.edu/repos/saga-adaptors/glite/trunk
-  saga-adaptor-drmaa      https://svn.cct.lsu.edu/repos/saga-adaptors/drmaa/trunk
-  saga-adaptor-torque     https://svn.cct.lsu.edu/repos/saga-adaptors/torque/trunk
-  saga-adaptor-pbspro     https://svn.cct.lsu.edu/repos/saga-adaptors/pbspro/trunk
-  saga-client-mandelbrot  https://svn.cct.lsu.edu/repos/saga-projects/applications/mandelbrot
-  saga-client-bigjob      https://github.com/drelu/BigJob.git/trunk/
-  documentation           none
-
-version: 1.6-pre1
-  externals               none
-  saga-core               https://svn.cct.lsu.edu/repos/saga/core/branches/egi-release
-  saga-binding-python     https://svn.cct.lsu.edu/repos/saga/bindings/python/branches/egi-release
-  saga-adaptor-x509       https://svn.cct.lsu.edu/repos/saga-adaptors/x509/branches/egi-release
-  saga-adaptor-globus     https://svn.cct.lsu.edu/repos/saga-adaptors/globus/branches/egi-release
-  saga-adaptor-ssh        https://svn.cct.lsu.edu/repos/saga-adaptors/ssh/branches/egi-release
-  saga-adaptor-bes        https://svn.cct.lsu.edu/repos/saga-adaptors/bes/branches/egi-release
-  saga-adaptor-glite      https://svn.cct.lsu.edu/repos/saga-adaptors/glite/branches/egi-release
-  saga-client-mandelbrot  https://svn.cct.lsu.edu/repos/saga-projects/applications/mandelbrot
-  saga-client-bigjob      https://github.com/drelu/BigJob.git/trunk/
-  documentation           none
-
 version: 1.6
   externals               none
   saga-core               https://svn.cct.lsu.edu/repos/saga/core/branches/egi-release
@@ -71,19 +40,10 @@ version: 1.6
   saga-adaptor-bes        https://svn.cct.lsu.edu/repos/saga-adaptors/bes/branches/egi-release       !ranger !lonestar !kraken 
   saga-adaptor-glite      https://svn.cct.lsu.edu/repos/saga-adaptors/glite/branches/egi-release     !ranger !lonestar !kraken 
   saga-adaptor-aws        https://svn.cct.lsu.edu/repos/saga-adaptors/aws/trunk                      !ranger !lonestar !kraken 
-  saga-adaptor-pbspro     https://svn.cct.lsu.edu/repos/saga-adaptors/pbspro/trunk                   !ranger !lonestar
-  saga-adaptor-torque     https://svn.cct.lsu.edu/repos/saga-adaptors/torque/trunk                   !ranger !lonestar !kraken 
+  saga-adaptor-pbspro     https://svn.cct.lsu.edu/repos/saga-adaptors/pbspro/trunk                   !ranger !lonestar !kraken
+  saga-adaptor-torque     https://svn.cct.lsu.edu/repos/saga-adaptors/torque/trunk                   !ranger !lonestar
   saga-adaptor-condor     https://svn.cct.lsu.edu/repos/saga-adaptors/condor/trunk                   !ranger !lonestar !kraken 
   saga-client-mandelbrot  https://svn.cct.lsu.edu/repos/saga-projects/applications/mandelbrot
-  saga-client-bigjob      https://github.com/drelu/BigJob.git/trunk/
-  documentation           none
-
-version: unstable
-  externals               none
-  saga-core               https://svn.cct.lsu.edu/repos/saga/core/branches/egi-release
-  saga-binding-python     https://svn.cct.lsu.edu/repos/saga/bindings/python/branches/egi-release
-  saga-adaptor-x509       https://svn.cct.lsu.edu/repos/saga-adaptors/x509/branches/egi-release
-  saga-adaptor-globus     https://svn.cct.lsu.edu/repos/saga-adaptors/globus/branches/egi-release
   saga-client-bigjob      https://github.com/drelu/BigJob.git/trunk/
   documentation           none
 
