@@ -13,37 +13,35 @@
 default: 1.6
 
 version: trunk
-  externals               none
-  saga-core               https://svn.cct.lsu.edu/repos/saga/core/trunk
-  saga-binding-python     https://svn.cct.lsu.edu/repos/saga/bindings/python/trunk
-  saga-adaptor-x509       https://svn.cct.lsu.edu/repos/saga-adaptors/x509/trunk
-  saga-adaptor-globus     https://svn.cct.lsu.edu/repos/saga-adaptors/globus/trunk
-  saga-adaptor-ssh        https://svn.cct.lsu.edu/repos/saga-adaptors/ssh/trunk
-  saga-adaptor-bes        https://svn.cct.lsu.edu/repos/saga-adaptors/bes/trunk
-  saga-adaptor-aws        https://svn.cct.lsu.edu/repos/saga-adaptors/aws/trunk
-  saga-adaptor-condor     https://svn.cct.lsu.edu/repos/saga-adaptors/condor/trunk
-  saga-adaptor-glite      https://svn.cct.lsu.edu/repos/saga-adaptors/glite/trunk
-  saga-adaptor-drmaa      https://svn.cct.lsu.edu/repos/saga-adaptors/drmaa/trunk
-  saga-adaptor-torque     https://svn.cct.lsu.edu/repos/saga-adaptors/torque/trunk
-  saga-adaptor-pbspro     https://svn.cct.lsu.edu/repos/saga-adaptors/pbspro/trunk
-  saga-client-mandelbrot  https://svn.cct.lsu.edu/repos/saga-projects/applications/mandelbrot
-  saga-client-bigjob      https://github.com/drelu/BigJob.git/trunk/
-  documentation           none
+  externals               none                                                                      esa
+  saga-core               https://svn.cct.lsu.edu/repos/saga/core/trunk                             esa
+  saga-binding-python     https://svn.cct.lsu.edu/repos/saga/bindings/python/trunk                  esa
+  saga-adaptor-x509       https://svn.cct.lsu.edu/repos/saga-adaptors/x509/trunk                    esa
+  saga-adaptor-globus     https://svn.cct.lsu.edu/repos/saga-adaptors/globus/trunk                  esa
+  saga-adaptor-ssh        https://svn.cct.lsu.edu/repos/saga-adaptors/ssh/trunk                     esa
+  saga-adaptor-bes        https://svn.cct.lsu.edu/repos/saga-adaptors/bes/trunk                     esa
+  saga-adaptor-aws        https://svn.cct.lsu.edu/repos/saga-adaptors/aws/trunk                     esa
+  saga-adaptor-condor     https://svn.cct.lsu.edu/repos/saga-adaptors/condor/trunk                  esa
+  saga-adaptor-glite      https://svn.cct.lsu.edu/repos/saga-adaptors/glite/trunk                   esa
+  saga-adaptor-drmaa      https://svn.cct.lsu.edu/repos/saga-adaptors/drmaa/trunk                   esa
+  saga-adaptor-torque     https://svn.cct.lsu.edu/repos/saga-adaptors/torque/trunk                  esa
+  saga-client-mandelbrot  https://svn.cct.lsu.edu/repos/saga-projects/applications/mandelbrot       esa
+  saga-client-bigjob      https://github.com/saga-project/BigJob/trunk/                             esa
+  documentation           none                                                                      esa
 
 version: 1.6
-  externals               none
-  saga-core               https://svn.cct.lsu.edu/repos/saga/core/branches/egi-release
-  saga-binding-python     https://svn.cct.lsu.edu/repos/saga/bindings/python/branches/egi-release
-  saga-adaptor-x509       https://svn.cct.lsu.edu/repos/saga-adaptors/x509/branches/egi-release
-  saga-adaptor-globus     https://svn.cct.lsu.edu/repos/saga-adaptors/globus/branches/egi-release
-  saga-adaptor-ssh        https://github.com/saga-project/saga-adaptors-ssh.git/trunk/
-  saga-adaptor-bes        https://svn.cct.lsu.edu/repos/saga-adaptors/bes/branches/egi-release       !ranger !lonestar !kraken 
-  saga-adaptor-glite      https://svn.cct.lsu.edu/repos/saga-adaptors/glite/branches/egi-release     !ranger !lonestar !kraken 
-  saga-adaptor-aws        https://svn.cct.lsu.edu/repos/saga-adaptors/aws/trunk                      !ranger !lonestar !kraken 
-  saga-adaptor-pbspro     https://svn.cct.lsu.edu/repos/saga-adaptors/pbspro/trunk                   !ranger !lonestar !kraken
-  saga-adaptor-torque     https://svn.cct.lsu.edu/repos/saga-adaptors/torque/trunk                   !ranger !lonestar
-  saga-adaptor-condor     https://svn.cct.lsu.edu/repos/saga-adaptors/condor/trunk                   !ranger !lonestar !kraken 
-  saga-client-mandelbrot  https://svn.cct.lsu.edu/repos/saga-projects/applications/mandelbrot
-  saga-client-bigjob      https://github.com/drelu/BigJob.git/trunk/
-  documentation           none
+  externals               none                                                                         
+  saga-core               https://svn.cct.lsu.edu/repos/saga/core/branches/egi-release                 
+  saga-binding-python     https://svn.cct.lsu.edu/repos/saga/bindings/python/branches/egi-release      
+  saga-adaptor-x509       https://svn.cct.lsu.edu/repos/saga-adaptors/x509/branches/egi-release        
+  saga-adaptor-globus     https://svn.cct.lsu.edu/repos/saga-adaptors/globus/branches/egi-release        !ranger
+  saga-adaptor-ssh        https://github.com/saga-project/saga-adaptors-ssh.git/trunk/                 
+  saga-adaptor-bes        https://svn.cct.lsu.edu/repos/saga-adaptors/bes/branches/egi-release
+  saga-adaptor-glite      https://svn.cct.lsu.edu/repos/saga-adaptors/glite/branches/egi-release    esa
+  saga-adaptor-aws        https://svn.cct.lsu.edu/repos/saga-adaptors/aws/trunk                     esa
+  saga-adaptor-torque     https://svn.cct.lsu.edu/repos/saga-adaptors/torque/trunk                       !ranger !lonestar
+  saga-adaptor-condor     https://svn.cct.lsu.edu/repos/saga-adaptors/condor/trunk                  esa
+  saga-client-mandelbrot  https://svn.cct.lsu.edu/repos/saga-projects/applications/mandelbrot          
+  saga-client-bigjob      https://github.com/saga-project/BigJob/trunk/                                
+  documentation           none                                                                         
 

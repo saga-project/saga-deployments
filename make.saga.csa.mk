@@ -670,12 +670,13 @@ BJ_SETUPTOOLS_GIT_URL= "http://pypi.python.org/packages/source/s/setuptools-git/
 BIGJOB_EGGS          = $(shell ls -d $(SAGA_PYTHON_MODPATH)/BigJob-*-py2.7.egg 2> /dev/null)
 BIGJOB_EGG           = $(shell echo $(BIGJOB_EGGS) | sort -n | tail -n 1 | rev | cut -f 1 -d '/' | rev)
 BIGJOB_VERSION       = $(shell echo $(BIGJOB_EGG)                        | rev | cut -f 2 -d '-' | rev)
-SAGA_PYTHON_MODPATH := $(SAGA_PYTHON_MODPATH):$(SAGA_PYTHON_MODPATH)/$(BIGJOB_EGG)/
+BIGJOB_MODPATH       = $(SAGA_PYTHON_MODPATH)/$(BIGJOB_EGG)/
+SAGA_PYTHON_MODPATH := $(SAGA_PYTHON_MODPATH):$(BIGJOB_MODPATH)
 
 # $(warning bigjob-version: $(BIGJOB_VERSION))
 # $(warning bigjob-eggs   : $(BIGJOB_EGGS))
 # $(warning bigjob-egg    : $(BIGJOB_EGG))
-# $(warning bigjob-mod    : $(SAGA_PYTHON_MODPATH))
+# $(warning bigjob-mod    : $(BIGJOB_MODPATH))
 
 TEST_ENV                 = /usr/bin/env
 TEST_ENV                += PATH=$(PYTHON_LOCATION)/bin/:$(SAGA_LOCATION)/bin/:$(MYPATH)
@@ -711,16 +712,38 @@ endif
 #
 # create some basic documentation about the installed software packages
 #
-CSA_README_SRC   = $(CSA_ROOT)/doc/README.stub
-CSA_README_CHECK = $(CSA_ROOT)/doc/README.saga-$(CSA_SAGA_VERSION).$(CC_NAME).$(HOSTNAME)$(CSA_SUFFIX)
-CSA_MODULE_SRC   = $(CSA_ROOT)/mod/module.stub
-CSA_MODULE_CHECK = $(CSA_ROOT)/mod/module.saga-$(CSA_SAGA_VERSION).$(CC_NAME).$(HOSTNAME)$(CSA_SUFFIX)
+CSA_SHELLRC_SRC   = $(CSA_ROOT)/env/saga-env.stub
+CSA_SHELLRC_CHECK = $(CSA_ROOT)/env/saga-$(CSA_SAGA_VERSION).$(CC_NAME).$(HOSTNAME)$(CSA_SUFFIX).sh
+CSA_README_SRC    = $(CSA_ROOT)/doc/README.stub
+CSA_README_CHECK  = $(CSA_ROOT)/doc/README.saga-$(CSA_SAGA_VERSION).$(CC_NAME).$(HOSTNAME)$(CSA_SUFFIX)
+CSA_MODULE_SRC    = $(CSA_ROOT)/mod/module.stub
+CSA_MODULE_CHECK  = $(CSA_ROOT)/mod/module.saga-$(CSA_SAGA_VERSION).$(CC_NAME).$(HOSTNAME)$(CSA_SUFFIX)
 
 .PHONY: documentation
 documentation:: base $(CSA_README_CHECK)$(FORCE) $(CSA_MODULE_CHECK)$(FORCE) permissions
 ifdef CSA_SAGA_CHECK
 	@$(call CHECK, $@, readme, test -e $(CSA_README_CHECK))
 	@$(call CHECK, $@, module, test -e $(CSA_MODULE_CHECK))
+endif
+
+$(CSA_SHELLRC_CHECK)$(FORCE): $(CSA_SHELLRC_SRC)
+ifndef CSA_SAGA_CHECK
+	@echo "SHELLRC                   creating"
+	@cp -fv $(CSA_SHELLRC_SRC) $(CSA_SHELLRC_CHECK)
+	@$(SED) -i -e 's|###SAGA_VERSION###|$(CSA_SAGA_VERSION)|ig;'          $(CSA_SHELLRC_CHECK)
+	@$(SED) -i -e 's|###SAGA_LOCATION###|$(SAGA_LOCATION)|ig;'            $(CSA_SHELLRC_CHECK)
+	@$(SED) -i -e 's|###SAGA_LDLIBPATH###|$(SAGA_ENV_LDPATH)|ig;'         $(CSA_SHELLRC_CHECK)
+	@$(SED) -i -e 's|###SAGA_PATH###|$(SAGA_ENV_PATH)|ig;'                $(CSA_SHELLRC_CHECK)
+	@$(SED) -i -e 's|###SAGA_MODPATH###|$(SAGA_PYTHON_MODPATH)|ig;'       $(CSA_SHELLRC_CHECK)
+	@$(SED) -i -e 's|###PYTHON_PATH###|$(PYTHON_LOCATION)/bin/|ig;'       $(CSA_SHELLRC_CHECK)
+	@$(SED) -i -e 's|###PYTHON_MODPATH###|$(PYTHON_MODPATH)|ig;'          $(CSA_SHELLRC_CHECK)
+	@$(SED) -i -e 's|###SAGA_PYTHON###|$(PYTHON_LOCATION)/bin/python|ig;' $(CSA_SHELLRC_CHECK)
+	@$(SED) -i -e 's|###SAGA_PYLOCATION###|$(PYTHON_LOCATION)|ig;'        $(CSA_SHELLRC_CHECK)
+	@$(SED) -i -e 's|###SAGA_PYVERSION###|$(PYTHON_VERSION)|ig;'          $(CSA_SHELLRC_CHECK)
+	@$(SED) -i -e 's|###SAGA_PYSVERSION###|$(PYTHON_SVERSION)|ig;'        $(CSA_SHELLRC_CHECK)
+	@$(SED) -i -e 's|###CSA_LOCATION###|$(CSA_LOCATION)|ig;'              $(CSA_SHELLRC_CHECK)
+	@$(SED) -i -e 's|###CC_NAME###|$(CC_NAME)|ig;'                        $(CSA_SHELLRC_CHECK)
+	@$(SED) -i -e 's|###BIGJOB_MODPATH###|$(BIGJOB_MODPATH)|ig;'          $(CSA_SHELLRC_CHECK)
 endif
 
 $(CSA_README_CHECK)$(FORCE): $(CSA_README_SRC)

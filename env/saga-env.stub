@@ -1,0 +1,13 @@
+
+# SAGA core settings
+export SAGA_LOCATION=###SAGA_LOCATION###
+export LD_LIBRARY_PATH=###SAGA_LDLIBPATH###:$LD_LIBRARY_PATH
+export PATH=###SAGA_PATH###:$PATH
+
+# SAGA Python bindings settings
+export PATH=###PYTHON_PATH###:$PATH
+export PYTHONPATH=###SAGA_MODPATH###:###PYTHON_MODPATH###:$PYTHONPATH
+
+# BigJob settings
+export PYTHONPATH=###BIGJOB_MODPATH###:$PYTHONPATH
+

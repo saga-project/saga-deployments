@@ -7,9 +7,12 @@ BEGIN {
   sub help (;$);
 }
 
+my $CSA_HOSTS   = "./csa_hosts";
+my $CSA_PACK    = "./csa_packages";
 
 my $ENV         = `which env`;
-my $svn         = "https://github.com/saga-project/saga-deployments.git/trunk/";
+my $MAKE        = "make";
+my $csa_src     = "https://github.com/saga-project/saga-deployments.git/trunk/";
 my %csa_hosts   = ();
 my %csa_packs   = ();
 my @modules     = ();
@@ -137,9 +140,6 @@ else
   $SVNCI = "echo -- ";
 }
 
-my $CSA_HOSTS   = "./csa_hosts";
-my $CSA_PACK    = "./csa_packages";
-
 # read and parse csa packages file
 {
   my $tmp = ();
@@ -177,13 +177,30 @@ my $CSA_PACK    = "./csa_packages";
       my @tmp_tgts = split (/[\s,]+/, $tmp_tgt);
 
       # if tgt's have only negatives, add star as default positive
+      # if 'esa' is listed as target, only use this module in 'esa' mode
       my $has_positive = 0;
+      my $use_module   = 1;
+
       foreach my $tgt ( @tmp_tgts )
       {
-        if ( $tgt !~ /^\!/o )
+        if ( $tgt eq 'esa' )
+        {
+          if ( ! $experiment )
+          {
+            $use_module = 0;
+          }
+        }
+        elsif ( $tgt !~ /^\!/o )
         {
           $has_positive = 1;
         }
+      }
+
+      if ( grep (/^esa$/, @tmp_tgts) )
+      {
+        # remove 'esa' from targets
+        @tmp_tgts = grep (!/^esa$/, @tmp_tgts);
+
       }
 
       if ( 0 == $has_positive )
@@ -192,9 +209,16 @@ my $CSA_PACK    = "./csa_packages";
       }
 
 
-      push ( @{$csa_packs{$tmp_version}{'modules'}}, {'name' => $tmp_mod,
-                                                      'src'  => $tmp_src, 
-                                                      'tgt' => \@tmp_tgts});
+      if ( $use_module )
+      {
+        push ( @{$csa_packs{$tmp_version}{'modules'}}, {'name' => $tmp_mod,
+                                                        'src'  => $tmp_src, 
+                                                        'tgt'  => \@tmp_tgts});
+      }
+      else
+      {
+        print "ignore esa module $tmp_mod\n";
+      }
     }
     else
     {
@@ -393,7 +417,8 @@ if ( $do_exe )
     # my $exe    = "rm -rv $path/csa/{doc,mod,test}/ ; " .
     #              "cd     $path/     ; test -d csa || svn co https://svn.cct.lsu.edu/repos/saga-projects/deployment/tg-csa csa ; " .
     #              "cd     $path/csa/ ; svn up";
-      my $exe    = "rm -rv $path/src/saga-adaptor-ssh-*";
+    # my $exe    = "rm -rv $path/src/saga-adaptor-ssh-*";
+      my $exe    = "rm -rv $path/csa/";
 
       print "+-----------------+------------------------------------------+-------------------------------------+\n";
       printf "| %-15s | %-40s | %-35s |\n", $host, $fqhn, $path;
@@ -491,7 +516,6 @@ if ( $do_deploy )
       printf "| %-15s | %-40s | %-35s |\n", $host, $fqhn, $path;
       print "+-----------------+------------------------------------------+-------------------------------------+\n";
 
-      
       foreach my $entry ( @modules )
       {
         my $mod_name = $entry->{'name'};
@@ -505,7 +529,7 @@ if ( $do_deploy )
                grep (/$host/,   @mod_tgts) )  )
         {
           my $cmd = "$access $fqhn 'mkdir -p $path ; " .
-                                   "cd $path && test -d csa && (cd csa && svn up) || svn co $svn csa; ". 
+                                   "cd $path && test -d csa && (cd csa && svn up) || svn co $csa_src csa; ". 
                                    "$ENV CSA_HOST=$host                 " .
                                    "     CSA_ESA=$experiment            " .
                                    "     CSA_LOCATION=$path             " .
@@ -513,7 +537,7 @@ if ( $do_deploy )
                                    "     CSA_SAGA_SRC=\"$mod_src\"      " .
                                    "     CSA_SAGA_TGT=$mod_name-$version" .
                                    "     $force                         " .
-                                   "     make -C $path/csa/             " .
+                                   "     $MAKE -C $path/csa/            " .
                                    "          --no-print-directory      " .
                                    "          -f make.saga.csa.mk       " .
                                    "          $mod_name               ' " ;
@@ -592,13 +616,13 @@ if ( $do_check )
 
       {
         my $cmd = "$access $fqhn 'mkdir -p $path ; " .
-                  "cd $path && test -d csa && (cd csa && svn up) || svn co $svn csa; ". 
+                  "cd $path && test -d csa && (cd csa && svn up) || svn co $csa_src csa; ". 
                   "$ENV CSA_HOST=$host                 " .
                   "     CSA_ESA=$experiment            " .
                   "     CSA_LOCATION=$path             " .
                   "     CSA_SAGA_VERSION=$version      " .
                   "     CSA_SAGA_CHECK=yes             " .
-                  "     make -C $path/csa/             " .
+                  "     $MAKE -C $path/csa/            " .
                   "          --no-print-directory      " .
                   "          -f make.saga.csa.mk       " .
                   "          all'                      " ;
