@@ -201,7 +201,7 @@ endif
 # create the basic directory infrastructure, documentation, etc
 #
 .PHONY: base
-base:: $(CSA_SRC_DIR) $(CSA_EXT_DIR) $(CSA_ROOT)
+base:: $(CSA_SRC_DIR) $(CSA_TGT_DIR) $(CSA_EXT_DIR) $(CSA_ROOT)
 ifdef CSA_SAGA_CHECK
 	@rm -f $(LOG)
 	@$(call CHECK, $@, install, test -d $(CSA_SRC_DIR) && test -d $(CSA_EXT_DIR) && test -d $(CSA_ROOT))
@@ -209,12 +209,17 @@ endif
 
 $(CSA_SRC_DIR):
 ifndef CSA_SAGA_CHECK
-	@mkdir $@
+	@mkdir -p $@
+endif
+
+$(CSA_TGT_DIR):
+ifndef CSA_SAGA_CHECK
+	@mkdir -p $@
 endif
 
 $(CSA_EXT_DIR):
 ifndef CSA_SAGA_CHECK
-	@mkdir $@
+	@mkdir -p $@
 endif
 
 # always do an svn up, on check
@@ -233,16 +238,16 @@ endif
 
 ########################################################################
 # python
-PYTHON_VERSION  = 2.7.1
-PYTHON_SVERSION = 2.7
-PYTHON_LOCATION = $(CSA_EXT_DIR)/python/$(PYTHON_VERSION)/gcc-$(CC_VERSION)/
-PYTHON_PATH     = $(PYTHON_LOCATION)/bin
-PYTHON_MODPATH  = $(PYTHON_LOCATION)/lib/$(PYTHON_SVERSION)/site-packages/
-PYTHON_CHECK    = $(PYTHON_PATH)/python
-PYTHON_SRC      = http://python.org/ftp/python/$(PYTHON_VERSION)/Python-$(PYTHON_VERSION).tar.bz2
-SAGA_ENV_VARS  += PYTHON_LOCATION=$(PYTHON_LOCATION)
-SAGA_ENV_LIBS  += $(PYTHON_LOCATION)/lib/
-SAGA_ENV_BINS  += $(PYTHON_LOCATION)/bin/
+PYTHON_VERSION   = 2.7.1
+PYTHON_SVERSION  = 2.7
+PYTHON_LOCATION  = $(CSA_EXT_DIR)/python/$(PYTHON_VERSION)/gcc-$(CC_VERSION)/
+PYTHON_PATH      = $(PYTHON_LOCATION)/bin
+PYTHON_MODPATH   = $(PYTHON_LOCATION)/lib/$(PYTHON_SVERSION)/site-packages/
+PYTHON_CHECK     = $(PYTHON_PATH)/python
+PYTHON_SRC       = http://python.org/ftp/python/$(PYTHON_VERSION)/Python-$(PYTHON_VERSION).tar.bz2
+SAGA_ENV_VARS   += PYTHON_LOCATION=$(PYTHON_LOCATION)
+SAGAPY_ENV_LIBS += $(PYTHON_LOCATION)/lib/
+SAGA_ENV_BINS   += $(PYTHON_LOCATION)/bin/
 
 .PHONY: python
 python:: base $(PYTHON_CHECK)$(FORCE)
@@ -268,7 +273,7 @@ BOOST_SRC       = http://garr.dl.sourceforge.net/project/boost/boost/1.44.0/boos
 SAGA_ENV_VARS  += BOOST_LOCATION=$(BOOST_LOCATION)
 SAGA_ENV_LIBS  += $(BOOST_LOCATION)/lib/
 
-SAGA_ENV_LDPATH = $(call nospace, $(foreach d,$(SAGA_ENV_LIBS),:$(d)))
+SAGA_ENV_LDPATH = $(call nospace, $(foreach d,$(SAGA_ENV_LIBS) $(SAGAPY_ENV_LIBS),:$(d)))
 SAGA_ENV        = PATH=$(SAGA_ENV_PATH):$(MYPATH) LD_LIBRARY_PATH=$(SAGA_ENV_LDPATH):$$LD_LIBRARY_PATH $(SAGA_ENV_VARS)
 
 .PHONY: boost
@@ -380,7 +385,8 @@ endif
 SAGA_PYTHON_CHECK    = $(SAGA_LOCATION)/share/saga/config/python.m4 
 SAGA_PYTHON_MODPATH  = $(SAGA_LOCATION)/lib/python$(PYTHON_SVERSION)/site-packages/
 
-SAGA_ENV_LDPATH      = $(call nospace, $(foreach d,$(SAGA_ENV_LIBS),:$(d)))
+SAGA_ENV_LDPATH      = $(call nospace, $(foreach d,$(SAGA_ENV_LIBS) $(SAGAPY_ENV_LIBS),:$(d)))
+SAGAPY_ENV_LDPATH    = 
 SAGA_ENV             = PATH=$(SAGA_ENV_PATH):$(MYPATH) LD_LIBRARY_PATH=$(SAGA_ENV_LDPATH):$$LD_LIBRARY_PATH $(SAGA_ENV_VARS)
 
 .PHONY: saga-binding-python
@@ -634,7 +640,7 @@ endif
 # 
 # TEST_ENV                 = /usr/bin/env
 # TEST_ENV                += PYTHONPATH=$(SAGA_PYTHON_MODPATH):$(PYTHON_MODPATH)
-# TEST_ENV                += LD_LIBRARY_PATH=$(SAGA_ENV_LDPATH):$$LD_LIBRARY_PATH
+# TEST_ENV                += LD_LIBRARY_PATH=$(SAGA_ENV_LDPATH):$(SAGAPY_ENV_LDPATH):$$LD_LIBRARY_PATH
 # 
 # .PHONY: saga-client-bigjob
 # saga-client-bigjob:: base $(SC_BIGJOB_CHECK)$(FORCE)
@@ -670,8 +676,11 @@ BJ_SETUPTOOLS_GIT_URL= "http://pypi.python.org/packages/source/s/setuptools-git/
 BIGJOB_EGGS          = $(shell ls -d $(SAGA_PYTHON_MODPATH)/BigJob-*-py2.7.egg 2> /dev/null)
 BIGJOB_EGG           = $(shell echo $(BIGJOB_EGGS) | sort -n | tail -n 1 | rev | cut -f 1 -d '/' | rev)
 BIGJOB_VERSION       = $(shell echo $(BIGJOB_EGG)                        | rev | cut -f 2 -d '-' | rev)
-BIGJOB_MODPATH       = $(SAGA_PYTHON_MODPATH)/$(BIGJOB_EGG)/
+BIGJOB_MODPATH      := $(SAGA_PYTHON_MODPATH)/$(BIGJOB_EGG)/
 SAGA_PYTHON_MODPATH := $(SAGA_PYTHON_MODPATH):$(BIGJOB_MODPATH)
+
+hallo:
+	@echo BIGJOB_MODPATH = $(BIGJOB_MODPATH)
 
 # $(warning bigjob-version: $(BIGJOB_VERSION))
 # $(warning bigjob-eggs   : $(BIGJOB_EGGS))
@@ -681,7 +690,7 @@ SAGA_PYTHON_MODPATH := $(SAGA_PYTHON_MODPATH):$(BIGJOB_MODPATH)
 TEST_ENV                 = /usr/bin/env
 TEST_ENV                += PATH=$(PYTHON_LOCATION)/bin/:$(SAGA_LOCATION)/bin/:$(MYPATH)
 TEST_ENV                += PYTHONPATH=$(SAGA_PYTHON_MODPATH):$(PYTHON_MODPATH)
-TEST_ENV                += LD_LIBRARY_PATH=$(SAGA_ENV_LDPATH):$$LD_LIBRARY_PATH
+TEST_ENV                += LD_LIBRARY_PATH=$(SAGA_ENV_LDPATH):$(SAGAPY_ENV_LDPATH):$$LD_LIBRARY_PATH
 
 .PHONY: saga-client-bigjob
 saga-client-bigjob:: base $(SC_BIGJOB_CHECK)$(FORCE)
@@ -720,7 +729,7 @@ CSA_MODULE_SRC    = $(CSA_ROOT)/mod/module.stub
 CSA_MODULE_CHECK  = $(CSA_ROOT)/mod/module.saga-$(CSA_SAGA_VERSION).$(CC_NAME).$(HOSTNAME)$(CSA_SUFFIX)
 
 .PHONY: documentation
-documentation:: base $(CSA_README_CHECK)$(FORCE) $(CSA_MODULE_CHECK)$(FORCE) permissions
+documentation:: base $(CSA_SHELLRC_CHECK)$(FORCE) $(CSA_README_CHECK)$(FORCE) $(CSA_MODULE_CHECK)$(FORCE) permissions
 ifdef CSA_SAGA_CHECK
 	@$(call CHECK, $@, readme, test -e $(CSA_README_CHECK))
 	@$(call CHECK, $@, module, test -e $(CSA_MODULE_CHECK))
@@ -763,6 +772,7 @@ ifndef CSA_SAGA_CHECK
 	@$(SED) -i -e 's|###SAGA_PYSVERSION###|$(PYTHON_SVERSION)|ig;'        $(CSA_README_CHECK)
 	@$(SED) -i -e 's|###CSA_LOCATION###|$(CSA_LOCATION)|ig;'              $(CSA_README_CHECK)
 	@$(SED) -i -e 's|###CC_NAME###|$(CC_NAME)|ig;'                        $(CSA_README_CHECK)
+	@$(SED) -i -e 's|###BIGJOB_MODPATH###|$(BIGJOB_MODPATH)|ig;'          $(CSA_README_CHECK)
 	@cp -fv $(CSA_README_CHECK) $(CSA_TGT_DIR)/
 endif
 	
@@ -783,13 +793,14 @@ ifndef CSA_SAGA_CHECK
 	@$(SED) -i -e 's|###SAGA_PYSVERSION###|$(PYTHON_SVERSION)|ig;'        $(CSA_MODULE_CHECK)
 	@$(SED) -i -e 's|###CSA_LOCATION###|$(CSA_LOCATION)|ig;'              $(CSA_MODULE_CHECK)
 	@$(SED) -i -e 's|###CC_NAME###|$(CC_NAME)|ig;'                        $(CSA_MODULE_CHECK)
+	@$(SED) -i -e 's|###BIGJOB_MODPATH###|$(BIGJOB_MODPATH)|ig;'          $(CSA_MODULE_CHECK)
 endif
 
 .PHONY: permissions
 permissions:
 ifndef CSA_SAGA_CHECK
 	@echo "fixing permissions"
-	-@$(CHMOD) -R a+rX $(SAGA_LOCATION)
-	-@$(CHMOD) -R a+rX $(EXTDIR)
-	-@$(CHMOD)    a+rX $(CSA_LOCATION)
+	@-$(CHMOD) -R a+rX $(SAGA_LOCATION)
+	@-$(CHMOD) -R a+rX $(EXTDIR)
+	@-$(CHMOD)    a+rX $(CSA_LOCATION)
 endif

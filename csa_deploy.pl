@@ -559,6 +559,7 @@ if ( $do_deploy )
             my $cmd = "$access $fqhn ' cd $path/csa/                             && " .
                                      " svn add doc/README.saga-$version.*.$host* && " .
                                      " svn add mod/module.saga-$version.*.$host* && " .
+                                     " svn add env/saga-$version.*.$host*.sh     && " .
                                      " $SVNCI -m \"automated update\"               " .
                                      "   doc/README.saga-$version.*.$host*          " .
                                      "   mod/module.saga-$version.*.$host*'         " ;

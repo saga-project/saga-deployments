@@ -6,7 +6,7 @@
 
 # checks
 localhost    localhost                              /home/merzky/saga/csa/deploy         ssh -l  merzky -q
-# boskop       boskop                                 /home/merzky/saga/csa/deploy         ssh -l  merzky -q
+boskop       boskop                                 /home/merzky/saga/csa/deploy         ssh -l  merzky -q
 cyder        cyder.cct.lsu.edu                      /home/amerzky/csa/                   ssh -l amerzky -q
 
 # TeraGrid / XSEDE
