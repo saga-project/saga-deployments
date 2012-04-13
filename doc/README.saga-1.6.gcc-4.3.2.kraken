@@ -7,16 +7,16 @@ Quick Guide:
 
   For using SAGA-C++, the following environment settings are required:
 
-      export SAGA_LOCATION=/nics/a/proj/saga/saga/1.6/gcc-4.3.2/
-      export LD_LIBRARY_PATH=:/nics/a/proj/saga/external/python/2.7.1/gcc-4.3.2//lib/:/nics/a/proj/saga/external/boost/1.44.0/gcc-4.3.2//lib/::/nics/a/proj/saga/external/postgresql/9.0.2/gcc-4.3.2//lib/::/nics/a/proj/saga/external/sqlite3/3.6.13/gcc-4.3.2//lib/::/nics/a/proj/saga/saga/1.6/gcc-4.3.2//lib/:$LD_LIBRARY_PATH
-      export PATH=:/nics/a/proj/saga/external/python/2.7.1/gcc-4.3.2//bin/::/nics/a/proj/saga/saga/1.6/gcc-4.3.2//bin/:$PATH
+      export SAGA_LOCATION=/lustre/scratch/proj/saga/saga//1.6/gcc-4.3.2/
+      export LD_LIBRARY_PATH=:/lustre/scratch/proj/saga/external/boost/1.44.0/gcc-4.3.2//lib/::/lustre/scratch/proj/saga/external/postgresql/9.0.2/gcc-4.3.2//lib/::/lustre/scratch/proj/saga/external/sqlite3/3.6.13/gcc-4.3.2//lib/::/lustre/scratch/proj/saga/saga//1.6/gcc-4.3.2//lib/:/lustre/scratch/proj/saga/external//python/2.7.1/gcc-4.3.2//lib/:$LD_LIBRARY_PATH
+      export PATH=:/lustre/scratch/proj/saga/external//python/2.7.1/gcc-4.3.2//bin/::/lustre/scratch/proj/saga/saga//1.6/gcc-4.3.2//bin/:$PATH
 
   For using the SAGA Python bindings, the follwoing settings are additionally required:
 
-      export PATH=/nics/a/proj/saga/external/python/2.7.1/gcc-4.3.2//bin/:$PATH
-      export PYTHONPATH=/nics/a/proj/saga/saga/1.6/gcc-4.3.2//lib/python2.7/site-packages/:/nics/a/proj/saga/saga/1.6/gcc-4.3.2//lib/python2.7/site-packages//BigJob-0.4.38-py2.7.egg/:/nics/a/proj/saga/external/python/2.7.1/gcc-4.3.2//lib/2.7/site-packages/:$PYTHONPATH
+      export PATH=/lustre/scratch/proj/saga/external//python/2.7.1/gcc-4.3.2//bin/:$PATH
+      export PYTHONPATH=/lustre/scratch/proj/saga/saga//1.6/gcc-4.3.2//lib/python2.7/site-packages/:/lustre/scratch/proj/saga/saga//1.6/gcc-4.3.2//lib/python2.7/site-packages//BigJob-0.4.49-py2.7.egg/:/lustre/scratch/proj/saga/external//python/2.7.1/gcc-4.3.2//lib/2.7/site-packages/:$PYTHONPATH
 
-  Please use /nics/a/proj/saga/external/python/2.7.1/gcc-4.3.2//bin/python as python interpreter (the setting 
+  Please use /lustre/scratch/proj/saga/external//python/2.7.1/gcc-4.3.2//bin/python as python interpreter (the setting 
   above puts that first in your path when running 'python').
 
 
@@ -29,28 +29,28 @@ Detailed Instructions:
 
   Note that this installation procedure is at this point not depending 
   on system level software, but is instead installing all pre-requisites
-  separately, in /nics/a/proj/saga/external.  The SAGA installation can
+  separately, in /lustre/scratch/proj/saga/external.  The SAGA installation can
   be used with those dependencies by setting the folllwing environment
   variables:
 
 
     SAGA_LOCATION points to the SAGA installation root
-    # export SAGA_LOCATION=/nics/a/proj/saga/saga/1.6/gcc-4.3.2/
+    # export SAGA_LOCATION=/lustre/scratch/proj/saga/saga//1.6/gcc-4.3.2/
 
 
     LD_LIBRARY_PATH allows to dynamically load shared libraries form this 
     path, such as SAGA package libs or adaptors.
-    # export LD_LIBRARY_PATH=:/nics/a/proj/saga/external/python/2.7.1/gcc-4.3.2//lib/:/nics/a/proj/saga/external/boost/1.44.0/gcc-4.3.2//lib/::/nics/a/proj/saga/external/postgresql/9.0.2/gcc-4.3.2//lib/::/nics/a/proj/saga/external/sqlite3/3.6.13/gcc-4.3.2//lib/::/nics/a/proj/saga/saga/1.6/gcc-4.3.2//lib/:$LD_LIBRARY_PATH
+    # export LD_LIBRARY_PATH=:/lustre/scratch/proj/saga/external/boost/1.44.0/gcc-4.3.2//lib/::/lustre/scratch/proj/saga/external/postgresql/9.0.2/gcc-4.3.2//lib/::/lustre/scratch/proj/saga/external/sqlite3/3.6.13/gcc-4.3.2//lib/::/lustre/scratch/proj/saga/saga//1.6/gcc-4.3.2//lib/:/lustre/scratch/proj/saga/external//python/2.7.1/gcc-4.3.2//lib/:$LD_LIBRARY_PATH
 
 
     PATH is used for searching for executables and scripts.
     We usually have to use our own python installation, to ensure that it is
     compatible with boost-python, which is used for our python bindings.
-    # export PATH=:/nics/a/proj/saga/external/python/2.7.1/gcc-4.3.2//bin/::/nics/a/proj/saga/saga/1.6/gcc-4.3.2//bin/:/nics/a/proj/saga/external/python/2.7.1/gcc-4.3.2//bin/:$PATH
+    # export PATH=:/lustre/scratch/proj/saga/external//python/2.7.1/gcc-4.3.2//bin/::/lustre/scratch/proj/saga/saga//1.6/gcc-4.3.2//bin/:/lustre/scratch/proj/saga/external//python/2.7.1/gcc-4.3.2//bin/:$PATH
 
 
     PYTHONPATH points the pyton runtime to the location of the SAGA python modules
-    # export PYTHONPATH=/nics/a/proj/saga/saga/1.6/gcc-4.3.2//lib/python2.7/site-packages/:/nics/a/proj/saga/saga/1.6/gcc-4.3.2//lib/python2.7/site-packages//BigJob-0.4.38-py2.7.egg/:/nics/a/proj/saga/external/python/2.7.1/gcc-4.3.2//lib/2.7/site-packages/:$PYTHONPATH
+    # export PYTHONPATH=/lustre/scratch/proj/saga/saga//1.6/gcc-4.3.2//lib/python2.7/site-packages/:/lustre/scratch/proj/saga/saga//1.6/gcc-4.3.2//lib/python2.7/site-packages//BigJob-0.4.49-py2.7.egg/:/lustre/scratch/proj/saga/external//python/2.7.1/gcc-4.3.2//lib/2.7/site-packages/:$PYTHONPATH
 
 
 
