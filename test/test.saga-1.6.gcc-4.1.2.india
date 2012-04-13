@@ -16,7 +16,6 @@ saga-adaptor-pbspro       install              : ok
 saga-adaptor-condor       install              : ok
 saga-client-mandelbrot    install              : ok
 saga-client-bigjob        install              : ok
-saga-client-bigjob        loading              : 04/13/2012 01:53:14 PM - bigjob - INFO - Loading BigJob version: 0.4.49
-04/13/2012 01:53:14 PM - bigjob - DEBUG - Using SAGA C++/Python.
+saga-client-bigjob        loading              : 04/13/2012 01:58:43 PM - bigjob - INFO - Loading BigJob version: 0.4.50
 /bin/sh: Logging: command not found
 nok
