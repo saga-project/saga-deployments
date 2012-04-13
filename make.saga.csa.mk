@@ -26,12 +26,14 @@ ifdef CSA_ESA
 	CSA_SRC_DIR     = $(CSA_LOCATION)/src/
 	CSA_TGT_DIR     = $(CSA_LOCATION)/saga-esa/
 	CSA_SUFFIX      = .esa
+	CSA_SUBDIR      = saga-esa
 else
 	CSA_ROOT        = $(CSA_LOCATION)/csa/
 	CSA_EXT_DIR     = $(CSA_LOCATION)/external/
 	CSA_SRC_DIR     = $(CSA_LOCATION)/src/
 	CSA_TGT_DIR     = $(CSA_LOCATION)/saga/
 #	CSA_SUFFIX      =
+#	CSA_SUBDIR      =
 endif
 
 
@@ -767,7 +769,7 @@ ifndef CSA_SAGA_CHECK
 	@$(SED) -i -e 's|###CSA_LOCATION###|$(CSA_LOCATION)|ig;'              $(CSA_README_CHECK)
 	@$(SED) -i -e 's|###CC_NAME###|$(CC_NAME)|ig;'                        $(CSA_README_CHECK)
 	@$(SED) -i -e 's|###BIGJOB_MODPATH###|$(BIGJOB_MODPATH)|ig;'          $(CSA_README_CHECK)
-	@cp -fv $(CSA_README_CHECK) $(CSA_TGT_DIR)/
+	@cp -fv $(CSA_README_CHECK) $(CSA_LOCATION)/$(CSA_SUBDIR)/
 endif
 	
 $(CSA_MODULE_CHECK)$(FORCE): $(CSA_MODULE_SRC)
