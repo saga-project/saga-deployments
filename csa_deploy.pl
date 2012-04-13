@@ -23,7 +23,8 @@ my $do_exe      = 0;
 my $do_list     = 0;
 my $do_check    = 0;
 my $do_deploy   = 0;
-my $experiment  = 0;
+my $do_exp      = 0;
+my $exp         = "";
 my $do_force    = 0;
 my $force       = "";
 my $fake        = 0;
@@ -82,7 +83,8 @@ while ( my $arg = shift )
   }
   elsif ( $arg =~ /^(-e|--exp|--esa|--experimental)$/io )
   {
-    $experiment = 1;
+    $do_exp = 1;
+    $exp    = "CSA_ESA=true";
   }
   elsif ( $arg =~ /^(-f|--force)$/io )
   {
@@ -185,7 +187,7 @@ else
       {
         if ( $tgt eq 'esa' )
         {
-          if ( ! $experiment )
+          if ( ! $do_exp )
           {
             $use_module = 0;
           }
@@ -346,7 +348,7 @@ print <<EOT;
 | check         : $do_check
 |
 | force         : $do_force
-| experimental  : $experiment
+| experimental  : $do_exp
 |
 +-------------------------------------------------------------------
 EOT
@@ -531,11 +533,11 @@ if ( $do_deploy )
           my $cmd = "$access $fqhn 'mkdir -p $path ; " .
                                    "cd $path && test -d csa && (cd csa && svn up) || svn co $csa_src csa; ". 
                                    "$ENV CSA_HOST=$host                 " .
-                                   "     CSA_ESA=$experiment            " .
                                    "     CSA_LOCATION=$path             " .
                                    "     CSA_SAGA_VERSION=$version      " .
                                    "     CSA_SAGA_SRC=\"$mod_src\"      " .
                                    "     CSA_SAGA_TGT=$mod_name-$version" .
+                                   "     $exp                           " .
                                    "     $force                         " .
                                    "     $MAKE -C $path/csa/            " .
                                    "          --no-print-directory      " .
@@ -619,10 +621,10 @@ if ( $do_check )
         my $cmd = "$access $fqhn 'mkdir -p $path ; " .
                   "cd $path && test -d csa && (cd csa && svn up) || svn co $csa_src csa; ". 
                   "$ENV CSA_HOST=$host                 " .
-                  "     CSA_ESA=$experiment            " .
                   "     CSA_LOCATION=$path             " .
                   "     CSA_SAGA_VERSION=$version      " .
                   "     CSA_SAGA_CHECK=yes             " .
+                  "     $exp                           " .
                   "     $MAKE -C $path/csa/            " .
                   "          --no-print-directory      " .
                   "          -f make.saga.csa.mk       " .

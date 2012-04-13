@@ -33,10 +33,26 @@ version: 1.6
   externals               none                                                                         
   saga-core               https://svn.cct.lsu.edu/repos/saga/core/branches/egi-release                 
   saga-binding-python     https://svn.cct.lsu.edu/repos/saga/bindings/python/branches/egi-release      
-  saga-adaptor-x509       https://svn.cct.lsu.edu/repos/saga-adaptors/x509/branches/egi-release        
+  saga-adaptor-x509       https://svn.cct.lsu.edu/repos/saga-adaptors/x509/branches/egi-release          !ranger
   saga-adaptor-globus     https://svn.cct.lsu.edu/repos/saga-adaptors/globus/branches/egi-release        !ranger
   saga-adaptor-ssh        https://github.com/saga-project/saga-adaptors-ssh.git/trunk/                 
-  saga-adaptor-bes        https://svn.cct.lsu.edu/repos/saga-adaptors/bes/branches/egi-release
+  saga-adaptor-bes        https://svn.cct.lsu.edu/repos/saga-adaptors/bes/branches/egi-release      esa
+  saga-adaptor-glite      https://svn.cct.lsu.edu/repos/saga-adaptors/glite/branches/egi-release    esa
+  saga-adaptor-aws        https://svn.cct.lsu.edu/repos/saga-adaptors/aws/trunk                     esa
+  saga-adaptor-torque     https://svn.cct.lsu.edu/repos/saga-adaptors/torque/trunk                       !ranger !lonestar
+  saga-adaptor-condor     https://svn.cct.lsu.edu/repos/saga-adaptors/condor/trunk                  esa
+  saga-client-mandelbrot  https://svn.cct.lsu.edu/repos/saga-projects/applications/mandelbrot          
+  saga-client-bigjob      https://github.com/saga-project/BigJob/trunk/                                
+  documentation           none                                                                         
+
+version: 1.6.1
+  externals               none                                                                         
+  saga-core               https://svn.cct.lsu.edu/repos/saga/core/branches/egi-release                 
+  saga-binding-python     https://svn.cct.lsu.edu/repos/saga/bindings/python/branches/egi-release      
+  saga-adaptor-x509       https://svn.cct.lsu.edu/repos/saga-adaptors/x509/branches/egi-release          !ranger
+  saga-adaptor-globus     https://svn.cct.lsu.edu/repos/saga-adaptors/globus/branches/egi-release        !ranger
+  saga-adaptor-ssh        https://github.com/saga-project/saga-adaptors-ssh.git/trunk/                 
+  saga-adaptor-bes        https://svn.cct.lsu.edu/repos/saga-adaptors/bes/branches/egi-release      esa
   saga-adaptor-glite      https://svn.cct.lsu.edu/repos/saga-adaptors/glite/branches/egi-release    esa
   saga-adaptor-aws        https://svn.cct.lsu.edu/repos/saga-adaptors/aws/trunk                     esa
   saga-adaptor-torque     https://svn.cct.lsu.edu/repos/saga-adaptors/torque/trunk                       !ranger !lonestar

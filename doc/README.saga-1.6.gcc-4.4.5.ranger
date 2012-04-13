@@ -14,7 +14,7 @@ Quick Guide:
   For using the SAGA Python bindings, the follwoing settings are additionally required:
 
       export PATH=/scratch/projects/tg/SAGA/external/python/2.7.1/gcc-4.4.5//bin/:$PATH
-      export PYTHONPATH=/scratch/projects/tg/SAGA/saga/1.6/gcc-4.4.5//lib/python2.7/site-packages/:/scratch/projects/tg/SAGA/saga/1.6/gcc-4.4.5//lib/python2.7/site-packages//BigJob-0.4.33-py2.7.egg/:/scratch/projects/tg/SAGA/external/python/2.7.1/gcc-4.4.5//lib/2.7/site-packages/:$PYTHONPATH
+      export PYTHONPATH=/scratch/projects/tg/SAGA/saga/1.6/gcc-4.4.5//lib/python2.7/site-packages/:/scratch/projects/tg/SAGA/saga/1.6/gcc-4.4.5//lib/python2.7/site-packages//BigJob-0.4.39-py2.7.egg/:/scratch/projects/tg/SAGA/external/python/2.7.1/gcc-4.4.5//lib/2.7/site-packages/:$PYTHONPATH
 
   Please use /scratch/projects/tg/SAGA/external/python/2.7.1/gcc-4.4.5//bin/python as python interpreter (the setting 
   above puts that first in your path when running 'python').
@@ -50,7 +50,7 @@ Detailed Instructions:
 
 
     PYTHONPATH points the pyton runtime to the location of the SAGA python modules
-    # export PYTHONPATH=/scratch/projects/tg/SAGA/saga/1.6/gcc-4.4.5//lib/python2.7/site-packages/:/scratch/projects/tg/SAGA/saga/1.6/gcc-4.4.5//lib/python2.7/site-packages//BigJob-0.4.33-py2.7.egg/:/scratch/projects/tg/SAGA/external/python/2.7.1/gcc-4.4.5//lib/2.7/site-packages/:$PYTHONPATH
+    # export PYTHONPATH=/scratch/projects/tg/SAGA/saga/1.6/gcc-4.4.5//lib/python2.7/site-packages/:/scratch/projects/tg/SAGA/saga/1.6/gcc-4.4.5//lib/python2.7/site-packages//BigJob-0.4.39-py2.7.egg/:/scratch/projects/tg/SAGA/external/python/2.7.1/gcc-4.4.5//lib/2.7/site-packages/:$PYTHONPATH
 
 
 

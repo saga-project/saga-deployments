@@ -5,13 +5,15 @@
 # name       full.qualified.host.name               /saga/csa/location                   access mechanism
 
 # checks
-localhost    localhost                              /home/merzky/saga/csa/deploy         ssh -l  merzky -q
+localhost    localhost                              /home/merzky/saga/deployments/test/  ssh -l  merzky -q
 boskop       boskop                                 /home/merzky/saga/csa/deploy         ssh -l  merzky -q
 cyder        cyder.cct.lsu.edu                      /home/amerzky/csa/                   ssh -l amerzky -q
+dare         dare.cct.lsu.edu                       /home/cctsg/install/saga             ssh -l cctsg   -q
 
 # TeraGrid / XSEDE
 # queenbee	 login1-qb.loni-lsu.teragrid.org        /project/tg_csa/saga/                gsissh -q
-kraken       kraken-gsi.nics.utk.edu                /nics/a/proj/saga/                   gsissh -q
+# kraken       kraken-gsi.nics.utk.edu                /nics/a/proj/saga/                   gsissh -q
+kraken       kraken-gsi.nics.utk.edu                /lustre/scratch/proj/saga/           gsissh -q
 ranger       tg-login.ranger.tacc.teragrid.org      /scratch/projects/tg/SAGA/           gsissh -q
 lonestar     tg-login.lonestar.tacc.teragrid.org    /share1/projects/tg/SAGA/            gsissh -q
 blacklight   tg-login.blacklight.psc.teragrid.org   /usr/local/packages/tg/csasaga/      gsissh -q

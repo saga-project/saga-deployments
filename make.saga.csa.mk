@@ -21,23 +21,17 @@ CSA_TMP_LOCATION  = $(shell cd $(CSA_LOCATION) && pwd -P)
 CSA_LOCATION     := $(CSA_TMP_LOCATION)
 
 ifdef CSA_ESA
- ESA              = $(CSA_ESA)
-else
- ESA              = 0
-endif
-
-ifeq "$(ESA)" "0"
-	CSA_ROOT        = $(CSA_LOCATION)/csa/
-	CSA_EXT_DIR     = $(CSA_LOCATION)/external/
-	CSA_SRC_DIR     = $(CSA_LOCATION)/src/
-	CSA_TGT_DIR     = $(CSA_LOCATION)/saga/
-	CSA_SUFFIX      =
-else
 	CSA_ROOT        = $(CSA_LOCATION)/csa/
 	CSA_EXT_DIR     = $(CSA_LOCATION)/external/
 	CSA_SRC_DIR     = $(CSA_LOCATION)/src/
 	CSA_TGT_DIR     = $(CSA_LOCATION)/saga-esa/
 	CSA_SUFFIX      = .esa
+else
+	CSA_ROOT        = $(CSA_LOCATION)/csa/
+	CSA_EXT_DIR     = $(CSA_LOCATION)/external/
+	CSA_SRC_DIR     = $(CSA_LOCATION)/src/
+	CSA_TGT_DIR     = $(CSA_LOCATION)/saga/
+#	CSA_SUFFIX      =
 endif
 
 
