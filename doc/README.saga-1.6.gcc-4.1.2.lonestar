@@ -7,16 +7,16 @@ Quick Guide:
 
   For using SAGA-C++, the following environment settings are required:
 
-      export SAGA_LOCATION=/share1/projects/xsede/SAGA/saga/1.6/gcc-4.1.2/
-      export LD_LIBRARY_PATH=:/share1/projects/xsede/SAGA/external/python/2.7.1/gcc-4.1.2//lib/:/share1/projects/xsede/SAGA/external/boost/1.44.0/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/external/postgresql/9.0.2/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/external/sqlite3/3.6.13/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/saga/1.6/gcc-4.1.2//lib/:$LD_LIBRARY_PATH
-      export PATH=:/share1/projects/xsede/SAGA/external/python/2.7.1/gcc-4.1.2//bin/::/share1/projects/xsede/SAGA/saga/1.6/gcc-4.1.2//bin/:$PATH
+      export SAGA_LOCATION=/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2/
+      export LD_LIBRARY_PATH=:/share1/projects/xsede/SAGA/external/boost/1.44.0/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/external/postgresql/9.0.2/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/external/sqlite3/3.6.13/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//lib/:$LD_LIBRARY_PATH
+      export PATH=:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//bin/::/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//bin/:$PATH
 
   For using the SAGA Python bindings, the follwoing settings are additionally required:
 
-      export PATH=/share1/projects/xsede/SAGA/external/python/2.7.1/gcc-4.1.2//bin/:$PATH
-      export PYTHONPATH=/share1/projects/xsede/SAGA/saga/1.6/gcc-4.1.2//lib/python2.7/site-packages/:/share1/projects/xsede/SAGA/saga/1.6/gcc-4.1.2//lib/python2.7/site-packages//BigJob-0.4.33-py2.7.egg/:/share1/projects/xsede/SAGA/external/python/2.7.1/gcc-4.1.2//lib/2.7/site-packages/:$PYTHONPATH
+      export PATH=/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//bin/:$PATH
+      export PYTHONPATH=/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/python2.7/site-packages/:/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/python2.7/site-packages//BigJob-0.4.50-py2.7.egg/:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//lib/2.7/site-packages/:$PYTHONPATH
 
-  Please use /share1/projects/xsede/SAGA/external/python/2.7.1/gcc-4.1.2//bin/python as python interpreter (the setting 
+  Please use /share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//bin/python as python interpreter (the setting 
   above puts that first in your path when running 'python').
 
 
@@ -35,22 +35,22 @@ Detailed Instructions:
 
 
     SAGA_LOCATION points to the SAGA installation root
-    # export SAGA_LOCATION=/share1/projects/xsede/SAGA/saga/1.6/gcc-4.1.2/
+    # export SAGA_LOCATION=/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2/
 
 
     LD_LIBRARY_PATH allows to dynamically load shared libraries form this 
     path, such as SAGA package libs or adaptors.
-    # export LD_LIBRARY_PATH=:/share1/projects/xsede/SAGA/external/python/2.7.1/gcc-4.1.2//lib/:/share1/projects/xsede/SAGA/external/boost/1.44.0/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/external/postgresql/9.0.2/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/external/sqlite3/3.6.13/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/saga/1.6/gcc-4.1.2//lib/:$LD_LIBRARY_PATH
+    # export LD_LIBRARY_PATH=:/share1/projects/xsede/SAGA/external/boost/1.44.0/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/external/postgresql/9.0.2/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/external/sqlite3/3.6.13/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//lib/:$LD_LIBRARY_PATH
 
 
     PATH is used for searching for executables and scripts.
     We usually have to use our own python installation, to ensure that it is
     compatible with boost-python, which is used for our python bindings.
-    # export PATH=:/share1/projects/xsede/SAGA/external/python/2.7.1/gcc-4.1.2//bin/::/share1/projects/xsede/SAGA/saga/1.6/gcc-4.1.2//bin/:/share1/projects/xsede/SAGA/external/python/2.7.1/gcc-4.1.2//bin/:$PATH
+    # export PATH=:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//bin/::/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//bin/:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//bin/:$PATH
 
 
     PYTHONPATH points the pyton runtime to the location of the SAGA python modules
-    # export PYTHONPATH=/share1/projects/xsede/SAGA/saga/1.6/gcc-4.1.2//lib/python2.7/site-packages/:/share1/projects/xsede/SAGA/saga/1.6/gcc-4.1.2//lib/python2.7/site-packages//BigJob-0.4.33-py2.7.egg/:/share1/projects/xsede/SAGA/external/python/2.7.1/gcc-4.1.2//lib/2.7/site-packages/:$PYTHONPATH
+    # export PYTHONPATH=/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/python2.7/site-packages/:/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/python2.7/site-packages//BigJob-0.4.50-py2.7.egg/:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//lib/2.7/site-packages/:$PYTHONPATH
 
 
 

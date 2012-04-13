@@ -1,0 +1,33 @@
+base                      install              : ok
+saga-core                 local job 1          : ok
+saga-core                 local job 2          : ok
+saga-binding-python       install              : ok
+saga-adaptor-x509         install              : ok
+saga-adaptor-globus       install              : nok
+saga-adaptor-ssh          install              : ok
+saga-adaptor-ssh          ssh job 1            :  SAGA exception caught: 
+SAGA(BadParameter):
+  SAGA(NoSuccess): ssh_job: Cannot execute jobs on remote host ()
+  SAGA(BadParameter): torque_job: Could not initialize job service for [ssh://localhost/]. Only any://, torque:// and xt5torque:// schemes are supported.
+  SAGA(NoSuccess): No adaptor succeeded in executing constructor for job_service_cpi
+
+nok
+saga-adaptor-ssh          ssh job 2            :  SAGA exception caught: 
+SAGA(BadParameter):
+  SAGA(NoSuccess): ssh_job: Cannot execute jobs on remote host ()
+  SAGA(BadParameter): torque_job: Could not initialize job service for [ssh://localhost/]. Only any://, torque:// and xt5torque:// schemes are supported.
+  SAGA(NoSuccess): No adaptor succeeded in executing constructor for job_service_cpi
+
+ok
+saga-adaptor-bes          install              : nok
+saga-adaptor-glite        install              : nok
+saga-adaptor-aws          install              : nok
+saga-adaptor-drmaa        install              : nok
+saga-adaptor-torque       install              : ok
+saga-adaptor-pbspro       install              : nok
+saga-adaptor-condor       install              : nok
+saga-client-mandelbrot    install              : ok
+saga-client-bigjob        install              : ok
+saga-client-bigjob        loading              : 04/13/2012 03:20:55 PM - bigjob - INFO - Loading BigJob version: 0.4.50
+/bin/sh: Logging: command not found
+nok

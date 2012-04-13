@@ -11,8 +11,8 @@ module-whatis "Sets up environment for SAGA"
 module-whatis "It is recommended to get approval for GRAM usage"
 module-whatis "Contact help@xsede.org for any questions"
 
-setenv       SAGA_LOCATION   /phase1/saga-project/saga/1.6/gcc-4.1.2/
-prepend-path PATH            /phase1/saga-project/saga/1.6/gcc-4.1.2//bin:/phase1/saga-project/external/python/2.7.1/gcc-4.1.2//bin
-prepend-path LD_LIBRARY_PATH :/phase1/saga-project/external/python/2.7.1/gcc-4.1.2//lib/:/phase1/saga-project/external/boost/1.44.0/gcc-4.1.2//lib/::/phase1/saga-project/external/postgresql/9.0.2/gcc-4.1.2//lib/::/phase1/saga-project/external/sqlite3/3.6.13/gcc-4.1.2//lib/::/phase1/saga-project/saga/1.6/gcc-4.1.2//lib/
-prepend-path PYTHONPATH      /phase1/saga-project/saga/1.6/gcc-4.1.2//lib/python2.7/site-packages/:/phase1/saga-project/saga/1.6/gcc-4.1.2//lib/python2.7/site-packages//BigJob-0.4.23-py2.7.egg/:/phase1/saga-project/external/python/2.7.1/gcc-4.1.2//lib/2.7/site-packages/
+setenv       SAGA_LOCATION   /phase1/saga-project/saga//1.6/gcc-4.1.2/
+prepend-path PATH            :/phase1/saga-project/external//python/2.7.1/gcc-4.1.2//bin/::/phase1/saga-project/saga//1.6/gcc-4.1.2//bin/:/phase1/saga-project/external//python/2.7.1/gcc-4.1.2//bin/
+prepend-path LD_LIBRARY_PATH :/phase1/saga-project/external/boost/1.44.0/gcc-4.1.2//lib/::/phase1/saga-project/external/postgresql/9.0.2/gcc-4.1.2//lib/::/phase1/saga-project/external/sqlite3/3.6.13/gcc-4.1.2//lib/::/phase1/saga-project/saga//1.6/gcc-4.1.2//lib/:/phase1/saga-project/external//python/2.7.1/gcc-4.1.2//lib/
+prepend-path PYTHONPATH      /phase1/saga-project/saga//1.6/gcc-4.1.2//lib/python2.7/site-packages/:/phase1/saga-project/saga//1.6/gcc-4.1.2//lib/python2.7/site-packages//BigJob-0.4.49-py2.7.egg/:/phase1/saga-project/external//python/2.7.1/gcc-4.1.2//lib/2.7/site-packages/
 
