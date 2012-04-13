@@ -3,19 +3,21 @@ saga-core                 local job 1          : ok
 saga-core                 local job 2          : ok
 saga-binding-python       install              : ok
 saga-adaptor-x509         install              : ok
-saga-adaptor-globus       install              : ok
+saga-adaptor-globus       install              : nok
 saga-adaptor-ssh          install              : ok
-saga-adaptor-ssh          ssh job 1            :  SAGA exception caught: 
-SAGA(NoSuccess):
-  SAGA(NoSuccess): ssh_job: Could not connect to remote host - missing context?
-  SAGA(NoSuccess): No adaptor succeeded in executing constructor for job_service_cpi
-
-nok
-saga-adaptor-ssh          ssh job 2            :  SAGA exception caught: 
-SAGA(NoSuccess):
-  SAGA(NoSuccess): ssh_job: Could not connect to remote host - missing context?
-  SAGA(NoSuccess): No adaptor succeeded in executing constructor for job_service_cpi
-
+saga-adaptor-ssh          ssh job 1            : Inactive Modules:
+  1) mvapich
+Activating Modules:
+  1) mvapich/1.0.1
+Due to MODULEPATH changes the following modules have been reloaded:
+  1) mvapich
+ok
+saga-adaptor-ssh          ssh job 2            : Inactive Modules:
+  1) mvapich
+Activating Modules:
+  1) mvapich/1.0.1
+Due to MODULEPATH changes the following modules have been reloaded:
+  1) mvapich
 ok
 saga-adaptor-bes          install              : nok
 saga-adaptor-glite        install              : nok
@@ -26,7 +28,6 @@ saga-adaptor-pbspro       install              : nok
 saga-adaptor-condor       install              : nok
 saga-client-mandelbrot    install              : ok
 saga-client-bigjob        install              : ok
-saga-client-bigjob        loading              : 01/19/2012 03:41:45 AM - bigjob - DEBUG - Loading BigJob version: 0.4.33
-01/19/2012 03:41:45 AM - bigjob - DEBUG - read configfile: /scratch/projects/tg/SAGA/saga/1.6/gcc-4.4.5/lib/python2.7/site-packages/BigJob-0.4.33-py2.7.egg/bigjob/../bigjob.conf
-01/19/2012 03:41:56 AM - bigjob - DEBUG - Using SAGA C++/Python.
-ok
+saga-client-bigjob        loading              : 04/13/2012 02:40:47 PM - bigjob - INFO - Loading BigJob version: 0.4.50
+/bin/sh: Logging: command not found
+nok
