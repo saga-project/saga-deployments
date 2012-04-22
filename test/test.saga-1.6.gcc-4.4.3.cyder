@@ -33,3 +33,5 @@ saga-adaptor-condor       install              : ok
 saga-client-mandelbrot    install              : ok
 saga-client-bigjob        install              : ok
 saga-client-bigjob        loading              : ok
+saga-adaptor-x509         install              : ok
+saga-adaptor-globus       install              : ok
