@@ -167,7 +167,7 @@ if ( $do_git_up )
   if ( ! $gituser ) { help (-1, "-g requires -u") }
   if ( ! $gitpass ) { help (-1, "-g requires -p") }
 
-  $giturl =~ s|^(https://)(.+)$|$1$gituser:$gitpass$2|io;
+  $giturl =~ s|^(https://)(.+)$|$1$gituser:$gitpass\@$2|io;
 }
 
 # {
@@ -385,7 +385,9 @@ if ( $do_check )
 }
 
 
-print <<EOT;
+if ( ! $run_test )
+{
+  print <<EOT;
 +-------------------------------------------------------------------
 |
 | targets       : @hosts
@@ -395,7 +397,6 @@ print <<EOT;
 | exec          : $do_exe
 | deploy        : $do_deploy
 | check         : $checkstring
-| run test      : $run_test  ($test_log $test_info)
 |
 | force         : $do_force
 | experimental  : $do_exp
@@ -404,6 +405,7 @@ print <<EOT;
 |
 +-------------------------------------------------------------------
 EOT
+}
 
 
 # list mode simply lists the known hosts
@@ -673,7 +675,6 @@ if ( $do_check )
       }
     }
   }
-  print "+-----------------+------------------------------------------+-------------------------------------+\n";
   print "\n";
 }
 
