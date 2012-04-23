@@ -7,8 +7,9 @@
 #
 # [svn_src]:  svn url for module code ('none' if no source is needed)
 # [module]:   must be defined as target in make.saga.csa.mk
-# [tgt_spec]: list of target host names for which the module is to be depoyed
+# [tgt_spec]: list of target host names for which the module is to be deployed
 #             ('!hostname' negates, '*', is wildcard and default)
+#             'esa', if *only* to be deployed in experimental mode
 
 default: 1.6
 

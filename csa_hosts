@@ -2,29 +2,28 @@
 # TODO: sites and components should get registered in the advert service... ;-)
 
 # Format of this file:  
-# name       full.qualified.host.name               /saga/csa/location                   access mechanism
+# name       full.qualified.host.name               /saga/csa/location                   access mechanism      local test                     remote tests
 
 # checks
-localhost    localhost                              /home/merzky/saga/deployments/test/  ssh -l  merzky -q
-boskop       boskop                                 /home/merzky/saga/csa/deploy         ssh -l  merzky -q
-cyder        cyder.cct.lsu.edu                      /home/amerzky/csa/                   ssh -l amerzky -q
-dare         dare.cct.lsu.edu                       /home/cctsg/install/saga             ssh -l cctsg   -q
+thinkie      thinkie                                /home/merzky/test/csa/               'ssh -l  merzky -q'    fork,bigjob                   ssh
+boskop       boskop-merzky.no-ip.org                /home/merzky/saga/csa/deploy         'ssh -l  merzky -q'    fork,bigjob                   ssh
+cyder        cyder.cct.lsu.edu                      /home/amerzky/csa/                   'ssh -l amerzky -q'    fork,bigjob                   ssh
+dare         dare.cct.lsu.edu                       /home/cctsg/install/saga             'ssh -l cctsg   -q'    fork,bigjob                   ssh
 
 # TeraGrid / XSEDE
-# queenbee	 login1-qb.loni-lsu.teragrid.org        /project/tg_csa/saga/                gsissh -q
-# kraken       kraken-gsi.nics.utk.edu                /nics/a/proj/saga/                   gsissh -q
-kraken       kraken-gsi.nics.utk.edu                /lustre/scratch/proj/saga/           gsissh -q
-ranger       tg-login.ranger.tacc.teragrid.org      /scratch/projects/tg/SAGA/           gsissh -q
-lonestar     tg-login.lonestar.tacc.teragrid.org    /share1/projects/tg/SAGA/            gsissh -q
-blacklight   tg-login.blacklight.psc.teragrid.org   /usr/local/packages/tg/csasaga/      gsissh -q
-trestles     trestles-login.sdsc.edu                /phase1/saga-project/                gsissh -q
-steele       tg-steele.purdue.teragrid.org          /tg_community/saga/                  gsissh -q
+queenbee     login1-qb.loni-lsu.teragrid.org        /project/tg_csa/saga/                'gsissh -q'            fork,bigjob                   ssh,gsissh,gram
+kraken       kraken-gsi.nics.utk.edu                /lustre/scratch/proj/saga/           'gsissh -q'            fork,pbspro,bigjob            ssh,gsissh,gram
+ranger       tg-login.ranger.tacc.teragrid.org      /scratch/projects/tg/SAGA/           'gsissh -q'            fork,pbspro,bigjob            ssh,gsissh,gram
+lonestar     tg-login.lonestar.tacc.teragrid.org    /share1/projects/tg/SAGA/            'gsissh -q'            fork,bigjob                   ssh,gsissh,gram
+blacklight   tg-login.blacklight.psc.teragrid.org   /usr/local/packages/tg/csasaga/      'gsissh -q'            fork,pbspro,bigjob            ssh,gsissh,gram
+trestles     trestles-login.sdsc.edu                /phase1/saga-project/                'gsissh -q'            fork,pbspro,bigjob            ssh,gsissh,gram
+steele       tg-steele.purdue.teragrid.org          /tg_community/saga/                  'gsissh -q'            fork,pbspro,bigjob            ssh,gsissh,gram
 
 # FutureGrid
-india        india.futuregrid.org                   /N/soft/SAGA/                        ssh -l merzky -q
-sierra       sierra.futuregrid.org                  /N/soft/SAGA/                        ssh -l merzky -q
-alamo        alamo.futuregrid.org                   /N/soft/SAGA/                        ssh -l merzky -q
-hotel        hotel.futuregrid.org                   /N/soft/x86_64/el5/hotel/SAGA        ssh -l merzky -q
+india        india.futuregrid.org                   /N/soft/SAGA/                        'ssh -l merzky -q'     fork,pbspro,bigjob            ssh
+sierra       sierra.futuregrid.org                  /N/soft/SAGA/                        'ssh -l merzky -q'     fork,pbspro,torque,bigjob     ssh
+alamo        alamo.futuregrid.org                   /N/soft/SAGA/                        'ssh -l merzky -q'     fork,pbspro,bigjob            ssh,gsissh,gram
+hotel        hotel.futuregrid.org                   /N/soft/x86_64/el5/hotel/SAGA        'ssh -l merzky -q'     fork,pbspro,bigjob            ssh
 
 # EGI
 

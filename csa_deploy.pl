@@ -4,36 +4,49 @@ BEGIN {
   use strict;
   use Data::Dumper;
 
-  sub help (;$);
+  sub help (;$$);
 }
+
 
 my $CSA_HOSTS   = "./csa_hosts";
 my $CSA_PACK    = "./csa_packages";
-
+my $CSA_TEST    = "./csa_tests";
+my $CSA_TESTEPS = "./csa_test_eps";
 my $ENV         = `which env`;
-my $MAKE        = "make";
-my $csa_src     = "https://github.com/saga-project/saga-deployments.git/trunk/";
+my $MAKE        = "make --no-print-directory -f make.saga.csa.mk ";
+my $giturl      = "https://github.com/saga-project/saga-deployments.git";
 my %csa_hosts   = ();
 my %csa_packs   = ();
+my %csa_tests   = ();
+
 my @modules     = ();
 my @hosts       = ();
-my $def_version = "";
-my $version     = "";
-my $do_exe      = 0;
-my $do_list     = 0;
+my @tests       = ();
+
 my $do_check    = 0;
 my $do_deploy   = 0;
+my $do_exe      = 0;
 my $do_exp      = 0;
-my $exp         = "";
 my $do_force    = 0;
-my $force       = "";
-my $fake        = 0;
-my $show        = 0;
-my $do_remove   = 0;
-my $svnuser     = `id -un`;
-my $svnpass     = "";
+my $do_list     = 0;
+my $do_git_up   = 0;
+my $run_test    = 0;
 
-chomp ($svnuser);
+my $test_mode   = "";
+my $test_info   = "";
+
+my $noop        = 0;
+my $verb        = 0;
+
+my $exp         = "";
+my $force       = "";
+my $version     = "";
+my $def_version = "";
+
+my $gituser     = "";
+my $gitpass     = "";
+
+chomp ($gituser);
 chomp ($ENV);
 
 if ( ! scalar (@ARGV) )
@@ -41,73 +54,94 @@ if ( ! scalar (@ARGV) )
   help (-1);
 }
 
-while ( my $arg = shift )
+while (my $arg   = shift )
 {
-  if ( $arg =~ /^(-l|--list)$/io )
+  if    ( $arg   =~ /^(-l|--list)$/o )
   {
-    $do_list = 1;
+    $do_list     = 1;
   }
-  elsif ( $arg =~ /^(-c|--check)$/io )
+  elsif ( $arg   =~ /^(-c|--check)$/o )
   {
-    $do_check = 1;
+    my $tmp      = shift || "job";
+    @tests       = split (/,/, $tmp);
+    $do_check    = 1;
+    help (-2, "cannot parse checks '$tmp'") if $tmp =~ /^-/o; 
   }
-  elsif ( $arg =~ /^(-v|--version)$/io )
+  elsif ( $arg   =~ /^(-v|--version)$/o )
   {
-    $version = shift || "";
+    $version     = shift || "-";
+    help (-2, "cannot parse version '$version'") if $version =~ /^-/o; 
   }
-  elsif ( $arg =~ /^(-t|--target|--targets|--targethosts)$/io )
+  elsif ( $arg   =~ /^(-t|--target|--targets|--targethosts)$/o )
   {
-    my $tmp = shift || "all";
-    @hosts = split (/,/, $tmp);
+    my $tmp      = shift || "all";
+    @hosts       = split (/,/, $tmp);
+    help (-2, "cannot parse target '$tmp'") if $tmp =~ /^-/o; 
   }
-  elsif ( $arg =~ /^(-m|--module|--modules)$/io )
+  elsif ( $arg   =~ /^(-m|--module|--modules)$/o )
   {
-    my $tmp = shift || "all";
-    @modules = split (/,/, $tmp);
+    my $tmp      = shift || "all";
+    @modules     = split (/,/, $tmp);
+    help (-2, "cannot parse modules '$tmp'") if $tmp =~ /^-/o; 
   }
-  elsif ( $arg =~ /^(-u|--user)$/io )
+  elsif ( $arg   =~ /^(-u|--user)$/o )
   {
-    $svnuser = shift || ""; 
+    $tmp         = shift || "-";
+    help (-2, "cannot parse git user '$tmp'") if $tmp =~ /^-/o; 
+    $gituser     = $tmp;
   }
-  elsif ( $arg =~ /^(-p|--pass)$/io )
+  elsif ( $arg   =~ /^(-p|--pass)$/o )
   {
-    $svnpass = shift || "";
+    $tmp         = shift || "-";
+    help (-2, "cannot parse git pass '$tmp'") if $tmp =~ /^-/o; 
+    $gitpass     = $tmp;
   }
-  elsif ( $arg =~ /^(-n|--nothing|--noop|--no)$/io )
+  elsif ( $arg   =~ /^(-n|--nothing|--noop|--no)$/o )
   {
-    $fake = 1;
+    $noop        = 1;
   }
-  elsif ( $arg =~ /^(-s|--show)$/io )
+  elsif ( $arg   =~ /^(-V|--Verb|--Verbose)$/o )
   {
-    $show = 1;
+    $verb        = 1;
   }
-  elsif ( $arg =~ /^(-e|--exp|--esa|--experimental)$/io )
+  elsif ( $arg   =~ /^(-e|--exp|--esa|--experimental)$/o )
   {
-    $do_exp = 1;
-    $exp    = "CSA_ESA=true";
+    $do_exp      = 1;
+    $exp         = "CSA_ESA=true";
   }
-  elsif ( $arg =~ /^(-f|--force)$/io )
+  elsif ( $arg   =~ /^(-f|--force)$/o )
   {
-    $do_force = 1;
-    $force    = "CSA_FORCE=true";
+    $do_force    = 1;
+    $force       = "CSA_FORCE=true";
   }
-  elsif ( $arg =~ /^(-r|--remove)$/io )
+  elsif ( $arg   =~ /^(-g|--git|--git-push)$/o )
   {
-    $do_remove = 1;
+    $do_git_up   = 1;
   }
-  elsif ( $arg =~ /^(-d|--deploy)$/io )
+  elsif ( $arg   =~ /^(-r|--run|--run-test)$/o )
   {
-    $do_deploy = 1;
+    $run_test    = 1;
+    $test_host   = shift || "-";
+    $test_log    = shift || "-";
+    $test_info   = shift || "-";
+
+    help (-2, "cannot parse test host name '$test_host'")  if $test_host =~ /^-/o; 
+    help (-2, "cannot parse test log name  '$test_log'")   if $test_log  =~ /^-/o; 
+    help (-2, "cannot parse test infos     '$test_info'" ) if $test_info =~ /^-/o; 
   }
-  elsif ( $arg =~ /^(-x|--execute)$/io )
+  elsif ( $arg   =~ /^(-d|--deploy)$/o )
   {
-    $do_exe = 1;
+    $do_deploy   = 1;
   }
-  elsif ( $arg =~ /^(-h|--help)$/io )
+  elsif ( $arg   =~ /^(-x|--execute)$/o )
+  {
+    $do_exe      = 1;
+  }
+  elsif ( $arg   =~ /^(-h|--help)$/o )
   {
     help (0);
   }
-  elsif ( $arg =~ /^-/io )
+  elsif ( $arg   =~ /^-/o )
   {
     warn "WARNING: cannot parse command line flag '$arg'\n";
   }
@@ -128,19 +162,22 @@ if ( ! scalar (@modules) )
 }
 
 
-my $SVNCI = "";
+if ( $do_git_up )
+{
+  if ( ! $gituser ) { help (-1, "-g requires -u") }
+  if ( ! $gitpass ) { help (-1, "-g requires -p") }
 
-if ( $svnpass )
-{
-  $SVNCI = "svn --no-auth-cache";
-  if ( $svnuser ) { $SVNCI .= " --username '$svnuser'"; }
-  if ( $svnpass ) { $SVNCI .= " --password '$svnpass'"; }
-  $SVNCI .= " ci";
+  $giturl =~ s|^(https://)(.+)$|$1$gituser:$gitpass$2|io;
 }
-else
-{
-  $SVNCI = "echo -- ";
-}
+
+# {
+#   if ( $arg =~ /^(-j|--job)$/io )
+#   {
+#    $do_test    = 1;
+#    my $tmp     = shift || "all";
+#    @middleware = split (/,/, $tmp);
+#   }
+# }
 
 # read and parse csa packages file
 {
@@ -219,7 +256,7 @@ else
       }
       else
       {
-        print "ignore esa module $tmp_mod\n";
+        # print "ignore esa module $tmp_mod\n";
       }
     }
     else
@@ -260,12 +297,14 @@ else
     {
       # skip comment lines and empty lines
     }
-    elsif ( $tmp =~ /^\s*(\S+)\s+(\S+)\s+(\S+)\s+((?:ssh|gsissh)\s*?.*?)\s*$/io )
+    elsif ( $tmp =~ /^\s*(\S+)\s+(\S+)\s+(\S+)\s+'((?:ssh|gsissh)\s*?.*?)'\s*(?:\s+(\S+?)?\s+(\S+?)?)\s*$/io )
     {
       my $host   = $1;
       my $fqhn   = $2;
       my $path   = $3;
       my $access = $4;
+      my $local  = $5;
+      my $remote = $6;
 
       if ( exists ( $csa_hosts{$host} ) )
       {
@@ -275,6 +314,8 @@ else
       $csa_hosts {$1}{'fqhn'}   = $fqhn;
       $csa_hosts {$1}{'path'}   = $path;
       $csa_hosts {$1}{'access'} = $access;
+      $csa_hosts {$1}{'local'}  = $local;
+      $csa_hosts {$1}{'remote'} = $remote;
     }
     else
     {
@@ -316,14 +357,12 @@ if ( grep (/all/, @modules) )
 
 if ( grep (/all/, @hosts) )
 {
-  @hosts = grep (/all/, @hosts);
   @hosts = sort keys ( %csa_hosts );
 }
 
-
 if ( ! scalar (@hosts) )
 {
-  if ( $do_check || $do_deploy || $do_exe || $do_remove )
+  if ( $do_check || $do_deploy || $do_exe )
   {
     die "no targets given\n";
   }
@@ -335,6 +374,17 @@ foreach my $entry ( @modules )
   $modstring .= "$entry->{name} ";
 }
 
+my $checkstring = $do_check;
+if ( $do_check )
+{
+  $checkstring .= " :";
+  foreach my $check ( @tests )
+  {
+    $checkstring .= " $check";
+  }
+}
+
+
 print <<EOT;
 +-------------------------------------------------------------------
 |
@@ -343,12 +393,14 @@ print <<EOT;
 | version       : $version
 |
 | exec          : $do_exe
-| remove        : $do_remove
 | deploy        : $do_deploy
-| check         : $do_check
+| check         : $checkstring
+| run test      : $run_test  ($test_log $test_info)
 |
 | force         : $do_force
 | experimental  : $do_exp
+|
+| git           : $giturl
 |
 +-------------------------------------------------------------------
 EOT
@@ -417,21 +469,22 @@ if ( $do_exe )
     #              "       $path/external/python/2.7.1/$CPP/lib/python*/site-packages/*" .
     #              "       $path/saga/$version/$CPP/share/saga/config/python.m4" ;
     # my $exe    = "rm -rv $path/csa/{doc,mod,test}/ ; " .
-    #              "cd     $path/     ; test -d csa || svn co https://svn.cct.lsu.edu/repos/saga-projects/deployment/tg-csa csa ; " .
-    #              "cd     $path/csa/ ; svn up";
+    #              "cd     $path/     ; test -d csa || git co https://git.cct.lsu.edu/repos/saga-projects/deployment/tg-csa csa ; " .
+    #              "cd     $path/csa/ ; git pull";
     # my $exe    = "rm -rv $path/src/saga-adaptor-ssh-*";
-      my $exe    = "rm -rv $path/csa/";
+    # my $exe    = "rm -rv $path/csa/";
+      my $exe    = "git --version ; module load git ; git --version";
 
       print "+-----------------+------------------------------------------+-------------------------------------+\n";
       printf "| %-15s | %-40s | %-35s |\n", $host, $fqhn, $path;
       print "+-----------------+------------------------------------------+-------------------------------------+\n";
 
-      if ( $show || $fake )
+      if ( $verb || $noop )
       {
         print " -- $access $fqhn '$exe'\n";
       }
       
-      unless ( $fake )
+      unless ( $noop )
       {
         my $cmd = "$access $fqhn '$exe'";
 
@@ -447,50 +500,6 @@ if ( $do_exe )
 
 }
 
-
-if ( $do_remove )
-{
-  # ! check, so do the real deployment
-
-  print "\n";
-  print "+-----------------+------------------------------------------+-------------------------------------+\n";
-  printf "| %-15s | %-40s | %-35s |\n", "host", "fqhn", "path";
-
-  foreach my $host ( @hosts )
-  {
-    if ( ! exists $csa_hosts{$host} )
-    {
-      warn " -- warning: unknown host '$host'\n";
-    }
-    else
-    {
-      my $fqhn   = $csa_hosts{$host}{'fqhn'};
-      my $path   = $csa_hosts{$host}{'path'};
-      my $access = $csa_hosts{$host}{'access'};
-
-      print "+-----------------+------------------------------------------+-------------------------------------+\n";
-      printf "| %-15s | %-40s | %-35s |\n", $host, $fqhn, $path;
-      print "+-----------------+------------------------------------------+-------------------------------------+\n";
-
-      print " -- remove installation $version on $host\n";
-
-      my $cmd = "$access $fqhn 'rm -rf $path/saga/$version/ $path/README.saga-$version.*.$host'";
-
-      if ( $show || $fake )
-      {
-        print " -- $cmd\n";
-      }
-
-      unless ( $fake )
-      {
-        if ( 0 != system ($cmd) )
-        {
-          print " -- error: cannot remove csa installation\n";
-        }
-      }
-    }
-  }
-}
 
 
 
@@ -530,25 +539,22 @@ if ( $do_deploy )
              ( grep (/\*/,      @mod_tgts) ||
                grep (/$host/,   @mod_tgts) )  )
         {
-          my $cmd = "$access $fqhn 'mkdir -p $path ; " .
-                                   "cd $path && test -d csa && (cd csa && svn up) || svn co $csa_src csa; ". 
-                                   "$ENV CSA_HOST=$host                 " .
-                                   "     CSA_LOCATION=$path             " .
-                                   "     CSA_SAGA_VERSION=$version      " .
-                                   "     CSA_SAGA_SRC=\"$mod_src\"      " .
-                                   "     CSA_SAGA_TGT=$mod_name-$version" .
-                                   "     $exp                           " .
-                                   "     $force                         " .
-                                   "     $MAKE -C $path/csa/            " .
-                                   "          --no-print-directory      " .
-                                   "          -f make.saga.csa.mk       " .
-                                   "          $mod_name               ' " ;
-          if ( $show || $fake )
+          my $cmd = "$access $fqhn 'mkdir -p $path;" .
+                                   " cd $path && test -d csa && (cd csa && git pull) || git clone $giturl csa;". 
+                                   " $ENV" .
+                                   " CSA_HOST=$host" .
+                                   " CSA_LOCATION=$path" .
+                                   " CSA_SAGA_VERSION=$version" .
+                                   " CSA_SAGA_SRC=\"$mod_src\"" .
+                                   " CSA_SAGA_TGT=$mod_name-$version" .
+                                   " $exp $force" .
+                                   " $MAKE -C $path/csa/ $mod_name ' " ;
+          if ( $verb || $noop )
           {
-            print " -- $cmd\n";
+            print " -- deploy: $cmd\n";
           }
           
-          unless ( $fake )
+          unless ( $noop )
           {
             if ( 0 != system ($cmd) )
             {
@@ -558,23 +564,25 @@ if ( $do_deploy )
 
           if ( $mod_name eq "documentation" )
           {
-            my $cmd = "$access $fqhn ' cd $path/csa/                             && " .
-                                     " svn add doc/README.saga-$version.*.$host* && " .
-                                     " svn add mod/module.saga-$version.*.$host* && " .
-                                     " svn add env/saga-$version.*.$host*.sh     && " .
-                                     " $SVNCI -m \"automated update\"               " .
-                                     "   doc/README.saga-$version.*.$host*          " .
-                                     "   mod/module.saga-$version.*.$host*'         " ;
-            if ( $show || $fake )
+            if ( $do_git_up )
             {
-              print " -- $cmd\n";
-            }
-            
-            unless ( $fake )
-            {
-              if ( 0 != system ($cmd) )
+              my $cmd = "$access $fqhn 'cd $path/csa/ &&" .
+                                       " git add doc/README.saga-$version.*.$host* &&" .
+                                       " git add mod/module.saga-$version.*.$host* &&" .
+                                       " git add env/saga-$version.*.$host*.sh &&" .
+                                       " git commit -m \"automated update\" &&" .
+                                       " git push $giturl ' " ;
+              if ( $verb || $noop )
               {
-                print " -- error: cannot commit documentation\n";
+                print " -- deploy: $cmd\n";
+              }
+              
+              unless ( $noop )
+              {
+                if ( 0 != system ($cmd) )
+                {
+                  print " -- error: cannot commit documentation\n";
+                }
               }
             }
           }
@@ -618,24 +626,23 @@ if ( $do_check )
       print "+-----------------+------------------------------------------+-------------------------------------+\n";
 
       {
-        my $cmd = "$access $fqhn 'mkdir -p $path ; " .
-                  "cd $path && test -d csa && (cd csa && svn up) || svn co $csa_src csa; ". 
-                  "$ENV CSA_HOST=$host                 " .
-                  "     CSA_LOCATION=$path             " .
-                  "     CSA_SAGA_VERSION=$version      " .
-                  "     CSA_SAGA_CHECK=yes             " .
-                  "     $exp                           " .
-                  "     $MAKE -C $path/csa/            " .
-                  "          --no-print-directory      " .
-                  "          -f make.saga.csa.mk       " .
-                  "          all'                      " ;
+        my $tmp = join (',', @tests);
+        my $cmd = "$access $fqhn 'mkdir -p $path;" .
+                  " cd $path && test -d csa && (cd csa && git pull) || git clone $giturl csa;". 
+                  " $ENV" .
+                  " CSA_HOST=$host" .
+                  " CSA_LOCATION=$path" .
+                  " CSA_SAGA_VERSION=$version" .
+                  " CSA_TESTS=$tmp" .
+                  " $exp" .
+                  " $MAKE -C $path/csa/ test ' " ;
 
-        if ( $show || $fake )
+        if ( $verb || $noop )
         {
-          print " -- $cmd\n";
+          print " -- check: $cmd\n";
         }
         
-        unless ( $fake )
+        unless ( $noop )
         {
           if ( 0 != system ($cmd) )
           {
@@ -644,17 +651,19 @@ if ( $do_check )
         }
       }
 
+      if ( $do_git_up )
       {
-        my $cmd = "$access $fqhn ' cd $path/csa/                               && " .
-                                 " svn add test/test.saga-$version.*.$host*    && " .
-                                 " $SVNCI -m \"automated update\"                 " .
-                                 "    test/test.saga-$version.*.$host*'           " ;
-        if ( $show || $fake )
+        my $cmd = "$access $fqhn ' cd $path/csa/ && " .
+                                 " git add test/test.saga-$version.*.$host* && " .
+                                 " git commit -m \"automated update\" && " .
+                                 " git push $giturl ' " ;
+
+        if ( $verb || $noop )
         {
-          print " -- $cmd\n";
+          print " -- check: $cmd\n";
         }
         
-        unless ( $fake )
+        unless ( $noop )
         {
           if ( 0 != system ($cmd) )
           {
@@ -668,46 +677,235 @@ if ( $do_check )
   print "\n";
 }
 
+# Submit jobs on machines specified..
+if ( $run_test )
+{
+  my %tests      = ();
+  my $test_types = ();
+
+  {
+    open   (TMP, "<$CSA_TESTEPS") || die "ERROR  : cannot open '$CSA_HOSTS': $!\n";
+    @tmp = <TMP>;
+    close  (TMP);
+    chomp  (@tmp);
+
+    foreach my $line ( @tmp )
+    {
+      if ( $line =~ /^\s*(?:#.*)?$/io )
+      {
+        # skip comment lines and empty lines
+      }
+      elsif ( $line =~
+        /^\s*(\S+)\s+(job|file|core|bigjob)\s+(local|remote)\s+(\S+)\s+(.*?)\s*$/io )
+      {
+        my $host = $1;
+        my $type = $2;
+        my $mode = $3;
+        my $name = $4;
+        my $info = $5;
+
+        $test_types{$type}++;
+
+        $info =~ s/\s+/ /iog;
+
+        if ( $host eq '*' )
+        {
+          foreach my $tmp ( keys %csa_hosts )
+          {
+            $tests{$tmp}{$type}{$mode}{$name} = $info;
+          }
+        }
+        else
+        {
+          $tests{$host}{$type}{$mode}{$name} = $info;
+        }
+      }
+    }
+  }
 
 
-sub help (;$)
+
+  @test_infos = split (/,/, $test_info );
+
+  if ( grep (/^all$/, @test_infos) )
+  {
+    @test_infos = grep (!/^all$/, @test_infos);
+    push (@test_infos, keys (%test_types));
+  }
+
+
+  # we now collect all tests to be run from the tests struct.  We run all tests
+  # of the given type: all remote ones for that type on all hosts, and all local 
+  # ones for that type on localhost.
+  my $run_these_tests= ();
+
+  # check tests for all hosts
+  foreach my $host ( keys %tests )
+  {
+    # test all types for that host
+    foreach my $type ( keys %{$tests{$host}} )
+    {
+      # check if we want this type
+      if ( grep ($type, @test_infos) )
+      {
+        # want this type
+        # get local tests only for localhost
+        if ( $host eq $test_host )
+        {
+          # for localhost, also run local tests
+          foreach my $name ( keys %{$tests{$host}{$type}{'local'}} )
+          {
+            my %test = ('host' => $host, 
+                        'type' => $type,
+                        'mode' => 'local',
+                        'name' => $name, 
+                        'url'  => $tests{$host}{$type}{'local'}{$name}
+                        );
+            push (@run_these_tests, \%test);
+          }
+        }
+
+        # always run remote tests
+        foreach my $name ( keys %{$tests{$host}{$type}{'remote'}} )
+        {
+          my %test = ('host' => $host, 
+                      'type' => $type,
+                      'mode' => 'remote',
+                      'name' => $name,
+                      'url'  => $tests{$host}{$type}{'remote'}{$name});
+          push (@run_these_tests, \%test);
+        }
+      }
+    }
+  }
+
+
+
+  my $tests_ok   = 0;
+  my $tests_nok  = 0;
+
+  my $out        = "";
+  my $err        = "";
+
+  printf "+-%-12s-+-%-7s-+-%-10s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x10, '-'x55;
+  printf "| %-12s | %-7s | %-10s | %-10s | %-55s | res | \n", 'host', 'type', 'mode', 'name', 'url';
+  printf "+-%-12s-+-%-7s-+-%-10s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x10, '-'x55;
+  
+  foreach my $test ( @run_these_tests)
+  {
+    my $host = $test->{'host'};
+    my $type = $test->{'type'};
+    my $mode = $test->{'mode'};
+    my $name = $test->{'name'};
+    my $url  = $test->{'url'};
+
+    my $out = qx{sh -c '. ../env.saga.sh ; python ./csa_test_$type.py $url true 2>&1'};
+
+    if ( ! defined $out )
+    {
+      $out = "could not run test - [FAILURE]";
+    }
+
+    my $msg = $out;
+
+    $out =~ s/^(.*)\s*\[SUCCESS\][\s\n]?$/$1/is;
+    $out =~ s/^(.*)\s*\[FAILURE\][\s\n]?$/$1/is;
+
+    $msg =~ s/^.*\s*\[SUCCESS\][\s\n]?$/ ok/iso;
+    $msg =~ s/^.*\s*\[FAILURE\][\s\n]?$/nok/iso;
+
+
+    printf "| %-12s | %-7s | %-10s | %-10s | %-55s | %3s |\n", 
+           $host, $type, $mode, $name, $url, $msg;
+
+
+    if ( $msg eq ' ok' )
+    {
+      $tests_ok++;
+    }
+    else
+    {
+      $tests_nok++;
+
+      $err .= sprintf "| %-112s |\n", " Error for $host / $name / $mode: ";
+      foreach my $line ( split (/\n/, $out) )
+      {
+        $err .= sprintf "| %-112s |\n", $line;
+      }
+      $err .= sprintf "+-%-12s-+-%-7s-+-%-10s-+-%-10s-+-%-55s-+-----+\n", '-'x12, '-'x7, '-'x10, '-'x10, '-'x55;
+    }
+  }
+
+
+  printf "+-%-12s-+-%-7s-+-%-10s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x10, '-'x55;
+  print  $err;
+  printf "| %-112s |\n", "ok : $tests_ok";
+  printf "| %-112s |\n", "nok: $tests_nok";
+  printf "+-%-12s-+-%-7s-+-%-10s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x10, '-'x55;
+
+}
+
+
+
+sub help (;$$)
 {
   my $ret = shift || 0;
+  my $msg = shift || undef;
+
+  if ( defined $msg )
+  {
+    print "\n\n    Error: $msg\n";
+  }
 
   print <<EOT;
 
-    $0 [-h|--help] 
-       [-l|--list] 
-       [-c|--check] 
-       [-v|--version version=all] 
-       [-n|--no]
-       [-e|--experimental]
-       [-f|--force]
-       [-s|--show]
-       [-d|--deploy]
-       [-r|--remove]
-       [-x|--execute] 
-       [-u|--user id] 
-       [-p|--pass pw] 
-       [-t|--target all,host1,host2,...] 
-       [-m|--module all,saga-core,readme,...] 
+    $0 -h | --help  
+            
+       -l | --list  
+       -d | --deploy 
+       -c | --check all,job,file,... 
+            
+       -e | --experimental 
+       -g | --git-push
+       -f | --force 
+       -n | --no 
+       -V | --Verbose 
+            
+       -t | --target  [all,host1,host2,...] 
+       -m | --module  [all,module1,module2,...]
+       -v | --version [version]
+       -p | --pass pw  
+       -u | --user id  
+            
+       -r | --run_test 
+       -x | --execute  
 
+
+  help operandi:
     -h : this help message
+
+  modus operandi:
     -l : list available target hosts
-    -c : check csa access and tooling               (default: off)
-    -v : version to deploy (see csa_packages file)  (default: trunk)
-    -a : deploy SAGA on all known target hosts      (default: off)
-    -u : svn user id                                (default: local user id)
-    -p : svn password                               (default: "")
-    -n : run 'make -n' to show what *would* be done (default: off)
-    -s : show commands to be run                    (default: off)
-    -e : experimental software deployment           (default: off)
-    -f : force re-deploy                            (default: off)
     -d : deploy version/modules on targets          (default: off)
-    -r : remove deployment on target host           (default: off)
+    -c : check csa deployment (unit tests)          (default: off)
+
+  flavors operandi:
+    -e : experimental software deployment           (default: off)
+    -g : push results back into git                 (default: off)
+    -f : force re-deploy                            (default: off)
+    -n : run 'make -n' to show what *would* be done (default: off)
+    -V : echo commands to be run                    (default: off)
+
+  parameter operandi:
+    -t : target hosts to deploy on                  (default: "" )
+    -m : modules to deploy                          (default: "" )
+    -v : version to deploy (see csa_packages file)  (default: ...)
+    -p : git password                               (default: "" )
+    -u : git user id                                (default: "" )
+
+  internal:
     -x : for maintainance, use with care!           (default: off)
-    -t : target hosts to deploy on                  (default: all)
-    -m : modules to deploy                          (default: all)
+    -r : run a specific test on target              (default: off)
 
 EOT
   exit ($ret);

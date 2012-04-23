@@ -1,0 +1,43 @@
+
+# These settings should be part of the saga env script and modules!
+#
+# lonestar      module swap mvapich2 openmpi,
+#               module load mkl,
+#               module use /share1/projects/tg/SAGA/modulefiles,
+#               module load saga,
+#               module load globus
+# india         module load torque,
+#               export PBS_HOME=/opt/torque
+# hotel         module load torque,
+#               module load openmpi,
+#               export PBS_HOME=/opt/torque
+# sierra        module load torque,
+#               module load openmpi,
+#               export PBS_HOME=/opt/torque
+
+*             job    local    fork           fork://localhost/
+*             job    local    ssh            ssh://localhost/
+*             job    local    gsissh         gsissh://localhost/
+*             job    local    pbspro         pbspro://localhost/
+*             job    local    torque         torque://localhost/
+*             job    local    sge            sge://localhost/
+
+kraken        job    remote   gsissh         gsissh://kraken-gsi.nics.utk.edu/
+kraken        job    remote   gram           gram://gridftp1.ls4.tacc.utexas.edu/jobmanager-fork
+kraken        job    remote   gram           gram://gridftp1.ls4.tacc.utexas.edu/jobmanager-pbs
+
+lonestar      job    remote   gsissh         gsissh://tg-login.lonestar.tacc.teragrid.org/
+lonestar      job    remote   gram           gram=gridftp1.ls4.tacc.utexas.edu:2119/jobmanager-fork
+lonestar      job    remote   gram           gram=gridftp1.ls4.tacc.utexas.edu:2119/jobmanager-sge
+
+queenbee      job    remote   gsissh         gsissh://queenbee.teragrid.org/
+ranger        job    remote   gsissh         gsissh://tg-login.ranger.tacc.teragrid.org/
+blacklight    job    remote   gsissh         gsissh://tg-login.blacklight.psc.teragrid.org/
+trestles      job    remote   gsissh         gsissh://trestles-login.sdsc.edu/
+steele        job    remote   gsissh         gsissh://tg-steele.purdue.teragrid.org/
+
+sierra        job    remote   ssh            ssh://sierra.futuregrid.org/
+india         job    remote   ssh            ssh://india.futuregrid.org/
+hotel         job    remote   ssh            ssh://hotel.futuregrid.org/
+alamo         job    remote   ssh            ssh://alamo.futuregrid.org/
+
