@@ -272,7 +272,7 @@ if ( $do_git_up )
   if ( $version eq "" )
   {
     $version = $def_version;
-    print "no version specified - using default version: $version\n";
+    # print "no version specified - using default version: $version\n";
   }
 
   if ( ! exists $csa_packs{$version} )

@@ -687,6 +687,6 @@ permissions:
 
 .PHONY: test
 test: info
-	@bash -c 'cd $(CSA_LOCATION) && source env.saga.sh && cd csa && ./csa_deploy.pl -r $(CSA_HOST) $(LOG) $(CSA_TESTS)'
+	@bash -c 'cd $(CSA_LOCATION) && source env.saga.sh && cd csa && ./csa_deploy.pl -r $(CSA_HOST) $(LOG) $(CSA_TESTS)' 2>&1 | tee -a $(LOG)
 
 
