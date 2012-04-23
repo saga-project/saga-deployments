@@ -200,9 +200,9 @@ $(CSA_EXT_DIR):
 # always do an svn up, on check
 .PHONY: $(CSA_ROOT) 
 $(CSA_ROOT):
-	# now done by csa_deploy itself
-	# @test -d $@ || $(SVNCO) https://svn.cct.lsu.edu/repos/saga-projects/deployment/tg-csa $@
-	# @test -d $@ && cd $@ && $(SVNUP)
+#	 now done by csa_deploy itself
+#	 @test -d $@ || $(SVNCO) https://svn.cct.lsu.edu/repos/saga-projects/deployment/tg-csa $@
+#	 @test -d $@ && cd $@ && $(SVNUP)
 
 
 ########################################################################
@@ -680,9 +680,9 @@ endif
 .PHONY: permissions
 permissions:
 	@echo "fixing permissions"
-	@-$(CHMOD) -R a+rX $(SAGA_LOCATION) 2>&1 /dev/null
-	@-$(CHMOD) -R a+rX $(EXTDIR)        2>&1 /dev/null
-	@-$(CHMOD)    a+rX $(CSA_LOCATION)  2>&1 /dev/null
+	@-$(CHMOD) -R a+rX $(SAGA_LOCATION)
+	@-$(CHMOD) -R a+rX $(EXTDIR)
+	@-$(CHMOD)    a+rX $(CSA_LOCATION)
 
 
 .PHONY: test
