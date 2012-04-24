@@ -5,6 +5,7 @@
 # name       full.qualified.host.name               /saga/csa/location                   access mechanism      local test                     remote tests
 
 # checks
+localhost    localhost                              /tmp/csa/install                     'ssh -q'               fork                          ssh
 thinkie      thinkie                                /home/merzky/test/csa/               'ssh -l  merzky -q'    fork,bigjob                   ssh
 boskop       boskop-merzky.no-ip.org                /home/merzky/saga/csa/deploy         'ssh -l  merzky -q'    fork,bigjob                   ssh
 cyder        cyder.cct.lsu.edu                      /home/amerzky/csa/                   'ssh -l amerzky -q'    fork,bigjob                   ssh
