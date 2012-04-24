@@ -94,7 +94,8 @@ my $CSA_TEST    = "$csa_root/csa_tests";
 my $CSA_TESTEPS = "$csa_root/csa_test_eps";
 my $ENV         = `which env`;  chomp ($ENV);
 my $MAKE        = "make --no-print-directory -f make.saga.csa.mk ";
-my $giturl      = "https://github.com/saga-project/saga-deployments.git";
+my $giturl_orig = "https://github.com/saga-project/saga-deployments.git";
+my $giturl      = $giturl_orig;
 my %csa_hosts   = ();
 my %csa_packs   = ();
 my %csa_tests   = ();
@@ -498,7 +499,7 @@ if ( $do_check )
 | force         : $do_force
 | experimental  : $do_exp
 |
-| git           : $giturl
+| git           : $giturl_orig
 |
 +------------------------------------------------------------------------------------------------------
 EOT
