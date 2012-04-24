@@ -1,6 +1,9 @@
 
 # host specific settings and modules
- 
+    export GLOBUS_LOCATION=/usr/
+    export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH
+    export PATH=$GLOBUS_LOCATION/bin/:$PATH
+
 
 # SAGA core settings
 export SAGA_LOCATION=/home/amerzky/csa/saga//1.6/gcc-4.4.3/
