@@ -14,6 +14,23 @@
 #
 # with obvious semantics (I hope)
 #
+#
+# These settings should be part of the saga env script and modules!
+#
+# lonestar      module swap mvapich2 openmpi,
+#               module load mkl,
+#               module use /share1/projects/tg/SAGA/modulefiles,
+#               module load saga,
+#               module load globus
+# india         module load torque,
+#               export PBS_HOME=/opt/torque
+# hotel         module load torque,
+#               module load openmpi,
+#               export PBS_HOME=/opt/torque
+# sierra        module load torque,
+#               module load openmpi,
+#               export PBS_HOME=/opt/torque
+
 #################################################################################
 
 thinkie: export GLOBUS_LOCATION=/usr/local/packages/globus-5.0.2

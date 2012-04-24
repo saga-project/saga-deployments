@@ -1,0 +1,76 @@
+
+Using this SAGA installation:
+=============================
+
+Quick Guide:
+------------
+
+  For using SAGA-C++, the following environment settings are required:
+
+      export SAGA_LOCATION=/home/merzky/test/csa/saga//1.6/gcc-4.4.5/
+      export LD_LIBRARY_PATH=:/home/merzky/test/csa/external/boost/1.44.0/gcc-4.4.5//lib/::/home/merzky/test/csa/external/postgresql/9.0.2/gcc-4.4.5//lib/::/home/merzky/test/csa/external/sqlite3/3.6.13/gcc-4.4.5//lib/::/home/merzky/test/csa/saga//1.6/gcc-4.4.5//lib/:/home/merzky/test/csa/external//python/2.7.1/gcc-4.4.5//lib/:$LD_LIBRARY_PATH
+      export PATH=:/home/merzky/test/csa/external//python/2.7.1/gcc-4.4.5//bin/::/home/merzky/test/csa/saga//1.6/gcc-4.4.5//bin/:$PATH
+
+  For using the SAGA Python bindings, the follwoing settings are additionally required:
+
+      export PATH=/home/merzky/test/csa/external//python/2.7.1/gcc-4.4.5//bin/:$PATH
+      export PYTHONPATH=/home/merzky/test/csa/saga//1.6/gcc-4.4.5//lib/python2.7/site-packages/:/home/merzky/test/csa/saga//1.6/gcc-4.4.5//lib/python2.7/site-packages//BigJob-0.4.60-py2.7.egg/:/home/merzky/test/csa/external//python/2.7.1/gcc-4.4.5//lib/2.7/site-packages/:$PYTHONPATH
+
+  Please use /home/merzky/test/csa/external//python/2.7.1/gcc-4.4.5//bin/python as python interpreter (the setting 
+  above puts that first in your path when running 'python').
+
+
+Detailed Instructions:
+----------------------
+ 
+  This README describes an automated SAGA deployment.  In particular, 
+  this installation of SAGA-C++ was installed via the SAGA CSA scripts 
+  (see https://svn.cct.lsu.edu/repos/saga-projects/deployment/tg-csa).
+
+  Note that this installation procedure is at this point not depending 
+  on system level software, but is instead installing all pre-requisites
+  separately, in /home/merzky/test/csa/external.  The SAGA installation can
+  be used with those dependencies by setting the folllwing environment
+  variables:
+
+
+    SAGA_LOCATION points to the SAGA installation root
+    # export SAGA_LOCATION=/home/merzky/test/csa/saga//1.6/gcc-4.4.5/
+
+
+    LD_LIBRARY_PATH allows to dynamically load shared libraries form this 
+    path, such as SAGA package libs or adaptors.
+    # export LD_LIBRARY_PATH=:/home/merzky/test/csa/external/boost/1.44.0/gcc-4.4.5//lib/::/home/merzky/test/csa/external/postgresql/9.0.2/gcc-4.4.5//lib/::/home/merzky/test/csa/external/sqlite3/3.6.13/gcc-4.4.5//lib/::/home/merzky/test/csa/saga//1.6/gcc-4.4.5//lib/:/home/merzky/test/csa/external//python/2.7.1/gcc-4.4.5//lib/:$LD_LIBRARY_PATH
+
+
+    PATH is used for searching for executables and scripts.
+    We usually have to use our own python installation, to ensure that it is
+    compatible with boost-python, which is used for our python bindings.
+    # export PATH=:/home/merzky/test/csa/external//python/2.7.1/gcc-4.4.5//bin/::/home/merzky/test/csa/saga//1.6/gcc-4.4.5//bin/:/home/merzky/test/csa/external//python/2.7.1/gcc-4.4.5//bin/:$PATH
+
+
+    PYTHONPATH points the pyton runtime to the location of the SAGA python modules
+    # export PYTHONPATH=/home/merzky/test/csa/saga//1.6/gcc-4.4.5//lib/python2.7/site-packages/:/home/merzky/test/csa/saga//1.6/gcc-4.4.5//lib/python2.7/site-packages//BigJob-0.4.60-py2.7.egg/:/home/merzky/test/csa/external//python/2.7.1/gcc-4.4.5//lib/2.7/site-packages/:$PYTHONPATH
+
+
+
+  For more information about SAGA-C++ and SAGA-Python, see 
+      
+    www : http://www.saga-project.org/
+
+
+  For general SAGA user support, please subscribe to the saga-users mailing
+  list:
+
+    www : https://mail.cct.lsu.edu/mailman/listinfo/saga-users
+    mail: saga-users@cct.lsu.edu
+
+
+
+  Please help to improve this software!  Report bugs and feature requests via
+  the TG ticket tracker (select SAGA component), or directly via the SAGA project 
+  tracker, at
+   
+    www : http://faust.cct.lsu.edu/trac/saga/  (login/pass: guest/guest)
+
+

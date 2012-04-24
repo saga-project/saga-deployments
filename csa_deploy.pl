@@ -483,7 +483,7 @@ if ( $do_check )
 #if ( ! $run_test )
 {
   print <<EOT;
-+-------------------------------------------------------------------------------------------------------------------
++------------------------------------------------------------------------------------------------------
 |
 | csa root      : $csa_root
 |
@@ -500,7 +500,7 @@ if ( $do_check )
 |
 | git           : $giturl
 |
-+-------------------------------------------------------------------------------------------------------------------
++------------------------------------------------------------------------------------------------------
 EOT
 }
 
@@ -668,7 +668,7 @@ if ( $do_deploy )
                                        " git add -f doc/README.saga-$version.*.$host* &&" .
                                        " git add -f mod/module.saga-$version.*.$host* &&" .
                                        " git add -f env/saga-$version.*.$host*.sh &&" .
-                                       " git commit -m \"automated update\" &&" .
+                                       " git commit -am \"automated update\" &&" .
                                        " git push $giturl ' " ;
 
               print " -- deploy: $cmd\n" if ( $verb || $noop );
@@ -779,7 +779,7 @@ if ( $do_check )
       {
         my $cmd = "$access $fqhn ' cd $path/csa/ && " .
                                  " git add -f test/test.saga-$version.*.$host* && " .
-                                 " git commit -m \"automated update\" && " .
+                                 " git commit -am \"automated update\" && " .
                                  " git push $giturl ' " ;
 
         print " -- check: $cmd\n" if ( $verb || $noop );
@@ -806,7 +806,7 @@ if ( $do_check )
 #
 if ( $run_test )
 {
-  my %tests      = ();
+  my @tests      = ();
   my $test_types = ();
 
   my $x509       = "$csa_root/test/x509_test.pem";
@@ -817,11 +817,15 @@ if ( $run_test )
     print "using $x509 as X509_USER_PROXY\n";
   }
 
+  # we now collect all tests to be run from the tests struct.  We run all tests
+  # of the given type, for the given host
   {
     open   (TMP, "<$CSA_TESTEPS") || die "ERROR  : cannot open '$CSA_HOSTS': $!\n";
     @tmp = <TMP>;
     close  (TMP);
     chomp  (@tmp);
+
+    @test_infos = split (/,/, $test_info );
 
     foreach my $line ( @tmp )
     {
@@ -830,90 +834,34 @@ if ( $run_test )
         # skip comment lines and empty lines
       }
       elsif ( $line =~
-        /^\s*(\S+)\s+(job|file|core|bigjob)\s+(local|remote)\s+(\S+)\s+(.*?)\s*$/io )
+        /^\s*(\S+)\s+(job|file|core|bigjob)\s+(\S+)\s+(.*?)\s*$/io )
       {
         my $host = $1;
         my $type = $2;
-        my $mode = $3;
-        my $name = $4;
-        my $info = $5;
+        my $name = $3;
+        my $info = $4;
 
-        $test_types{$type}++;
-
-        $info =~ s/\s+/ /iog;
-
-        if ( $host eq '*' )
+        if ( $host eq $test_host ||
+             $host eq '*'        )
         {
-          foreach my $tmp ( keys %csa_hosts )
+          if ( grep ($type,    @test_infos) ||
+               grep (/^all$/,  @test_infos) )
           {
-            $tests{$tmp}{$type}{$mode}{$name} = $info;
-          }
-        }
-        else
-        {
-          $tests{$host}{$type}{$mode}{$name} = $info;
-        }
-      }
-    }
-  }
+            $info =~ s/\s+/ /iog;
 
-
-
-  @test_infos = split (/,/, $test_info );
-
-  if ( grep (/^all$/, @test_infos) )
-  {
-    @test_infos = grep (!/^all$/, @test_infos);
-    push (@test_infos, keys (%test_types));
-  }
-
-
-  # we now collect all tests to be run from the tests struct.  We run all tests
-  # of the given type: all remote ones for that type on all hosts, and all local 
-  # ones for that type on localhost.
-  my $run_these_tests= ();
-
-  # check tests for all hosts
-  foreach my $host ( keys %tests )
-  {
-    # test all types for that host
-    foreach my $type ( keys %{$tests{$host}} )
-    {
-      # check if we want this type
-      if ( grep ($type, @test_infos) )
-      {
-        # want this type
-        # get local tests only for localhost
-        if ( $host eq $test_host )
-        {
-          # for localhost, also run local tests
-          foreach my $name ( keys %{$tests{$host}{$type}{'local'}} )
-          {
-            my %test = ('host' => $host, 
+            my %test = ('host' => $test_host, 
                         'type' => $type,
-                        'mode' => 'local',
                         'name' => $name, 
-                        'url'  => $tests{$host}{$type}{'local'}{$name}
+                        'info' => $info
                         );
-            push (@run_these_tests, \%test);
+            push (@tests, \%test);
           }
-        }
-
-        # always run remote tests
-        foreach my $name ( keys %{$tests{$host}{$type}{'remote'}} )
-        {
-          my %test = ('host' => $host, 
-                      'type' => $type,
-                      'mode' => 'remote',
-                      'name' => $name,
-                      'url'  => $tests{$host}{$type}{'remote'}{$name});
-          push (@run_these_tests, \%test);
         }
       }
     }
   }
 
-
+  # print Dumper \@tests;
 
   my $tests_ok   = 0;
   my $tests_nok  = 0;
@@ -921,19 +869,18 @@ if ( $run_test )
   my $out        = "";
   my $err        = "";
 
-  printf "+-%-12s-+-%-7s-+-%-10s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x10, '-'x55;
-  printf "| %-12s | %-7s | %-10s | %-10s | %-55s | res | \n", 'host', 'type', 'mode', 'name', 'url';
-  printf "+-%-12s-+-%-7s-+-%-10s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x10, '-'x55;
+  printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7,  '-'x10, '-'x55;
+  printf "| %-12s | %-7s | %-10s | %-55s | res | \n", 'host', 'type', 'name', 'info';
+  printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7,  '-'x10, '-'x55;
   
-  foreach my $test ( @run_these_tests)
+  foreach my $test ( @tests)
   {
     my $host = $test->{'host'};
     my $type = $test->{'type'};
-    my $mode = $test->{'mode'};
     my $name = $test->{'name'};
-    my $url  = $test->{'url'};
+    my $info = $test->{'info'};
 
-    my $cmd  = "bash -c '. $csa_root/../env.saga.sh ; python $csa_root/test/csa_test_$type.py $url true 2>&1'";
+    my $cmd  = "bash -c '. $csa_root/../env.saga.sh ; python $csa_root/test/csa_test_$type.py $info true 2>&1'";
 
     print " -- test: $cmd\n" if ( $verb || $noop );
         
@@ -956,9 +903,7 @@ if ( $run_test )
     $msg =~ s/^.*\s*\[FAILURE\][\s\n]?$/nok/iso;
 
 
-    printf "| %-12s | %-7s | %-10s | %-10s | %-55s | %3s |\n", 
-           $host, $type, $mode, $name, $url, $msg;
-
+    printf "| %-12s | %-7s | %-10s | %-55s | %3s |\n", $host, $type, $name, $info, $msg;
 
     if ( $msg eq ' ok' )
     {
@@ -968,20 +913,20 @@ if ( $run_test )
     {
       $tests_nok++;
 
-      $err .= sprintf "| %-112s |\n", " Error for $host / $name / $mode: ";
+      $err .= sprintf "| %-100s |\n", " Error for $host / $name : ";
       foreach my $line ( split (/\n/, $out) )
       {
-        $err .= sprintf "| %-112s |\n", $line;
+        $err .= sprintf "| %-100s |\n", $line;
       }
-      $err .= sprintf "+-%-12s-+-%-7s-+-%-10s-+-%-10s-+-%-55s-+-----+\n", '-'x12, '-'x7, '-'x10, '-'x10, '-'x55;
+      $err .= sprintf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+\n", '-'x12, '-'x7, '-'x10, '-'x55;
     }
   }
 
 
-  printf "+-%-12s-+-%-7s-+-%-10s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x10, '-'x55;
+  printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x55;
   print  $err;
-  printf "| %-112s |\n", "ok : $tests_ok";
-  printf "| %-112s |\n", "nok: $tests_nok";
-  printf "+-%-12s-+-%-7s-+-%-10s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x10, '-'x55;
+  printf "| %-100s |\n", "ok : $tests_ok";
+  printf "| %-100s |\n", "nok: $tests_nok";
+  printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x55;
 }
 
