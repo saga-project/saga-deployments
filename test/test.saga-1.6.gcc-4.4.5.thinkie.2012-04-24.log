@@ -6,6 +6,8 @@ csa  target               /home/merzky/test/csa/saga/
 saga version              1.6
 make version              GNU Make 3.81
 compiler version          gcc-4.4.5
+bash: true\n: command not found
+Use of uninitialized value $host in hash element at /home/merzky/test/csa/csa//csa_deploy.pl line 881.
 +-------------------------------------------------------------------------------------------------------------------
 |
 | csa root      : /home/merzky/test/csa/csa//
@@ -25,21 +27,10 @@ compiler version          gcc-4.4.5
 |
 +-------------------------------------------------------------------------------------------------------------------
 using /home/merzky/test/csa/csa///test/x509_test.pem as X509_USER_PROXY
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+ 
-| host         | type    | mode       | name       | url                                                     | res | 
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+ 
-| thinkie      | job     | local      | fork       | fork://localhost/                                       |  ok |
-| thinkie      | job     | local      | ssh        | ssh://localhost/                                        |  ok |
-| kraken       | job     | remote     | gsissh     | gsissh://kraken-gsi.nics.utk.edu/                       |  ok |
-| blacklight   | job     | remote     | gsissh     | gsissh://tg-login.blacklight.psc.teragrid.org/          |  ok |
-| india        | job     | remote     | ssh        | ssh://india.futuregrid.org/                             |  ok |
-| alamo        | job     | remote     | ssh        | ssh://alamo.futuregrid.org/                             |  ok |
-| ranger       | job     | remote     | gsissh     | gsissh://tg-login.ranger.tacc.teragrid.org/             |  ok |
-| lonestar     | job     | remote     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           |  ok |
-| trestles     | job     | remote     | gsissh     | gsissh://trestles-login.sdsc.edu/                       |  ok |
-| hotel        | job     | remote     | ssh        | ssh://hotel.futuregrid.org/                             |  ok |
-| sierra       | job     | remote     | ssh        | ssh://sierra.futuregrid.org/                            |  ok |
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+ 
-| ok : 11                                                                                                          |
++--------------+---------+------------+---------------------------------------------------------+-----+ 
+| host         | type    | name       | url                                                     | res | 
++--------------+---------+------------+---------------------------------------------------------+-----+ 
++--------------+---------+------------+---------------------------------------------------------+-----+ 
+| ok : 0                                                                                                           |
 | nok: 0                                                                                                           |
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+ 
++--------------+---------+------------+---------------------------------------------------------+-----+ 
