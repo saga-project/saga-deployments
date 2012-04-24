@@ -668,7 +668,7 @@ if ( $do_deploy )
                                        " git add -f doc/README.saga-$version.*.$host* &&" .
                                        " git add -f mod/module.saga-$version.*.$host* &&" .
                                        " git add -f env/saga-$version.*.$host*.sh &&" .
-                                       " git commit -m \"automated update\" &&" .
+                                       " git commit -am \"automated update\" &&" .
                                        " git push $giturl ' " ;
 
               print " -- deploy: $cmd\n" if ( $verb || $noop );
@@ -779,7 +779,7 @@ if ( $do_check )
       {
         my $cmd = "$access $fqhn ' cd $path/csa/ && " .
                                  " git add -f test/test.saga-$version.*.$host* && " .
-                                 " git commit -m \"automated update\" && " .
+                                 " git commit -am \"automated update\" && " .
                                  " git push $giturl ' " ;
 
         print " -- check: $cmd\n" if ( $verb || $noop );
