@@ -95,6 +95,7 @@ my $CSA_TESTEPS = "$csa_root/csa_test_eps";
 my $ENV         = `which env`;  chomp ($ENV);
 my $MAKE        = "make --no-print-directory -f make.saga.csa.mk ";
 my $giturl_orig = "https://github.com/saga-project/saga-deployments.git";
+my $giturl_pub  = "git://github.com/saga-project/saga-deployments.git";
 my $giturl      = $giturl_orig;
 my %csa_hosts   = ();
 my %csa_packs   = ();
@@ -248,6 +249,10 @@ if ( $do_git_up )
   if ( ! $gitpass ) { help (-1, "-g requires -p") }
 
   $giturl =~ s|^(https://)(.+)$|$1$gituser:$gitpass\@$2|io;
+}
+else
+{
+  $giturl = $giturl_pub;
 }
 
 # {
