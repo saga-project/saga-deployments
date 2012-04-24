@@ -7,7 +7,7 @@ saga version              1.6
 make version              GNU Make 3.81
 compiler version          gcc-4.4.3
 bash: true\n: command not found
-+-------------------------------------------------------------------------------------------------------------------
++------------------------------------------------------------------------------------------------------
 |
 | csa root      : /home/amerzky/csa/csa//
 |
@@ -24,72 +24,55 @@ bash: true\n: command not found
 |
 | git           : https://github.com/saga-project/saga-deployments.git
 |
-+-------------------------------------------------------------------------------------------------------------------
++------------------------------------------------------------------------------------------------------
 using /home/amerzky/csa/csa///test/x509_test.pem as X509_USER_PROXY
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+ 
-| host         | type    | mode       | name       | url                                                     | res | 
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+ 
-| kraken       | job     | remote     | gsissh     | gsissh://kraken-gsi.nics.utk.edu/                       | nok |
-| blacklight   | job     | remote     | gsissh     | gsissh://tg-login.blacklight.psc.teragrid.org/          | nok |
-| india        | job     | remote     | ssh        | ssh://india.futuregrid.org/                             | nok |
-| alamo        | job     | remote     | ssh        | ssh://alamo.futuregrid.org/                             | nok |
-| ranger       | job     | remote     | gsissh     | gsissh://tg-login.ranger.tacc.teragrid.org/             | nok |
-| cyder        | job     | local      | fork       | fork://localhost/                                       |  ok |
-| lonestar     | job     | remote     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
-| trestles     | job     | remote     | gsissh     | gsissh://trestles-login.sdsc.edu/                       | nok |
-| hotel        | job     | remote     | ssh        | ssh://hotel.futuregrid.org/                             | nok |
-| sierra       | job     | remote     | ssh        | ssh://sierra.futuregrid.org/                            | nok |
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+ 
-|  Error for kraken / gsissh / remote:                                                                             |
-|  === no cmd                                                                                                      |
-| SAGA(NoSuccess): ssh_job: Cannot execute jobs on remote host ()                                                  |
++--------------+---------+------------+---------------------------------------------------------+-----+ 
+| host         | type    | name       | info                                                    | res | 
++--------------+---------+------------+---------------------------------------------------------+-----+ 
+| cyder        | job     | fork       | fork://localhost/                                       |  ok |
+| cyder        | job     | ssh        | ssh://localhost/                                        |  ok |
+| cyder        | job     | ssh        | ssh://sierra.futuregrid.org/                            | nok |
+| cyder        | job     | gsissh     | gsissh://kraken-gsi.nics.utk.edu/                       | nok |
+| cyder        | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
+| cyder        | job     | gsissh     | gsissh://tg-login.ranger.tacc.teragrid.org/             | nok |
+| cyder        | job     | gsissh     | gsissh://tg-login.blacklight.psc.teragrid.org/          | nok |
+| cyder        | job     | gsissh     | gsissh://trestles-login.sdsc.edu/                       | nok |
++--------------+---------+------------+---------------------------------------------------------+-----+ 
+|  Error for cyder / ssh :                                                                             |
+| watching job [ Running ]                                                                             |
+|              [ Failed ]                                                                              |
+| job failed. final job state : Failed                                                                 |
++--------------+---------+------------+---------------------------------------------------------+-----+
+|  Error for cyder / gsissh :                                                                          |
+|  === no cmd                                                                                          |
+| SAGA(NoSuccess): ssh_job: Cannot execute jobs on remote host ()                                      |
 | SAGA(BadParameter): torque_job: Could not initialize job service for [gsissh://kraken-gsi.nics.utk.edu/]. Only any://, torque:// and xt5torque:// schemes are supported. |
-| SAGA(NoSuccess): No adaptor succeeded in executing constructor for job_service_cpi                               |
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+
-|  Error for blacklight / gsissh / remote:                                                                         |
-|  === no cmd                                                                                                      |
-| SAGA(NoSuccess): ssh_job: Cannot execute jobs on remote host ()                                                  |
-| SAGA(BadParameter): torque_job: Could not initialize job service for [gsissh://tg-login.blacklight.psc.teragrid.org/]. Only any://, torque:// and xt5torque:// schemes are supported. |
-| SAGA(NoSuccess): No adaptor succeeded in executing constructor for job_service_cpi                               |
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+
-|  Error for india / ssh / remote:                                                                                 |
-| watching job [ Running ]                                                                                         |
-|              [ Failed ]                                                                                          |
-| job failed. final job state : Failed                                                                             |
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+
-|  Error for alamo / ssh / remote:                                                                                 |
-| watching job [ Running ]                                                                                         |
-|              [ Failed ]                                                                                          |
-| job failed. final job state : Failed                                                                             |
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+
-|  Error for ranger / gsissh / remote:                                                                             |
-|  === no cmd                                                                                                      |
-| SAGA(NoSuccess): ssh_job: Cannot execute jobs on remote host ()                                                  |
-| SAGA(BadParameter): torque_job: Could not initialize job service for [gsissh://tg-login.ranger.tacc.teragrid.org/]. Only any://, torque:// and xt5torque:// schemes are supported. |
-| SAGA(NoSuccess): No adaptor succeeded in executing constructor for job_service_cpi                               |
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+
-|  Error for lonestar / gsissh / remote:                                                                           |
-|  === no cmd                                                                                                      |
-| SAGA(NoSuccess): ssh_job: Cannot execute jobs on remote host ()                                                  |
+| SAGA(NoSuccess): No adaptor succeeded in executing constructor for job_service_cpi                   |
++--------------+---------+------------+---------------------------------------------------------+-----+
+|  Error for cyder / gsissh :                                                                          |
+|  === no cmd                                                                                          |
+| SAGA(NoSuccess): ssh_job: Cannot execute jobs on remote host ()                                      |
 | SAGA(BadParameter): torque_job: Could not initialize job service for [gsissh://tg-login.lonestar.tacc.teragrid.org/]. Only any://, torque:// and xt5torque:// schemes are supported. |
-| SAGA(NoSuccess): No adaptor succeeded in executing constructor for job_service_cpi                               |
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+
-|  Error for trestles / gsissh / remote:                                                                           |
-|  === no cmd                                                                                                      |
-| SAGA(NoSuccess): ssh_job: Cannot execute jobs on remote host ()                                                  |
+| SAGA(NoSuccess): No adaptor succeeded in executing constructor for job_service_cpi                   |
++--------------+---------+------------+---------------------------------------------------------+-----+
+|  Error for cyder / gsissh :                                                                          |
+|  === no cmd                                                                                          |
+| SAGA(NoSuccess): ssh_job: Cannot execute jobs on remote host ()                                      |
+| SAGA(BadParameter): torque_job: Could not initialize job service for [gsissh://tg-login.ranger.tacc.teragrid.org/]. Only any://, torque:// and xt5torque:// schemes are supported. |
+| SAGA(NoSuccess): No adaptor succeeded in executing constructor for job_service_cpi                   |
++--------------+---------+------------+---------------------------------------------------------+-----+
+|  Error for cyder / gsissh :                                                                          |
+|  === no cmd                                                                                          |
+| SAGA(NoSuccess): ssh_job: Cannot execute jobs on remote host ()                                      |
+| SAGA(BadParameter): torque_job: Could not initialize job service for [gsissh://tg-login.blacklight.psc.teragrid.org/]. Only any://, torque:// and xt5torque:// schemes are supported. |
+| SAGA(NoSuccess): No adaptor succeeded in executing constructor for job_service_cpi                   |
++--------------+---------+------------+---------------------------------------------------------+-----+
+|  Error for cyder / gsissh :                                                                          |
+|  === no cmd                                                                                          |
+| SAGA(NoSuccess): ssh_job: Cannot execute jobs on remote host ()                                      |
 | SAGA(BadParameter): torque_job: Could not initialize job service for [gsissh://trestles-login.sdsc.edu/]. Only any://, torque:// and xt5torque:// schemes are supported. |
-| SAGA(NoSuccess): No adaptor succeeded in executing constructor for job_service_cpi                               |
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+
-|  Error for hotel / ssh / remote:                                                                                 |
-| watching job [ Running ]                                                                                         |
-|              [ Failed ]                                                                                          |
-| job failed. final job state : Failed                                                                             |
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+
-|  Error for sierra / ssh / remote:                                                                                |
-| watching job [ Running ]                                                                                         |
-|              [ Failed ]                                                                                          |
-| job failed. final job state : Failed                                                                             |
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+
-| ok : 1                                                                                                           |
-| nok: 9                                                                                                           |
-+--------------+---------+------------+------------+---------------------------------------------------------+-----+ 
+| SAGA(NoSuccess): No adaptor succeeded in executing constructor for job_service_cpi                   |
++--------------+---------+------------+---------------------------------------------------------+-----+
+| ok : 2                                                                                               |
+| nok: 6                                                                                               |
++--------------+---------+------------+---------------------------------------------------------+-----+ 
