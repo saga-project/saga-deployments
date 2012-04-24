@@ -913,10 +913,10 @@ if ( $run_test )
     {
       $tests_nok++;
 
-      $err .= sprintf "| %-100s |\n", " Error for $host / $name : ";
+      $err .= sprintf "| %-99s |\n", " Error for $host / $type / $name / $info : ";
       foreach my $line ( split (/\n/, $out) )
       {
-        $err .= sprintf "| %-100s |\n", $line;
+        $err .= sprintf "| %-99s |\n", $line;
       }
       $err .= sprintf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+\n", '-'x12, '-'x7, '-'x10, '-'x55;
     }
@@ -925,8 +925,8 @@ if ( $run_test )
 
   printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x55;
   print  $err;
-  printf "| %-100s |\n", "ok : $tests_ok";
-  printf "| %-100s |\n", "nok: $tests_nok";
+  printf "| %-99s |\n", "ok : $tests_ok";
+  printf "| %-99s |\n", "nok: $tests_nok";
   printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x55;
 }
 
