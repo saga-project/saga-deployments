@@ -880,7 +880,7 @@ if ( $run_test )
       # want this type, add all found tests
       foreach my $name ( keys %{$tests{$test_host}{$type}} )
       {
-        my %test = ('host' => $host, 
+        my %test = ('host' => $test_host, 
                     'type' => $type,
                     'name' => $name, 
                     'url'  => $tests{$test_host}{$type}{$name}
