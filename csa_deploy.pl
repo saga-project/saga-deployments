@@ -878,12 +878,12 @@ if ( $run_test )
     if ( grep ($type, @test_infos) )
     {
       # want this type, add all found tests
-      foreach my $name ( keys %{$tests{$host}{$type}} )
+      foreach my $name ( keys %{$tests{$test_host}{$type}} )
       {
         my %test = ('host' => $host, 
                     'type' => $type,
                     'name' => $name, 
-                    'url'  => $tests{$host}{$type}{$name}
+                    'url'  => $tests{$test_host}{$type}{$name}
                     );
         push (@run_these_tests, \%test);
       }
