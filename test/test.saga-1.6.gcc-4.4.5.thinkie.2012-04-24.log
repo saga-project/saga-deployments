@@ -7,8 +7,7 @@ saga version              1.6
 make version              GNU Make 3.81
 compiler version          gcc-4.4.5
 bash: true\n: command not found
-Use of uninitialized value $host in hash element at /home/merzky/test/csa/csa//csa_deploy.pl line 881.
-+-------------------------------------------------------------------------------------------------------------------
++-------------------------------------------------------------------------------------------------------
 |
 | csa root      : /home/merzky/test/csa/csa//
 |
@@ -25,12 +24,23 @@ Use of uninitialized value $host in hash element at /home/merzky/test/csa/csa//c
 |
 | git           : https://github.com/saga-project/saga-deployments.git
 |
-+-------------------------------------------------------------------------------------------------------------------
++-------------------------------------------------------------------------------------------------------
 using /home/merzky/test/csa/csa///test/x509_test.pem as X509_USER_PROXY
 +--------------+---------+------------+---------------------------------------------------------+-----+ 
-| host         | type    | name       | url                                                     | res | 
+| host         | type    | name       | info                                                    | res | 
 +--------------+---------+------------+---------------------------------------------------------+-----+ 
+| thinkie      | job     | fork       | fork://localhost/                                       |  ok |
+| thinkie      | job     | ssh        | ssh://localhost/                                        |  ok |
+| thinkie      | job     | ssh        | ssh://sierra.futuregrid.org/                            |  ok |
+| thinkie      | job     | ssh        | ssh://india.futuregrid.org/                             |  ok |
+| thinkie      | job     | ssh        | ssh://hotel.futuregrid.org/                             |  ok |
+| thinkie      | job     | ssh        | ssh://alamo.futuregrid.org/                             |  ok |
+| thinkie      | job     | gsissh     | gsissh://kraken-gsi.nics.utk.edu/                       |  ok |
+| thinkie      | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           |  ok |
+| thinkie      | job     | gsissh     | gsissh://tg-login.ranger.tacc.teragrid.org/             |  ok |
+| thinkie      | job     | gsissh     | gsissh://tg-login.blacklight.psc.teragrid.org/          |  ok |
+| thinkie      | job     | gsissh     | gsissh://trestles-login.sdsc.edu/                       |  ok |
 +--------------+---------+------------+---------------------------------------------------------+-----+ 
-| ok : 0                                                                                                           |
-| nok: 0                                                                                                           |
+| ok : 11                                                                                              |
+| nok: 0                                                                                               |
 +--------------+---------+------------+---------------------------------------------------------+-----+ 

@@ -483,7 +483,7 @@ if ( $do_check )
 #if ( ! $run_test )
 {
   print <<EOT;
-+-------------------------------------------------------------------------------------------------------------------
++-------------------------------------------------------------------------------------------------------
 |
 | csa root      : $csa_root
 |
@@ -500,7 +500,7 @@ if ( $do_check )
 |
 | git           : $giturl
 |
-+-------------------------------------------------------------------------------------------------------------------
++-------------------------------------------------------------------------------------------------------
 EOT
 }
 
@@ -806,7 +806,7 @@ if ( $do_check )
 #
 if ( $run_test )
 {
-  my %tests      = ();
+  my @tests      = ();
   my $test_types = ();
 
   my $x509       = "$csa_root/test/x509_test.pem";
@@ -817,11 +817,15 @@ if ( $run_test )
     print "using $x509 as X509_USER_PROXY\n";
   }
 
+  # we now collect all tests to be run from the tests struct.  We run all tests
+  # of the given type, for the given host
   {
     open   (TMP, "<$CSA_TESTEPS") || die "ERROR  : cannot open '$CSA_HOSTS': $!\n";
     @tmp = <TMP>;
     close  (TMP);
     chomp  (@tmp);
+
+    @test_infos = split (/,/, $test_info );
 
     foreach my $line ( @tmp )
     {
@@ -837,59 +841,27 @@ if ( $run_test )
         my $name = $3;
         my $info = $4;
 
-        $test_types{$type}++;
-
-        $info =~ s/\s+/ /iog;
-
-        if ( $host eq '*' )
+        if ( $host eq $test_host ||
+             $host eq '*'        )
         {
-          foreach my $tmp ( keys %csa_hosts )
+          if ( grep ($type,    @test_infos) ||
+               grep (/^all$/,  @test_infos) )
           {
-            $tests{$tmp}{$type}{$name} = $info;
+            $info =~ s/\s+/ /iog;
+
+            my %test = ('host' => $test_host, 
+                        'type' => $type,
+                        'name' => $name, 
+                        'info' => $info
+                        );
+            push (@tests, \%test);
           }
         }
-        else
-        {
-          $tests{$host}{$type}{$name} = $info;
-        }
       }
     }
   }
 
-
-
-  @test_infos = split (/,/, $test_info );
-
-  if ( grep (/^all$/, @test_infos) )
-  {
-    @test_infos = grep (!/^all$/, @test_infos);
-    push (@test_infos, keys (%test_types));
-  }
-
-
-  # we now collect all tests to be run from the tests struct.  We run all tests
-  # of the given type, for the given host
-  my $run_these_tests= ();
-
-  # test all types for the test host
-  foreach my $type ( keys %{$tests{$test_host}} )
-  {
-    # check if we want this type
-    if ( grep ($type, @test_infos) )
-    {
-      # want this type, add all found tests
-      foreach my $name ( keys %{$tests{$test_host}{$type}} )
-      {
-        my %test = ('host' => $test_host, 
-                    'type' => $type,
-                    'name' => $name, 
-                    'url'  => $tests{$test_host}{$type}{$name}
-                    );
-        push (@run_these_tests, \%test);
-      }
-    }
-  }
-  
+  # print Dumper \@tests;
 
   my $tests_ok   = 0;
   my $tests_nok  = 0;
@@ -898,17 +870,17 @@ if ( $run_test )
   my $err        = "";
 
   printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7,  '-'x10, '-'x55;
-  printf "| %-12s | %-7s | %-10s | %-55s | res | \n", 'host', 'type', 'name', 'url';
+  printf "| %-12s | %-7s | %-10s | %-55s | res | \n", 'host', 'type', 'name', 'info';
   printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7,  '-'x10, '-'x55;
   
-  foreach my $test ( @run_these_tests)
+  foreach my $test ( @tests)
   {
     my $host = $test->{'host'};
     my $type = $test->{'type'};
     my $name = $test->{'name'};
-    my $url  = $test->{'url'};
+    my $info = $test->{'info'};
 
-    my $cmd  = "bash -c '. $csa_root/../env.saga.sh ; python $csa_root/test/csa_test_$type.py $url true 2>&1'";
+    my $cmd  = "bash -c '. $csa_root/../env.saga.sh ; python $csa_root/test/csa_test_$type.py $info true 2>&1'";
 
     print " -- test: $cmd\n" if ( $verb || $noop );
         
@@ -931,9 +903,7 @@ if ( $run_test )
     $msg =~ s/^.*\s*\[FAILURE\][\s\n]?$/nok/iso;
 
 
-    printf "| %-12s | %-7s | %-10s | %-55s | %3s |\n", 
-           $host, $type, $name, $url, $msg;
-
+    printf "| %-12s | %-7s | %-10s | %-55s | %3s |\n", $host, $type, $name, $info, $msg;
 
     if ( $msg eq ' ok' )
     {
@@ -943,10 +913,10 @@ if ( $run_test )
     {
       $tests_nok++;
 
-      $err .= sprintf "| %-112s |\n", " Error for $host / $name : ";
+      $err .= sprintf "| %-100s |\n", " Error for $host / $name : ";
       foreach my $line ( split (/\n/, $out) )
       {
-        $err .= sprintf "| %-112s |\n", $line;
+        $err .= sprintf "| %-100s |\n", $line;
       }
       $err .= sprintf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+\n", '-'x12, '-'x7, '-'x10, '-'x55;
     }
@@ -955,8 +925,8 @@ if ( $run_test )
 
   printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x55;
   print  $err;
-  printf "| %-112s |\n", "ok : $tests_ok";
-  printf "| %-112s |\n", "nok: $tests_nok";
+  printf "| %-100s |\n", "ok : $tests_ok";
+  printf "| %-100s |\n", "nok: $tests_nok";
   printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x55;
 }
 
