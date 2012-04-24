@@ -7,16 +7,16 @@ Quick Guide:
 
   For using SAGA-C++, the following environment settings are required:
 
-      export SAGA_LOCATION=/home/amerzky/csa/saga/1.6/gcc-4.4.3/
-      export LD_LIBRARY_PATH=:/home/amerzky/csa/external/python/2.7.1/gcc-4.4.3//lib/:/home/amerzky/csa/external/boost/1.44.0/gcc-4.4.3//lib/::/home/amerzky/csa/external/postgresql/9.0.2/gcc-4.4.3//lib/::/home/amerzky/csa/external/sqlite3/3.6.13/gcc-4.4.3//lib/::/home/amerzky/csa/saga/1.6/gcc-4.4.3//lib/:$LD_LIBRARY_PATH
-      export PATH=/home/amerzky/csa/saga/1.6/gcc-4.4.3//bin:$PATH
+      export SAGA_LOCATION=/home/amerzky/csa/saga//1.6/gcc-4.4.3/
+      export LD_LIBRARY_PATH=:/home/amerzky/csa/external/boost/1.44.0/gcc-4.4.3//lib/::/home/amerzky/csa/external/postgresql/9.0.2/gcc-4.4.3//lib/::/home/amerzky/csa/external/sqlite3/3.6.13/gcc-4.4.3//lib/::/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/:/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//lib/:$LD_LIBRARY_PATH
+      export PATH=:/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//bin/::/home/amerzky/csa/saga//1.6/gcc-4.4.3//bin/:$PATH
 
   For using the SAGA Python bindings, the follwoing settings are additionally required:
 
-      export PATH=/home/amerzky/csa/external/python/2.7.1/gcc-4.4.3//bin:$PATH
-      export PYTHONPATH=/home/amerzky/csa/saga/1.6/gcc-4.4.3//lib/python2.7/site-packages/:/home/amerzky/csa/external/python/2.7.1/gcc-4.4.3//lib/2.7/site-packages/:$PYTHONPATH
+      export PATH=/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//bin/:$PATH
+      export PYTHONPATH=/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages/:/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages//BigJob-0.4.61-py2.7.egg/:/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//lib/2.7/site-packages/:$PYTHONPATH
 
-  Please use /home/amerzky/csa/external/python/2.7.1/gcc-4.4.3//bin/python as python interpreter (the setting 
+  Please use /home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//bin/python as python interpreter (the setting 
   above puts that first in your path when running 'python').
 
 
@@ -35,22 +35,22 @@ Detailed Instructions:
 
 
     SAGA_LOCATION points to the SAGA installation root
-    # export SAGA_LOCATION=/home/amerzky/csa/saga/1.6/gcc-4.4.3/
+    # export SAGA_LOCATION=/home/amerzky/csa/saga//1.6/gcc-4.4.3/
 
 
     LD_LIBRARY_PATH allows to dynamically load shared libraries form this 
     path, such as SAGA package libs or adaptors.
-    # export LD_LIBRARY_PATH=:/home/amerzky/csa/external/python/2.7.1/gcc-4.4.3//lib/:/home/amerzky/csa/external/boost/1.44.0/gcc-4.4.3//lib/::/home/amerzky/csa/external/postgresql/9.0.2/gcc-4.4.3//lib/::/home/amerzky/csa/external/sqlite3/3.6.13/gcc-4.4.3//lib/::/home/amerzky/csa/saga/1.6/gcc-4.4.3//lib/:$LD_LIBRARY_PATH
+    # export LD_LIBRARY_PATH=:/home/amerzky/csa/external/boost/1.44.0/gcc-4.4.3//lib/::/home/amerzky/csa/external/postgresql/9.0.2/gcc-4.4.3//lib/::/home/amerzky/csa/external/sqlite3/3.6.13/gcc-4.4.3//lib/::/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/:/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//lib/:$LD_LIBRARY_PATH
 
 
     PATH is used for searching for executables and scripts.
     We usually have to use our own python installation, to ensure that it is
     compatible with boost-python, which is used for our python bindings.
-    # export PATH=/home/amerzky/csa/saga/1.6/gcc-4.4.3//bin:/home/amerzky/csa/external/python/2.7.1/gcc-4.4.3//bin:$PATH
+    # export PATH=:/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//bin/::/home/amerzky/csa/saga//1.6/gcc-4.4.3//bin/:/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//bin/:$PATH
 
 
     PYTHONPATH points the pyton runtime to the location of the SAGA python modules
-    # export PYTHONPATH=/home/amerzky/csa/saga/1.6/gcc-4.4.3//lib/python2.7/site-packages/:/home/amerzky/csa/external/python/2.7.1/gcc-4.4.3//lib/2.7/site-packages/:$PYTHONPATH
+    # export PYTHONPATH=/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages/:/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages//BigJob-0.4.61-py2.7.egg/:/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//lib/2.7/site-packages/:$PYTHONPATH
 
 
 
