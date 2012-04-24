@@ -1,76 +1,94 @@
 
+---------------------------------------------------------------------------------
+
 Using this SAGA installation:
 =============================
 
 Quick Guide:
 ------------
 
-  For using SAGA-C++, the following environment settings are required:
+ For using SAGA-C++, the following environment settings are required:
 
-      export SAGA_LOCATION=###SAGA_LOCATION###
-      export LD_LIBRARY_PATH=###SAGA_LDLIBPATH###:$LD_LIBRARY_PATH
-      export PATH=###SAGA_PATH###:$PATH
+     # export SAGA_LOCATION=###SAGA_LOCATION###
+     # export LD_LIBRARY_PATH=###SAGA_LDLIBPATH###:$LD_LIBRARY_PATH
+     # export PATH=###SAGA_PATH###:$PATH
 
-  For using the SAGA Python bindings, the follwoing settings are additionally required:
+ For using the SAGA Python bindings, the follwoing settings are additionally required:
 
-      export PATH=###PYTHON_PATH###:$PATH
-      export PYTHONPATH=###SAGA_MODPATH###:###PYTHON_MODPATH###:$PYTHONPATH
+     # export PATH=###PYTHON_PATH###:$PATH
+     # export PYTHONPATH=###SAGA_MODPATH###:###PYTHON_MODPATH###:$PYTHONPATH
 
-  Please use ###SAGA_PYTHON### as python interpreter (the setting 
-  above puts that first in your path when running 'python').
+ Please use ###SAGA_PYTHON### as python interpreter (the setting 
+ above puts that first in your path when running 'python').
 
+
+---------------------------------------------------------------------------------
 
 Detailed Instructions:
 ----------------------
  
-  This README describes an automated SAGA deployment.  In particular, 
-  this installation of SAGA-C++ was installed via the SAGA CSA scripts 
-  (see https://svn.cct.lsu.edu/repos/saga-projects/deployment/tg-csa).
+ This README describes an automated SAGA deployment.  In particular, 
+ this deployment of SAGA-C++ was installed via the SAGA CSA scripts 
+ (see https://svn.cct.lsu.edu/repos/saga-projects/deployment/tg-csa).
 
-  Note that this installation procedure is at this point not depending 
-  on system level software, but is instead installing all pre-requisites
-  separately, in ###CSA_LOCATION###/external.  The SAGA installation can
-  be used with those dependencies by setting the folllwing environment
-  variables:
+ Note that this deployment is at this point not depending on system level
+ software, but instead includes all pre-requisites separately, in
 
+   ###CSA_LOCATION###/external
 
-    SAGA_LOCATION points to the SAGA installation root
-    # export SAGA_LOCATION=###SAGA_LOCATION###
+ This host might nevertheless require some specific settings to use this
+ deployment -- if so, those are listed below:
 
+###HOST_SETUP###
 
-    LD_LIBRARY_PATH allows to dynamically load shared libraries form this 
-    path, such as SAGA package libs or adaptors.
-    # export LD_LIBRARY_PATH=###SAGA_LDLIBPATH###:$LD_LIBRARY_PATH
+ The SAGA deployment and the accompanying dependencies can be used by setting
+ the following environment variables:
 
 
-    PATH is used for searching for executables and scripts.
-    We usually have to use our own python installation, to ensure that it is
-    compatible with boost-python, which is used for our python bindings.
-    # export PATH=###SAGA_PATH###:###PYTHON_PATH###:$PATH
+   # SAGA_LOCATION points to the SAGA installation root
+   export SAGA_LOCATION=###SAGA_LOCATION###
 
 
-    PYTHONPATH points the pyton runtime to the location of the SAGA python modules
-    # export PYTHONPATH=###SAGA_MODPATH###:###PYTHON_MODPATH###:$PYTHONPATH
+   # LD_LIBRARY_PATH allows to dynamically load shared libraries form this 
+   # path, such as SAGA package libs or adaptors.
+   export LD_LIBRARY_PATH=###SAGA_LDLIBPATH###:$LD_LIBRARY_PATH
+
+
+   # PATH is used for searching for executables and scripts.
+   # We usually have to use our own python installation, to ensure that it is
+   # compatible with boost-python, which is used for the SAGA python bindings.
+   export PATH=###SAGA_PATH###:###PYTHON_PATH###:$PATH
+
+
+   # PYTHONPATH points the pyton runtime to the location of the SAGA 
+   # python modules
+   export PYTHONPATH=###SAGA_MODPATH###:###PYTHON_MODPATH###:$PYTHONPATH
+
+
+---------------------------------------------------------------------------------
+
+Further documentation and support:
+----------------------------------
+
+
+ For more information about SAGA-C++ and SAGA-Python, see 
+     
+   www : http://www.saga-project.org/
+
+
+ For general SAGA user support, please subscribe to the saga-users mailing
+ list:
+
+   www : https://mail.cct.lsu.edu/mailman/listinfo/saga-users
+   mail: saga-users@cct.lsu.edu
 
 
 
-  For more information about SAGA-C++ and SAGA-Python, see 
-      
-    www : http://www.saga-project.org/
+ Please help to improve this software!  Report bugs and feature requests via
+ the TG ticket tracker (select SAGA component), or directly via the SAGA project 
+ tracker, at
+  
+   www : http://faust.cct.lsu.edu/trac/saga/  (login/pass: guest/guest)
 
-
-  For general SAGA user support, please subscribe to the saga-users mailing
-  list:
-
-    www : https://mail.cct.lsu.edu/mailman/listinfo/saga-users
-    mail: saga-users@cct.lsu.edu
-
-
-
-  Please help to improve this software!  Report bugs and feature requests via
-  the TG ticket tracker (select SAGA component), or directly via the SAGA project 
-  tracker, at
-   
-    www : http://faust.cct.lsu.edu/trac/saga/  (login/pass: guest/guest)
-
+---------------------------------------------------------------------------------
 
