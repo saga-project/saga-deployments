@@ -740,7 +740,7 @@ if ( $do_check )
           if ( -r $proxy )
           {
             my $tgt = "$path/csa/test/x509_test.pem";
-            my $cmd = "cat $proxy | $access $fqhn 'cat > $tgt' ; chmod 0600 $tgt";
+            my $cmd = "cat $proxy | $access $fqhn 'cat > $tgt ; chmod 0600 $tgt'";
 
             print " -- check : $cmd\n" if ( $verb || $noop );
 
