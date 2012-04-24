@@ -830,13 +830,12 @@ if ( $run_test )
         # skip comment lines and empty lines
       }
       elsif ( $line =~
-        /^\s*(\S+)\s+(job|file|core|bigjob)\s+(local|remote)\s+(\S+)\s+(.*?)\s*$/io )
+        /^\s*(\S+)\s+(job|file|core|bigjob)\s+(\S+)\s+(.*?)\s*$/io )
       {
         my $host = $1;
         my $type = $2;
-        my $mode = $3;
-        my $name = $4;
-        my $info = $5;
+        my $name = $3;
+        my $info = $4;
 
         $test_types{$type}++;
 
@@ -846,12 +845,12 @@ if ( $run_test )
         {
           foreach my $tmp ( keys %csa_hosts )
           {
-            $tests{$tmp}{$type}{$mode}{$name} = $info;
+            $tests{$tmp}{$type}{$name} = $info;
           }
         }
         else
         {
-          $tests{$host}{$type}{$mode}{$name} = $info;
+          $tests{$host}{$type}{$name} = $info;
         }
       }
     }
@@ -869,51 +868,28 @@ if ( $run_test )
 
 
   # we now collect all tests to be run from the tests struct.  We run all tests
-  # of the given type: all remote ones for that type on all hosts, and all local 
-  # ones for that type on localhost.
+  # of the given type, for the given host
   my $run_these_tests= ();
 
-  # check tests for all hosts
-  foreach my $host ( keys %tests )
+  # test all types for the test host
+  foreach my $type ( keys %{$tests{$test_host}} )
   {
-    # test all types for that host
-    foreach my $type ( keys %{$tests{$host}} )
+    # check if we want this type
+    if ( grep ($type, @test_infos) )
     {
-      # check if we want this type
-      if ( grep ($type, @test_infos) )
+      # want this type, add all found tests
+      foreach my $name ( keys %{$tests{$host}{$type}} )
       {
-        # want this type
-        # get local tests only for localhost
-        if ( $host eq $test_host )
-        {
-          # for localhost, also run local tests
-          foreach my $name ( keys %{$tests{$host}{$type}{'local'}} )
-          {
-            my %test = ('host' => $host, 
-                        'type' => $type,
-                        'mode' => 'local',
-                        'name' => $name, 
-                        'url'  => $tests{$host}{$type}{'local'}{$name}
-                        );
-            push (@run_these_tests, \%test);
-          }
-        }
-
-        # always run remote tests
-        foreach my $name ( keys %{$tests{$host}{$type}{'remote'}} )
-        {
-          my %test = ('host' => $host, 
-                      'type' => $type,
-                      'mode' => 'remote',
-                      'name' => $name,
-                      'url'  => $tests{$host}{$type}{'remote'}{$name});
-          push (@run_these_tests, \%test);
-        }
+        my %test = ('host' => $host, 
+                    'type' => $type,
+                    'name' => $name, 
+                    'url'  => $tests{$host}{$type}{$name}
+                    );
+        push (@run_these_tests, \%test);
       }
     }
   }
-
-
+  
 
   my $tests_ok   = 0;
   my $tests_nok  = 0;
@@ -921,15 +897,14 @@ if ( $run_test )
   my $out        = "";
   my $err        = "";
 
-  printf "+-%-12s-+-%-7s-+-%-10s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x10, '-'x55;
-  printf "| %-12s | %-7s | %-10s | %-10s | %-55s | res | \n", 'host', 'type', 'mode', 'name', 'url';
-  printf "+-%-12s-+-%-7s-+-%-10s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x10, '-'x55;
+  printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7,  '-'x10, '-'x55;
+  printf "| %-12s | %-7s | %-10s | %-55s | res | \n", 'host', 'type', 'name', 'url';
+  printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7,  '-'x10, '-'x55;
   
   foreach my $test ( @run_these_tests)
   {
     my $host = $test->{'host'};
     my $type = $test->{'type'};
-    my $mode = $test->{'mode'};
     my $name = $test->{'name'};
     my $url  = $test->{'url'};
 
@@ -956,8 +931,8 @@ if ( $run_test )
     $msg =~ s/^.*\s*\[FAILURE\][\s\n]?$/nok/iso;
 
 
-    printf "| %-12s | %-7s | %-10s | %-10s | %-55s | %3s |\n", 
-           $host, $type, $mode, $name, $url, $msg;
+    printf "| %-12s | %-7s | %-10s | %-55s | %3s |\n", 
+           $host, $type, $name, $url, $msg;
 
 
     if ( $msg eq ' ok' )
@@ -968,20 +943,20 @@ if ( $run_test )
     {
       $tests_nok++;
 
-      $err .= sprintf "| %-112s |\n", " Error for $host / $name / $mode: ";
+      $err .= sprintf "| %-112s |\n", " Error for $host / $name : ";
       foreach my $line ( split (/\n/, $out) )
       {
         $err .= sprintf "| %-112s |\n", $line;
       }
-      $err .= sprintf "+-%-12s-+-%-7s-+-%-10s-+-%-10s-+-%-55s-+-----+\n", '-'x12, '-'x7, '-'x10, '-'x10, '-'x55;
+      $err .= sprintf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+\n", '-'x12, '-'x7, '-'x10, '-'x55;
     }
   }
 
 
-  printf "+-%-12s-+-%-7s-+-%-10s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x10, '-'x55;
+  printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x55;
   print  $err;
   printf "| %-112s |\n", "ok : $tests_ok";
   printf "| %-112s |\n", "nok: $tests_nok";
-  printf "+-%-12s-+-%-7s-+-%-10s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x10, '-'x55;
+  printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x55;
 }
 
