@@ -41,6 +41,6 @@ using /home/merzky/test/csa/csa///test/x509_test.pem as X509_USER_PROXY
 | thinkie      | job     | gsissh     | gsissh://tg-login.blacklight.psc.teragrid.org/          |  ok |
 | thinkie      | job     | gsissh     | gsissh://trestles-login.sdsc.edu/                       |  ok |
 +--------------+---------+------------+---------------------------------------------------------+-----+ 
-| ok : 11                                                                                              |
-| nok: 0                                                                                               |
+| ok : 11                                                                                             |
+| nok: 0                                                                                              |
 +--------------+---------+------------+---------------------------------------------------------+-----+ 
