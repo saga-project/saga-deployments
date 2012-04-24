@@ -39,8 +39,7 @@ Detailed Instructions:
  This host might nevertheless require some specific settings to use this
  deployment -- if so, those are listed below:
 
- "true
-"  export GLOBUS_LOCATION=/usr/local/packages/globus-5.0.2
+  export GLOBUS_LOCATION=/usr/local/packages/globus-5.0.2
   export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH
   export PATH=$GLOBUS_LOCATION/bin/:$PATH
 

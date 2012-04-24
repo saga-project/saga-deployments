@@ -1,8 +1,8 @@
 
 # host specific settings and modules
-  export LD_LIBRARY_PATH=/usr/local/packages/globus-5.0.2/lib/:$LD_LIBRARY_PATH
-  export PATH=/usr/local/packages/globus-5.0.2/bin/:$PATH
   export GLOBUS_LOCATION=/usr/local/packages/globus-5.0.2
+  export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH
+  export PATH=$GLOBUS_LOCATION/bin/:$PATH
 
 
 # SAGA core settings
