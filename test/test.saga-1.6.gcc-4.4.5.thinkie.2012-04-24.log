@@ -1,0 +1,45 @@
+log file                  /home/merzky/test/csa/csa//test/test.saga-1.6.gcc-4.4.5.thinkie.2012-04-24.log
+hostname                  thinkie
+time stamp                2012-04-24
+csa  location             /home/merzky/test/csa
+csa  target               /home/merzky/test/csa/saga/
+saga version              1.6
+make version              GNU Make 3.81
+compiler version          gcc-4.4.5
++-------------------------------------------------------------------------------------------------------------------
+|
+| csa root      : /home/merzky/test/csa/csa//
+|
+| targets       : alamo blacklight boskop cyder dare hotel india kraken lonestar queenbee ranger sierra steele thinkie trestles
+| modules       : externals saga-core saga-binding-python saga-adaptor-x509 saga-adaptor-globus saga-adaptor-ssh saga-adaptor-torque saga-client-mandelbrot saga-client-bigjob documentation 
+| version       : 1.6
+|
+| exec          : 0
+| deploy        : 0
+| check         : 0
+|
+| force         : 0
+| experimental  : 0
+|
+| git           : https://github.com/saga-project/saga-deployments.git
+|
++-------------------------------------------------------------------------------------------------------------------
+using /home/merzky/test/csa/csa///test/x509_test.pem as X509_USER_PROXY
++--------------+---------+------------+------------+---------------------------------------------------------+-----+ 
+| host         | type    | mode       | name       | url                                                     | res | 
++--------------+---------+------------+------------+---------------------------------------------------------+-----+ 
+| thinkie      | job     | local      | fork       | fork://localhost/                                       |  ok |
+| thinkie      | job     | local      | ssh        | ssh://localhost/                                        |  ok |
+| kraken       | job     | remote     | gsissh     | gsissh://kraken-gsi.nics.utk.edu/                       |  ok |
+| blacklight   | job     | remote     | gsissh     | gsissh://tg-login.blacklight.psc.teragrid.org/          |  ok |
+| india        | job     | remote     | ssh        | ssh://india.futuregrid.org/                             |  ok |
+| alamo        | job     | remote     | ssh        | ssh://alamo.futuregrid.org/                             |  ok |
+| ranger       | job     | remote     | gsissh     | gsissh://tg-login.ranger.tacc.teragrid.org/             |  ok |
+| lonestar     | job     | remote     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           |  ok |
+| trestles     | job     | remote     | gsissh     | gsissh://trestles-login.sdsc.edu/                       |  ok |
+| hotel        | job     | remote     | ssh        | ssh://hotel.futuregrid.org/                             |  ok |
+| sierra       | job     | remote     | ssh        | ssh://sierra.futuregrid.org/                            |  ok |
++--------------+---------+------------+------------+---------------------------------------------------------+-----+ 
+| ok : 11                                                                                                          |
+| nok: 0                                                                                                           |
++--------------+---------+------------+------------+---------------------------------------------------------+-----+ 
