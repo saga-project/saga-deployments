@@ -101,8 +101,13 @@ MAKE_VERSION = $(shell make --version | head -1)
 # we need special settings on some hosts: those need to be used when running
 # commands, and also need to be documented in the READMEs etc.
 #
-CSA_HOST_SETUP  = "true\n"
-CSA_HOST_SETUP += $(shell grep $(CSA_HOST) $(CSA_ROOT)/csa_hostenv | cut -f 2- -d : | sed 's/$$/\\n/')
+CSA_HOST_SETUP  = $(shell grep $(CSA_HOST) $(CSA_ROOT)/csa_hostenv | cut -f 2- -d : | sed 's/$$/\\n/')
+
+ifeq "$(CSA_HOST_SETUP)" ""
+  MK_CSA_HOST_SETUP = "true"
+else
+  MK_CSA_HOST_SETUP = $(CSA_HOST_SETUP)
+endif
 
 
 ########################################################################
@@ -247,7 +252,7 @@ $(PYTHON_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; $(WGET) $(PYTHON_SRC)
 	@cd $(SRCDIR) ; tar jxvf Python-$(PYTHON_VERSION).tar.bz2
 	@cd $(SRCDIR)/Python-$(PYTHON_VERSION)/ ; \
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     ./configure --prefix=$(PYTHON_LOCATION) --enable-shared --enable-unicode=ucs4 && make $J && make install
 
 
@@ -270,7 +275,7 @@ $(BOOST_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; $(WGET) $(BOOST_SRC)
 	@cd $(SRCDIR) ; tar jxvf boost_1_44_0.tar.bz2
 	@cd $(SRCDIR)/boost_1_44_0 ; \
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     env $(SAGA_ENV) ./bootstrap.sh \
                    --with-libraries=test,thread,system,iostreams,filesystem,program_options,python,regex,serialization \
                    --with-python=$(PYTHON_LOCATION)/bin/python \
@@ -295,7 +300,7 @@ $(POSTGRESQL_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; $(WGET) $(POSTGRESQL_SRC)
 	@cd $(SRCDIR) ; tar jxvf postgresql-9.0.2.tar.bz2
 	@cd $(SRCDIR)/postgresql-9.0.2/ ; \
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     ./configure --prefix=$(POSTGRESQL_LOCATION) --without-readline && make $J && make install
 
 
@@ -315,7 +320,7 @@ $(SQLITE3_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; $(WGET) $(SQLITE3_SRC)
 	@cd $(SRCDIR) ; tar zxvf sqlite-amalgamation-3.6.13.tar.gz
 	@cd $(SRCDIR)/sqlite-3.6.13/ ; \
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     ./configure --prefix=$(SQLITE3_LOCATION) && make $J && make install
 
 
@@ -346,7 +351,7 @@ $(SAGA_CORE_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT) 
 	@cd $(SRCDIR)/$(CSA_SAGA_TGT) ;\
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     env $(SAGA_ENV) ./configure --prefix=$(SAGA_LOCATION) && make clean && make $J && make install
 
 
@@ -369,7 +374,7 @@ $(SAGA_PYTHON_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
 	@cd $(SRCDIR)/$(CSA_SAGA_TGT) ; \
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     env $(SAGA_ENV) ./configure && make clean && make $J && make install
 
 
@@ -393,7 +398,7 @@ $(SA_X509_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
 	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
@@ -410,7 +415,7 @@ $(SA_GLOBUS_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
 	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
@@ -426,7 +431,7 @@ $(SA_SSH_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
 	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
@@ -442,7 +447,7 @@ $(SA_AWS_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
 	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
@@ -458,7 +463,7 @@ $(SA_DRMAA_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
 	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
@@ -474,7 +479,7 @@ $(SA_CONDOR_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
 	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
@@ -490,7 +495,7 @@ $(SA_GLITE_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
 	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
@@ -506,7 +511,7 @@ $(SA_PBSPRO_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
 	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
@@ -522,7 +527,7 @@ $(SA_TORQUE_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
 	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
@@ -538,7 +543,7 @@ $(SA_BES_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
 	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
@@ -556,7 +561,7 @@ $(SC_MANDELBROT_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
 	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
-    $(CSA_HOST_SETUP) ; \
+    $(MK_CSA_HOST_SETUP) ; \
     env $(SAGA_ENV) ./configure  --disable-master && make clean && make $J && make install
 
 
@@ -632,14 +637,14 @@ $(SC_BIGJOB_CHECK)$(FORCE):
 	@echo "saga-client-bigjob        installing"
 	@rm -rf $(SC_BIGJOB_CHECK)
 	@cd $(SRCDIR) ; rm -f $(BJ_SETUPTOOLS)     ; wget $(BJ_SETUPTOOLS_URL)     && \
-      $(CSA_HOST_SETUP) ; \
+      $(MK_CSA_HOST_SETUP) ; \
       $(TEST_ENV) sh $(BJ_SETUPTOOLS)
 	@cd $(SRCDIR) ; rm -f $(BJ_SETUPTOOLS_GIT) ; wget $(BJ_SETUPTOOLS_GIT_URL) && \
-      $(CSA_HOST_SETUP) ; \
+      $(MK_CSA_HOST_SETUP) ; \
       tar zxvf $(BJ_SETUPTOOLS_GIT) && cd setuptools-git-0.4.2 && \
       $(TEST_ENV) $(PYTHON_CHECK) setup.py install --prefix=$(SAGA_LOCATION)
 	@cd $(SRCDIR) ; \
-      $(CSA_HOST_SETUP) ; \
+      $(MK_CSA_HOST_SETUP) ; \
       $(TEST_ENV) $(PYTHON_LOCATION)/bin/easy_install -U --prefix=$(SAGA_LOCATION) bigjob
 	@sed -i $(SAGA_LOCATION)/lib/python$(PYTHON_SVERSION)/site-packages/easy-install.pth -e 's/^.*BigJob.*$$//g'
 
@@ -743,6 +748,6 @@ permissions:
 
 .PHONY: test
 test: info
-	@bash -c '$(CSA_HOST_SETUP) ; cd $(CSA_LOCATION) && source env.saga.sh && $(CSA_ROOT)/csa_deploy.pl -r $(CSA_HOST) $(CSA_TESTS)' 2>&1 | tee -a $(LOG)
+	@bash -c '$(MK_CSA_HOST_SETUP) ; cd $(CSA_LOCATION) && source env.saga.sh && $(CSA_ROOT)/csa_deploy.pl -r $(CSA_HOST) $(CSA_TESTS)' 2>&1 | tee -a $(LOG)
 
 
