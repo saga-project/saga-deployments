@@ -245,10 +245,15 @@ if ( ! scalar (@modules) )
 
 if ( $do_git_up )
 {
-  if ( ! $gituser ) { help (-1, "-g requires -u") }
-  if ( ! $gitpass ) { help (-1, "-g requires -p") }
+  my $gitauth = "";
+  my $at      = "";
 
-  $giturl =~ s|^(https://)(.+)$|$1$gituser:$gitpass\@$2|io;
+  if ( $gitpass ) { $gitauth .= "$gitpass:"; $at = '@'; }
+  if ( $gituser ) { $gitauth .= "$gituser";  $at = '@'; }
+
+  $gitauth .= $at;
+
+  $giturl =~ s|^(https://)(.+)$|$1$gitauth$2|io;
 }
 else
 {
