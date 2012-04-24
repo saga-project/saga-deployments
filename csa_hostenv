@@ -1,0 +1,22 @@
+
+#################################################################################
+#
+# this file contains settings which are required on the specific target
+# machines, either to correctly configure or to run SAGA components.  Those
+# settings are used for the deployment, and are also copied into the
+# documentation, the env scripts, and the module files, to ensure that SAGA is
+# functioning properly.
+#
+# Two types of settings are supported:
+#
+#  host: export var=val
+#  host: module load git
+#
+# with obvious semantics (I hope)
+#
+#################################################################################
+
+thinkie: export LD_LIBRARY_PATH=/usr/local/packages/globus-5.0.2/lib/:$LD_LIBRARY_PATH
+thinkie: export PATH=/usr/local/packages/globus-5.0.2/bin/:$PATH
+thinkie: export GLOBUS_LOCATION=/usr/local/packages/globus-5.0.2
+

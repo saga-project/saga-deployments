@@ -1,8 +1,0 @@
-log file                  /home/amerzky/csa/csa//test/test.saga-1.6.gcc-4.4.3.cyder.2012-04-23-16-55.log
-hostname                  cyder
-time stamp                2012-04-23-16-55
-csa  location             /home/amerzky/csa
-csa  target               /home/amerzky/csa/saga/
-saga version              1.6
-make version              GNU Make 3.81
-compiler version          gcc-4.4.3

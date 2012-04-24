@@ -8,11 +8,91 @@ BEGIN {
 }
 
 
-my $CSA_HOSTS   = "./csa_hosts";
-my $CSA_PACK    = "./csa_packages";
-my $CSA_TEST    = "./csa_tests";
-my $CSA_TESTEPS = "./csa_test_eps";
-my $ENV         = `which env`;
+################################################################################
+#
+#
+#
+sub help (;$$)
+{
+  my $ret = shift || 0;
+  my $msg = shift || undef;
+
+  if ( defined $msg )
+  {
+    print "\n\n    Error: $msg\n";
+  }
+
+  print <<EOT;
+
+    $0 -h | --help  
+            
+       -l | --list  
+       -d | --deploy 
+       -c | --check all,job,file,... 
+            
+       -e | --experimental 
+       -g | --git-push
+       -f | --force 
+       -n | --noop
+       -V | --verbose 
+            
+       -t | --target   [all,host1,host2,...] 
+       -m | --module   [all,module1,module2,...]
+       -v | --version  [version]
+       -p | --pass pw  
+       -u | --user id  
+            
+       -r | --run_test [host] ['test args']
+       -x | --execute  
+
+
+  opem operandi:
+    -h : this help message *duh*
+
+  modus operandi:
+    -l : list available target hosts
+    -d : deploy version/modules on targets          (default:  off)
+    -c : check csa deployment (unit tests)          (default:  off)
+                                                               
+  sapor operandi:                                            
+    -e : experimental software deployment           (default:  off)
+    -g : push results back into git                 (default:  off)
+    -f : force re-deploy                            (default:  off)
+    -n : run 'make -n' to show what *would* be done (default:  off)
+    -V : echo commands to be run                    (default:  off)
+
+  parameter operandi:
+    -v : version to deploy (see csa_packages file)  (default: auto)
+    -t : target hosts to deploy on                  (default:   "")
+    -m : modules to deploy                          (default:   "")
+    -p : git password                               (default:   "")
+    -u : git user id                                (default:   "")
+
+  interno operandi:
+    -x : maintainance action, use with care!        (default:  off)
+    -r : run a specific test on the *local* machine (default:  off)
+
+EOT
+
+  exit ($ret);
+}
+################################################################################
+
+my $pwd         = `pwd`;  chomp ($pwd);
+my $csa_root    = $0;
+
+# remove file name from root
+$csa_root =~ s/[^\/]+$//i;
+
+# make root absolute
+#$csa_root =~ s/^\.\/(.+)$/$pwd$1/io;
+$csa_root =~ s/^\.\//$pwd\//i;
+
+my $CSA_HOSTS   = "$csa_root/csa_hosts";
+my $CSA_PACK    = "$csa_root/csa_packages";
+my $CSA_TEST    = "$csa_root/csa_tests";
+my $CSA_TESTEPS = "$csa_root/csa_test_eps";
+my $ENV         = `which env`;  chomp ($ENV);
 my $MAKE        = "make --no-print-directory -f make.saga.csa.mk ";
 my $giturl      = "https://github.com/saga-project/saga-deployments.git";
 my %csa_hosts   = ();
@@ -46,8 +126,9 @@ my $def_version = "";
 my $gituser     = "";
 my $gitpass     = "";
 
-chomp ($gituser);
-chomp ($ENV);
+################################################################################
+
+
 
 if ( ! scalar (@ARGV) )
 {
@@ -100,7 +181,7 @@ while (my $arg   = shift )
   {
     $noop        = 1;
   }
-  elsif ( $arg   =~ /^(-V|--Verb|--Verbose)$/o )
+  elsif ( $arg   =~ /^(-V|--verb|--verbose)$/o )
   {
     $verb        = 1;
   }
@@ -122,11 +203,9 @@ while (my $arg   = shift )
   {
     $run_test    = 1;
     $test_host   = shift || "-";
-    $test_log    = shift || "-";
     $test_info   = shift || "-";
 
     help (-2, "cannot parse test host name '$test_host'")  if $test_host =~ /^-/o; 
-    help (-2, "cannot parse test log name  '$test_log'")   if $test_log  =~ /^-/o; 
     help (-2, "cannot parse test infos     '$test_info'" ) if $test_info =~ /^-/o; 
   }
   elsif ( $arg   =~ /^(-d|--deploy)$/o )
@@ -179,7 +258,10 @@ if ( $do_git_up )
 #   }
 # }
 
+################################################################################
+#
 # read and parse csa packages file
+#
 {
   my $tmp = ();
 
@@ -267,7 +349,10 @@ if ( $do_git_up )
 }
 
 
+################################################################################
+#
 # fall back to default version if needed
+#
 {
   if ( $version eq "" )
   {
@@ -282,7 +367,10 @@ if ( $do_git_up )
   }
 }
 
+################################################################################
+#
 # read and parse csa host file
+#
 {
   my $tmp = ();
 
@@ -334,12 +422,15 @@ if ( grep (/all/, @modules) )
   }
 }
 
+################################################################################
+#
 # modules need to be re-ordered, as we assume that the order given in the
 # csa_packages file is significant (i.e. resolves dependenncies).
 # FWIW, this procedure also weeds out duplicates.
 #
 # TODO: for each module, we should also include all modules listed before 
 # that one, to actually satisfy not specified dependencies...
+#
 {
   my  @tmp = @modules;
   @modules = ();
@@ -385,10 +476,16 @@ if ( $do_check )
 }
 
 
-if ( ! $run_test )
+################################################################################
+#
+# print summery of actions and parameters
+#
+#if ( ! $run_test )
 {
   print <<EOT;
-+-------------------------------------------------------------------
++-------------------------------------------------------------------------------------------------------------------
+|
+| csa root      : $csa_root
 |
 | targets       : @hosts
 | modules       : $modstring
@@ -403,12 +500,15 @@ if ( ! $run_test )
 |
 | git           : $giturl
 |
-+-------------------------------------------------------------------
++-------------------------------------------------------------------------------------------------------------------
 EOT
 }
 
 
+################################################################################
+#
 # list mode simply lists the known hosts
+#
 if ( $do_list )
 {
   print "\n";
@@ -435,7 +535,10 @@ if ( $do_list )
 }
 
 
+################################################################################
+#
 # for each csa host, execute some maintainance op
+#
 if ( $do_exe )
 {
   print "\n";
@@ -481,17 +584,12 @@ if ( $do_exe )
       printf "| %-15s | %-40s | %-35s |\n", $host, $fqhn, $path;
       print "+-----------------+------------------------------------------+-------------------------------------+\n";
 
-      if ( $verb || $noop )
-      {
-        print " -- $access $fqhn '$exe'\n";
-      }
-      
-      unless ( $noop )
-      {
-        my $cmd = "$access $fqhn '$exe'";
+      my $cmd = "$access $fqhn '$exe'";
 
-        if ( 0 != system ($cmd) )
-        {
+      print " -- $cmd\n" if ( $verb || $noop );
+      
+      unless ( $noop ) { 
+        if ( 0 != system ($cmd) ) {
           print " -- error: cannot run $cmd\n";
         }
       }
@@ -503,8 +601,10 @@ if ( $do_exe )
 }
 
 
-
-
+################################################################################
+#
+# deploy some modules on some targets
+#
 if ( $do_deploy )
 {
   # ! check, so do the real deployment
@@ -551,15 +651,11 @@ if ( $do_deploy )
                                    " CSA_SAGA_TGT=$mod_name-$version" .
                                    " $exp $force" .
                                    " $MAKE -C $path/csa/ $mod_name ' " ;
-          if ( $verb || $noop )
-          {
-            print " -- deploy: $cmd\n";
-          }
+
+          print " -- deploy: $cmd\n" if ( $verb || $noop );
           
-          unless ( $noop )
-          {
-            if ( 0 != system ($cmd) )
-            {
+          unless ( $noop ) {
+            if ( 0 != system ($cmd) ) {
               print " -- error: cannot deploy $mod_name on $host\n";
             }
           }
@@ -574,15 +670,11 @@ if ( $do_deploy )
                                        " git add env/saga-$version.*.$host*.sh &&" .
                                        " git commit -m \"automated update\" &&" .
                                        " git push $giturl ' " ;
-              if ( $verb || $noop )
-              {
-                print " -- deploy: $cmd\n";
-              }
+
+              print " -- deploy: $cmd\n" if ( $verb || $noop );
               
-              unless ( $noop )
-              {
-                if ( 0 != system ($cmd) )
-                {
+              unless ( $noop ) {
+                if ( 0 != system ($cmd) ) {
                   print " -- error: cannot commit documentation\n";
                 }
               }
@@ -603,10 +695,21 @@ if ( $do_deploy )
 
 
 
-# for each csa host, check the csa installation itself (also check on deploy!)
+################################################################################
+#
+# run the test suite on the target hosts
+#
+# running checks requires security setup to be in place.  That is required even
+# for some local checks (local ssh etc).  
+#
+# We expect ssh access to be available already.   For gsissh and gram, we  copy
+# the X509 from the local host (running $0) to the target host (running the
+# test).  We store the cert in $CSA_LOCATION/csa/test/x509_test.pem, and set
+# X509_USER_PROXY to point to it.  Note that this does not check the SAGA
+# contexts.
+#
 if ( $do_check )
 {
-  # just check if we are able to deploy
   print "\n";
   print "+-----------------+------------------------------------------+-------------------------------------+\n";
   printf "| %-15s | %-40s | %-35s |\n", "host", "fqhn", "path";
@@ -628,27 +731,46 @@ if ( $do_check )
       print "+-----------------+------------------------------------------+-------------------------------------+\n";
 
       {
-        my $tmp = join (',', @tests);
-        my $cmd = "$access $fqhn 'mkdir -p $path;" .
-                  " cd $path && test -d csa && (cd csa && git pull) || git clone $giturl csa;". 
-                  " $ENV" .
-                  " CSA_HOST=$host" .
-                  " CSA_LOCATION=$path" .
-                  " CSA_SAGA_VERSION=$version" .
-                  " CSA_TESTS=$tmp" .
-                  " $exp" .
-                  " $MAKE -C $path/csa/ test ' " ;
+        # copy the x509 proxy if available
+        {
+          my $uid = `id -u`;
+          chomp ($uid);
 
-        if ( $verb || $noop )
-        {
-          print " -- check: $cmd\n";
-        }
-        
-        unless ( $noop )
-        {
-          if ( 0 != system ($cmd) )
+          my $proxy = "/tmp/x509up_u$uid";
+          if ( -r $proxy )
           {
-            print " -- error: cannot run csa checks\n";
+            my $tgt = "$path/csa/test/x509_test.pem";
+            my $cmd = "cat $proxy | $access $fqhn 'cat > $tgt' ; chmod 0600 $tgt";
+
+            print " -- check : $cmd\n" if ( $verb || $noop );
+
+            unless ( $noop ) {
+              if ( 0 != system ($cmd) ) {
+                print "WARNING: copy x509 proxy failed.\n";
+              }
+            }
+          }
+        }
+
+        # running the test suite ('make test')
+        { 
+          my $tmp = join (',', @tests);
+          my $cmd = "$access $fqhn 'mkdir -p $path;" .
+                    " cd $path && test -d csa && (cd csa && git pull) || git clone $giturl csa;". 
+                    " $ENV" .
+                    " CSA_HOST=$host" .
+                    " CSA_LOCATION=$path" .
+                    " CSA_SAGA_VERSION=$version" .
+                    " CSA_TESTS=$tmp" .
+                    " $exp" .
+                    " $MAKE -C $path/csa/ test ' " ;
+
+          print " -- check: $cmd\n" if ( $verb || $noop );
+          
+          unless ( $noop ) {
+            if ( 0 != system ($cmd) ) {
+              print " -- error: cannot run csa checks\n";
+            }
           }
         }
       }
@@ -660,15 +782,10 @@ if ( $do_check )
                                  " git commit -m \"automated update\" && " .
                                  " git push $giturl ' " ;
 
-        if ( $verb || $noop )
-        {
-          print " -- check: $cmd\n";
-        }
+        print " -- check: $cmd\n" if ( $verb || $noop );
         
-        unless ( $noop )
-        {
-          if ( 0 != system ($cmd) )
-          {
+        unless ( $noop ) {
+          if ( 0 != system ($cmd) ) {
             print " -- error: cannot commit csa checks\n";
           }
         }
@@ -678,11 +795,27 @@ if ( $do_check )
   print "\n";
 }
 
-# Submit jobs on machines specified..
+
+
+################################################################################
+#
+# run a single test on localhost
+#
+# we assume ssh keys to be in place, and point X509_USER_PROXY to
+# $CSA_LOCATION/csa/test/x509_test.pem, if that exists
+#
 if ( $run_test )
 {
   my %tests      = ();
   my $test_types = ();
+
+  my $x509       = "$csa_root/test/x509_test.pem";
+
+  if ( -r $x509 )
+  {
+    $ENV{'X509_USER_PROXY'} = $x509;
+    print "using $x509 as X509_USER_PROXY\n";
+  }
 
   {
     open   (TMP, "<$CSA_TESTEPS") || die "ERROR  : cannot open '$CSA_HOSTS': $!\n";
@@ -800,7 +933,14 @@ if ( $run_test )
     my $name = $test->{'name'};
     my $url  = $test->{'url'};
 
-    my $out = qx{sh -c '. ../env.saga.sh ; python ./csa_test_$type.py $url true 2>&1'};
+    my $cmd  = "bash -c '. $csa_root/../env.saga.sh ; python $csa_root/test/csa_test_$type.py $url true 2>&1'";
+
+    print " -- test: $cmd\n" if ( $verb || $noop );
+        
+    my $out = "";
+    unless ( $noop ) {
+      $out  = qx{$cmd};
+    }
 
     if ( ! defined $out )
     {
@@ -843,72 +983,5 @@ if ( $run_test )
   printf "| %-112s |\n", "ok : $tests_ok";
   printf "| %-112s |\n", "nok: $tests_nok";
   printf "+-%-12s-+-%-7s-+-%-10s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x10, '-'x55;
-
-}
-
-
-
-sub help (;$$)
-{
-  my $ret = shift || 0;
-  my $msg = shift || undef;
-
-  if ( defined $msg )
-  {
-    print "\n\n    Error: $msg\n";
-  }
-
-  print <<EOT;
-
-    $0 -h | --help  
-            
-       -l | --list  
-       -d | --deploy 
-       -c | --check all,job,file,... 
-            
-       -e | --experimental 
-       -g | --git-push
-       -f | --force 
-       -n | --no 
-       -V | --Verbose 
-            
-       -t | --target  [all,host1,host2,...] 
-       -m | --module  [all,module1,module2,...]
-       -v | --version [version]
-       -p | --pass pw  
-       -u | --user id  
-            
-       -r | --run_test 
-       -x | --execute  
-
-
-  help operandi:
-    -h : this help message
-
-  modus operandi:
-    -l : list available target hosts
-    -d : deploy version/modules on targets          (default: off)
-    -c : check csa deployment (unit tests)          (default: off)
-
-  flavors operandi:
-    -e : experimental software deployment           (default: off)
-    -g : push results back into git                 (default: off)
-    -f : force re-deploy                            (default: off)
-    -n : run 'make -n' to show what *would* be done (default: off)
-    -V : echo commands to be run                    (default: off)
-
-  parameter operandi:
-    -t : target hosts to deploy on                  (default: "" )
-    -m : modules to deploy                          (default: "" )
-    -v : version to deploy (see csa_packages file)  (default: ...)
-    -p : git password                               (default: "" )
-    -u : git user id                                (default: "" )
-
-  internal:
-    -x : for maintainance, use with care!           (default: off)
-    -r : run a specific test on target              (default: off)
-
-EOT
-  exit ($ret);
 }
 

@@ -1,4 +1,7 @@
 
+# host specific settings and modules
+###HOST_SETUP###
+
 # SAGA core settings
 export SAGA_LOCATION=###SAGA_LOCATION###
 export LD_LIBRARY_PATH=###SAGA_LDLIBPATH###:$LD_LIBRARY_PATH

@@ -44,7 +44,8 @@ endif
 SRCDIR         = $(CSA_SRC_DIR)
 EXTDIR         = $(CSA_EXT_DIR)
 
-DATE           = $(shell date '+%Y-%m-%d-%H-%M')
+# DATE         = $(shell date '+%Y-%m-%d-%H-%M')
+DATE           = $(shell date '+%Y-%m-%d')
 LOG            = $(CSA_ROOT)/test/test.saga-$(CSA_SAGA_VERSION).$(CC_NAME).$(CSA_HOST)$(CSA_SUFFIX).$(DATE).log
 
 # to be call'ed by individual tests.  The first check expects the call to
@@ -85,13 +86,22 @@ CXX        = g++
 # gcc --version is stupidly formatted.  Worse, that format is inconsistent over
 # different distribution channels.  Thus this detour to get the version directly
 # via gcc compiler macros:
-ifeq "$(CSA_HOST)" "localhost"
+ifeq "$(CSA_HOST)" "thinkie"
  CC_VERSION  = $(shell (gcc --version | head -1 | rev | cut -f 1 -d ' '| rev))
 else
  CC_VERSION  = $(shell (rm -f cpp_version ; make cpp_version ; ./cpp_version) | tail -n 1)
 endif
 CC_NAME      = $(notdir $(CC))-$(CC_VERSION)
 MAKE_VERSION = $(shell make --version | head -1)
+
+
+
+########################################################################
+# 
+# we need special settings on some hosts: those need to be used when running
+# commands, and also need to be documented in the READMEs etc.
+#
+CSA_HOST_SETUP = $(shell grep $(CSA_HOST) $(CSA_ROOT)/csa_hostenv | cut -f 2- -d : | sed 's/$$/\\n/')
 
 
 ########################################################################
@@ -115,21 +125,26 @@ info:
 #
 # basic tools
 #
-SED        = $(shell which sed)
-ENV        = $(shell which env)
 WGET       = $(shell which wget) --no-check-certificate
-CHMOD      = $(shell which chmod)
-
-
 SVN        = $(shell which svn 2>/dev/null)
 SVNCO      = $(SVN) co
 SVNUP      = $(SVN) up
 
 ifeq "$(SVN)" ""
- $(error Could not find svn binary)
+ $(warning Could not find svn binary)
 endif
 
-MYPATH     = "/bin/:/usr/bin/:$(GLOBUS_LOCATION)/bin:"$(shell dirname $(SED))
+
+GIT        = $(shell which svn 2>/dev/null)
+GITCO      = $(GIT) clone
+GITUP      = $(GIT) pull
+
+ifeq "$(GIT)" ""
+ $(warning Could not find git binary)
+endif
+
+
+MYPATH     = "/bin/:/usr/bin/:$(GLOBUS_LOCATION)/bin"
 
 ##########################################################################
 # #
@@ -231,7 +246,8 @@ $(PYTHON_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; $(WGET) $(PYTHON_SRC)
 	@cd $(SRCDIR) ; tar jxvf Python-$(PYTHON_VERSION).tar.bz2
 	@cd $(SRCDIR)/Python-$(PYTHON_VERSION)/ ; \
-                ./configure --prefix=$(PYTHON_LOCATION) --enable-shared --enable-unicode=ucs4 && make $J && make install
+    $(CSA_HOST_SETUP) ; \
+    ./configure --prefix=$(PYTHON_LOCATION) --enable-shared --enable-unicode=ucs4 && make $J && make install
 
 
 ########################################################################
@@ -252,12 +268,14 @@ $(BOOST_CHECK)$(FORCE):
 	@echo "boost                     installing"
 	@cd $(SRCDIR) ; $(WGET) $(BOOST_SRC)
 	@cd $(SRCDIR) ; tar jxvf boost_1_44_0.tar.bz2
-	@cd $(SRCDIR)/boost_1_44_0 ; $(ENV) $(SAGA_ENV) ./bootstrap.sh \
-                               --with-libraries=test,thread,system,iostreams,filesystem,program_options,python,regex,serialization \
-                               --with-python=$(PYTHON_LOCATION)/bin/python \
-                               --with-python-root=$(PYTHON_LOCATION) \
-                               --with-python-version=2.7 \
-                               --prefix=$(BOOST_LOCATION) && ./bjam $J && ./bjam install
+	@cd $(SRCDIR)/boost_1_44_0 ; \
+    $(CSA_HOST_SETUP) ; \
+    env $(SAGA_ENV) ./bootstrap.sh \
+                   --with-libraries=test,thread,system,iostreams,filesystem,program_options,python,regex,serialization \
+                   --with-python=$(PYTHON_LOCATION)/bin/python \
+                   --with-python-root=$(PYTHON_LOCATION) \
+                   --with-python-version=2.7 \
+                   --prefix=$(BOOST_LOCATION) && ./bjam $J && ./bjam install
 
 
 ########################################################################
@@ -275,7 +293,9 @@ $(POSTGRESQL_CHECK)$(FORCE):
 	@echo "postgresql                installing"
 	@cd $(SRCDIR) ; $(WGET) $(POSTGRESQL_SRC)
 	@cd $(SRCDIR) ; tar jxvf postgresql-9.0.2.tar.bz2
-	@cd $(SRCDIR)/postgresql-9.0.2/ ; ./configure --prefix=$(POSTGRESQL_LOCATION) --without-readline && make $J && make install
+	@cd $(SRCDIR)/postgresql-9.0.2/ ; \
+    $(CSA_HOST_SETUP) ; \
+    ./configure --prefix=$(POSTGRESQL_LOCATION) --without-readline && make $J && make install
 
 
 ########################################################################
@@ -293,7 +313,9 @@ $(SQLITE3_CHECK)$(FORCE):
 	@echo "sqlite3                   installing"
 	@cd $(SRCDIR) ; $(WGET) $(SQLITE3_SRC)
 	@cd $(SRCDIR) ; tar zxvf sqlite-amalgamation-3.6.13.tar.gz
-	@cd $(SRCDIR)/sqlite-3.6.13/ ; ./configure --prefix=$(SQLITE3_LOCATION) && make $J && make install
+	@cd $(SRCDIR)/sqlite-3.6.13/ ; \
+    $(CSA_HOST_SETUP) ; \
+    ./configure --prefix=$(SQLITE3_LOCATION) && make $J && make install
 
 
 ########################################################################
@@ -322,8 +344,9 @@ $(SAGA_CORE_CHECK)$(FORCE):
 	@echo "saga-core                 installing"
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT) 
-	@cd $(SRCDIR)/$(CSA_SAGA_TGT) ; $(ENV) $(SAGA_ENV) \
-                 ./configure --prefix=$(SAGA_LOCATION) && make clean && make $J && make install
+	@cd $(SRCDIR)/$(CSA_SAGA_TGT) ;\
+    $(CSA_HOST_SETUP) ; \
+    env $(SAGA_ENV) ./configure --prefix=$(SAGA_LOCATION) && make clean && make $J && make install
 
 
 ########################################################################
@@ -344,8 +367,9 @@ $(SAGA_PYTHON_CHECK)$(FORCE):
 	@echo "saga-binding-python       installing"
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
-	@cd $(SRCDIR)/$(CSA_SAGA_TGT) ; $(ENV) $(SAGA_ENV) \
-                   ./configure && make clean && make $J && make install
+	@cd $(SRCDIR)/$(CSA_SAGA_TGT) ; \
+    $(CSA_HOST_SETUP) ; \
+    env $(SAGA_ENV) ./configure && make clean && make $J && make install
 
 
 ########################################################################
@@ -367,7 +391,9 @@ $(SA_X509_CHECK)$(FORCE):
 	@echo "saga-adaptor-x509         installing"
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
-	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; $(ENV) $(SAGA_ENV) ./configure  && make clean && make $J && make install
+	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
+    $(CSA_HOST_SETUP) ; \
+    env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
 ########################################################################
@@ -382,7 +408,9 @@ $(SA_GLOBUS_CHECK)$(FORCE):
 	@echo "saga-adaptor-globus       installing"
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
-	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; $(ENV) $(SAGA_ENV) ./configure  && make clean && make $J && make install
+	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
+    $(CSA_HOST_SETUP) ; \
+    env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
 ########################################################################
@@ -396,7 +424,9 @@ $(SA_SSH_CHECK)$(FORCE):
 	@echo "saga-adaptor-ssh          installing"
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
-	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; $(ENV) $(SAGA_ENV) ./configure  && make clean && make $J && make install
+	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
+    $(CSA_HOST_SETUP) ; \
+    env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
 ########################################################################
@@ -410,7 +440,9 @@ $(SA_AWS_CHECK)$(FORCE):
 	@echo "saga-adaptor-aws          installing"
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
-	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; $(ENV) $(SAGA_ENV) ./configure  && make clean && make $J && make install
+	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
+    $(CSA_HOST_SETUP) ; \
+    env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
 ########################################################################
@@ -424,7 +456,9 @@ $(SA_DRMAA_CHECK)$(FORCE):
 	@echo "saga-adaptor-drmaa        installing"
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
-	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; $(ENV) $(SAGA_ENV) ./configure  && make clean && make $J && make install
+	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
+    $(CSA_HOST_SETUP) ; \
+    env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
 ########################################################################
@@ -438,7 +472,9 @@ $(SA_CONDOR_CHECK)$(FORCE):
 	@echo "saga-adaptor-condor       installing"
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
-	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; $(ENV) $(SAGA_ENV) ./configure  && make clean && make $J && make install
+	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
+    $(CSA_HOST_SETUP) ; \
+    env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
 ########################################################################
@@ -452,7 +488,9 @@ $(SA_GLITE_CHECK)$(FORCE):
 	@echo "saga-adaptor-glite        installing"
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
-	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; $(ENV) $(SAGA_ENV) ./configure  && make clean && make $J && make install
+	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
+    $(CSA_HOST_SETUP) ; \
+    env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
 ########################################################################
@@ -466,7 +504,9 @@ $(SA_PBSPRO_CHECK)$(FORCE):
 	@echo "saga-adaptor-pbspro       installing"
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
-	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; $(ENV) $(SAGA_ENV) ./configure  && make clean && make $J && make install
+	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
+    $(CSA_HOST_SETUP) ; \
+    env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
 ########################################################################
@@ -480,7 +520,9 @@ $(SA_TORQUE_CHECK)$(FORCE):
 	@echo "saga-adaptor-torque       installing"
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
-	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; $(ENV) $(SAGA_ENV) ./configure  && make clean && make $J && make install
+	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
+    $(CSA_HOST_SETUP) ; \
+    env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
 ########################################################################
@@ -494,7 +536,9 @@ $(SA_BES_CHECK)$(FORCE):
 	@echo "saga-adaptor-bes          installing"
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
-	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; $(ENV) $(SAGA_ENV) ./configure  && make clean && make $J && make install
+	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
+    $(CSA_HOST_SETUP) ; \
+    env $(SAGA_ENV) ./configure  && make clean && make $J && make install
 
 
 ########################################################################
@@ -510,7 +554,9 @@ $(SC_MANDELBROT_CHECK)$(FORCE):
 	@echo "saga-client-mandelbrot    installing"
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
-	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; $(ENV) $(SAGA_ENV) ./configure  --disable-master && make clean && make $J && make install
+	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; \
+    $(CSA_HOST_SETUP) ; \
+    env $(SAGA_ENV) ./configure  --disable-master && make clean && make $J && make install
 
 
 # ########################################################################
@@ -544,7 +590,7 @@ $(SC_MANDELBROT_CHECK)$(FORCE):
 # 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
 # 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(SVNCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
 # 	@rm -rf $(SC_BIGJOB_CHECK)
-# 	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; $(ENV) $(SAGA_ENV) make install
+# 	@cd $(SRCDIR)/$(CSA_SAGA_TGT)/ ; env $(SAGA_ENV) make install
 # 	@sed -i $(SAGA_LOCATION)/lib/python2.7/site-packages/easy-install.pth -e 's/^.*BigJob.*$$//g'
 # 
 # 
@@ -584,11 +630,16 @@ saga-client-bigjob:: base $(SC_BIGJOB_CHECK)$(FORCE)
 $(SC_BIGJOB_CHECK)$(FORCE):
 	@echo "saga-client-bigjob        installing"
 	@rm -rf $(SC_BIGJOB_CHECK)
-	@cd $(SRCDIR) ; rm -f $(BJ_SETUPTOOLS)     ; wget $(BJ_SETUPTOOLS_URL)     && $(TEST_ENV) sh $(BJ_SETUPTOOLS)
+	@cd $(SRCDIR) ; rm -f $(BJ_SETUPTOOLS)     ; wget $(BJ_SETUPTOOLS_URL)     && \
+      $(CSA_HOST_SETUP) ; \
+      $(TEST_ENV) sh $(BJ_SETUPTOOLS)
 	@cd $(SRCDIR) ; rm -f $(BJ_SETUPTOOLS_GIT) ; wget $(BJ_SETUPTOOLS_GIT_URL) && \
+      $(CSA_HOST_SETUP) ; \
       tar zxvf $(BJ_SETUPTOOLS_GIT) && cd setuptools-git-0.4.2 && \
       $(TEST_ENV) $(PYTHON_CHECK) setup.py install --prefix=$(SAGA_LOCATION)
-	@cd $(SRCDIR) ; $(TEST_ENV) $(PYTHON_LOCATION)/bin/easy_install -U --prefix=$(SAGA_LOCATION) bigjob
+	@cd $(SRCDIR) ; \
+      $(CSA_HOST_SETUP) ; \
+      $(TEST_ENV) $(PYTHON_LOCATION)/bin/easy_install -U --prefix=$(SAGA_LOCATION) bigjob
 	@sed -i $(SAGA_LOCATION)/lib/python$(PYTHON_SVERSION)/site-packages/easy-install.pth -e 's/^.*BigJob.*$$//g'
 
 #	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
@@ -608,26 +659,28 @@ CSA_README_CHECK  = $(CSA_ROOT)/doc/README.saga-$(CSA_SAGA_VERSION).$(CC_NAME).$
 CSA_MODULE_SRC    = $(CSA_ROOT)/mod/module.stub
 CSA_MODULE_CHECK  = $(CSA_ROOT)/mod/module.saga-$(CSA_SAGA_VERSION).$(CC_NAME).$(CSA_HOST)$(CSA_SUFFIX)
 
+
 .PHONY: documentation
 documentation:: base $(CSA_SHELLRC_CHECK)$(FORCE) $(CSA_README_CHECK)$(FORCE) $(CSA_MODULE_CHECK)$(FORCE) permissions
 
 $(CSA_SHELLRC_CHECK)$(FORCE): $(CSA_SHELLRC_SRC)
 	@echo "SHELLRC                   creating"
 	@cp -fv $(CSA_SHELLRC_SRC) $(CSA_SHELLRC_CHECK)
-	@$(SED) -i -e 's|###SAGA_VERSION###|$(CSA_SAGA_VERSION)|ig;'          $(CSA_SHELLRC_CHECK)
-	@$(SED) -i -e 's|###SAGA_LOCATION###|$(SAGA_LOCATION)|ig;'            $(CSA_SHELLRC_CHECK)
-	@$(SED) -i -e 's|###SAGA_LDLIBPATH###|$(SAGA_ENV_LDPATH)|ig;'         $(CSA_SHELLRC_CHECK)
-	@$(SED) -i -e 's|###SAGA_PATH###|$(SAGA_ENV_PATH)|ig;'                $(CSA_SHELLRC_CHECK)
-	@$(SED) -i -e 's|###SAGA_MODPATH###|$(SAGA_PYTHON_MODPATH)|ig;'       $(CSA_SHELLRC_CHECK)
-	@$(SED) -i -e 's|###PYTHON_PATH###|$(PYTHON_LOCATION)/bin/|ig;'       $(CSA_SHELLRC_CHECK)
-	@$(SED) -i -e 's|###PYTHON_MODPATH###|$(PYTHON_MODPATH)|ig;'          $(CSA_SHELLRC_CHECK)
-	@$(SED) -i -e 's|###SAGA_PYTHON###|$(PYTHON_LOCATION)/bin/python|ig;' $(CSA_SHELLRC_CHECK)
-	@$(SED) -i -e 's|###SAGA_PYLOCATION###|$(PYTHON_LOCATION)|ig;'        $(CSA_SHELLRC_CHECK)
-	@$(SED) -i -e 's|###SAGA_PYVERSION###|$(PYTHON_VERSION)|ig;'          $(CSA_SHELLRC_CHECK)
-	@$(SED) -i -e 's|###SAGA_PYSVERSION###|$(PYTHON_SVERSION)|ig;'        $(CSA_SHELLRC_CHECK)
-	@$(SED) -i -e 's|###CSA_LOCATION###|$(CSA_LOCATION)|ig;'              $(CSA_SHELLRC_CHECK)
-	@$(SED) -i -e 's|###CC_NAME###|$(CC_NAME)|ig;'                        $(CSA_SHELLRC_CHECK)
-	@$(SED) -i -e 's|###BIGJOB_MODPATH###|$(BIGJOB_MODPATH)|ig;'          $(CSA_SHELLRC_CHECK)
+	@sed -i -e 's|###HOST_SETUP###| $(CSA_HOST_SETUP)|ig;'             $(CSA_SHELLRC_CHECK)
+	@sed -i -e 's|###SAGA_VERSION###|$(CSA_SAGA_VERSION)|ig;'          $(CSA_SHELLRC_CHECK)
+	@sed -i -e 's|###SAGA_LOCATION###|$(SAGA_LOCATION)|ig;'            $(CSA_SHELLRC_CHECK)
+	@sed -i -e 's|###SAGA_LDLIBPATH###|$(SAGA_ENV_LDPATH)|ig;'         $(CSA_SHELLRC_CHECK)
+	@sed -i -e 's|###SAGA_PATH###|$(SAGA_ENV_PATH)|ig;'                $(CSA_SHELLRC_CHECK)
+	@sed -i -e 's|###SAGA_MODPATH###|$(SAGA_PYTHON_MODPATH)|ig;'       $(CSA_SHELLRC_CHECK)
+	@sed -i -e 's|###PYTHON_PATH###|$(PYTHON_LOCATION)/bin/|ig;'       $(CSA_SHELLRC_CHECK)
+	@sed -i -e 's|###PYTHON_MODPATH###|$(PYTHON_MODPATH)|ig;'          $(CSA_SHELLRC_CHECK)
+	@sed -i -e 's|###SAGA_PYTHON###|$(PYTHON_LOCATION)/bin/python|ig;' $(CSA_SHELLRC_CHECK)
+	@sed -i -e 's|###SAGA_PYLOCATION###|$(PYTHON_LOCATION)|ig;'        $(CSA_SHELLRC_CHECK)
+	@sed -i -e 's|###SAGA_PYVERSION###|$(PYTHON_VERSION)|ig;'          $(CSA_SHELLRC_CHECK)
+	@sed -i -e 's|###SAGA_PYSVERSION###|$(PYTHON_SVERSION)|ig;'        $(CSA_SHELLRC_CHECK)
+	@sed -i -e 's|###CSA_LOCATION###|$(CSA_LOCATION)|ig;'              $(CSA_SHELLRC_CHECK)
+	@sed -i -e 's|###CC_NAME###|$(CC_NAME)|ig;'                        $(CSA_SHELLRC_CHECK)
+	@sed -i -e 's|###BIGJOB_MODPATH###|$(BIGJOB_MODPATH)|ig;'          $(CSA_SHELLRC_CHECK)
 ifdef CSA_LINK_INFO
 	@rm -f                       $(CSA_LOCATION)/env.saga.sh
 	@ln -s  $(CSA_SHELLRC_CHECK) $(CSA_LOCATION)/env.saga.sh
@@ -636,20 +689,21 @@ endif
 $(CSA_README_CHECK)$(FORCE): $(CSA_README_SRC)
 	@echo "README                    creating"
 	@cp -fv $(CSA_README_SRC) $(CSA_README_CHECK)
-	@$(SED) -i -e 's|###SAGA_VERSION###|$(CSA_SAGA_VERSION)|ig;'          $(CSA_README_CHECK)
-	@$(SED) -i -e 's|###SAGA_LOCATION###|$(SAGA_LOCATION)|ig;'            $(CSA_README_CHECK)
-	@$(SED) -i -e 's|###SAGA_LDLIBPATH###|$(SAGA_ENV_LDPATH)|ig;'         $(CSA_README_CHECK)
-	@$(SED) -i -e 's|###SAGA_PATH###|$(SAGA_ENV_PATH)|ig;'                $(CSA_README_CHECK)
-	@$(SED) -i -e 's|###SAGA_MODPATH###|$(SAGA_PYTHON_MODPATH)|ig;'       $(CSA_README_CHECK)
-	@$(SED) -i -e 's|###PYTHON_PATH###|$(PYTHON_LOCATION)/bin/|ig;'       $(CSA_README_CHECK)
-	@$(SED) -i -e 's|###PYTHON_MODPATH###|$(PYTHON_MODPATH)|ig;'          $(CSA_README_CHECK)
-	@$(SED) -i -e 's|###SAGA_PYTHON###|$(PYTHON_LOCATION)/bin/python|ig;' $(CSA_README_CHECK)
-	@$(SED) -i -e 's|###SAGA_PYLOCATION###|$(PYTHON_LOCATION)|ig;'        $(CSA_README_CHECK)
-	@$(SED) -i -e 's|###SAGA_PYVERSION###|$(PYTHON_VERSION)|ig;'          $(CSA_README_CHECK)
-	@$(SED) -i -e 's|###SAGA_PYSVERSION###|$(PYTHON_SVERSION)|ig;'        $(CSA_README_CHECK)
-	@$(SED) -i -e 's|###CSA_LOCATION###|$(CSA_LOCATION)|ig;'              $(CSA_README_CHECK)
-	@$(SED) -i -e 's|###CC_NAME###|$(CC_NAME)|ig;'                        $(CSA_README_CHECK)
-	@$(SED) -i -e 's|###BIGJOB_MODPATH###|$(BIGJOB_MODPATH)|ig;'          $(CSA_README_CHECK)
+	@sed -i -e 's|###HOST_SETUP###| $(CSA_HOST_SETUP)|ig;'             $(CSA_README_CHECK)
+	@sed -i -e 's|###SAGA_VERSION###|$(CSA_SAGA_VERSION)|ig;'          $(CSA_README_CHECK)
+	@sed -i -e 's|###SAGA_LOCATION###|$(SAGA_LOCATION)|ig;'            $(CSA_README_CHECK)
+	@sed -i -e 's|###SAGA_LDLIBPATH###|$(SAGA_ENV_LDPATH)|ig;'         $(CSA_README_CHECK)
+	@sed -i -e 's|###SAGA_PATH###|$(SAGA_ENV_PATH)|ig;'                $(CSA_README_CHECK)
+	@sed -i -e 's|###SAGA_MODPATH###|$(SAGA_PYTHON_MODPATH)|ig;'       $(CSA_README_CHECK)
+	@sed -i -e 's|###PYTHON_PATH###|$(PYTHON_LOCATION)/bin/|ig;'       $(CSA_README_CHECK)
+	@sed -i -e 's|###PYTHON_MODPATH###|$(PYTHON_MODPATH)|ig;'          $(CSA_README_CHECK)
+	@sed -i -e 's|###SAGA_PYTHON###|$(PYTHON_LOCATION)/bin/python|ig;' $(CSA_README_CHECK)
+	@sed -i -e 's|###SAGA_PYLOCATION###|$(PYTHON_LOCATION)|ig;'        $(CSA_README_CHECK)
+	@sed -i -e 's|###SAGA_PYVERSION###|$(PYTHON_VERSION)|ig;'          $(CSA_README_CHECK)
+	@sed -i -e 's|###SAGA_PYSVERSION###|$(PYTHON_SVERSION)|ig;'        $(CSA_README_CHECK)
+	@sed -i -e 's|###CSA_LOCATION###|$(CSA_LOCATION)|ig;'              $(CSA_README_CHECK)
+	@sed -i -e 's|###CC_NAME###|$(CC_NAME)|ig;'                        $(CSA_README_CHECK)
+	@sed -i -e 's|###BIGJOB_MODPATH###|$(BIGJOB_MODPATH)|ig;'          $(CSA_README_CHECK)
 ifdef CSA_LINK_INFO
 	@rm -f                      $(CSA_LOCATION)/README.saga
 	@ln -s  $(CSA_README_CHECK) $(CSA_LOCATION)/README.saga
@@ -658,20 +712,21 @@ endif
 $(CSA_MODULE_CHECK)$(FORCE): $(CSA_MODULE_SRC)
 	@echo "module                    creating"
 	@cp -fv $(CSA_MODULE_SRC) $(CSA_MODULE_CHECK)
-	@$(SED) -i -e 's|###SAGA_VERSION###|$(CSA_SAGA_VERSION)|ig;'          $(CSA_MODULE_CHECK)
-	@$(SED) -i -e 's|###SAGA_LOCATION###|$(SAGA_LOCATION)|ig;'            $(CSA_MODULE_CHECK)
-	@$(SED) -i -e 's|###SAGA_LDLIBPATH###|$(SAGA_ENV_LDPATH)|ig;'         $(CSA_MODULE_CHECK)
-	@$(SED) -i -e 's|###SAGA_PATH###|$(SAGA_ENV_PATH)|ig;'                $(CSA_MODULE_CHECK)
-	@$(SED) -i -e 's|###SAGA_MODPATH###|$(SAGA_PYTHON_MODPATH)|ig;'       $(CSA_MODULE_CHECK)
-	@$(SED) -i -e 's|###PYTHON_PATH###|$(PYTHON_LOCATION)/bin/|ig;'       $(CSA_MODULE_CHECK)
-	@$(SED) -i -e 's|###PYTHON_MODPATH###|$(PYTHON_MODPATH)|ig;'          $(CSA_MODULE_CHECK)
-	@$(SED) -i -e 's|###SAGA_PYTHON###|$(PYTHON_LOCATION)/bin/python|ig;' $(CSA_MODULE_CHECK)
-	@$(SED) -i -e 's|###SAGA_PYLOCATION###|$(PYTHON_LOCATION)|ig;'        $(CSA_MODULE_CHECK)
-	@$(SED) -i -e 's|###SAGA_PYVERSION###|$(PYTHON_VERSION)|ig;'          $(CSA_MODULE_CHECK)
-	@$(SED) -i -e 's|###SAGA_PYSVERSION###|$(PYTHON_SVERSION)|ig;'        $(CSA_MODULE_CHECK)
-	@$(SED) -i -e 's|###CSA_LOCATION###|$(CSA_LOCATION)|ig;'              $(CSA_MODULE_CHECK)
-	@$(SED) -i -e 's|###CC_NAME###|$(CC_NAME)|ig;'                        $(CSA_MODULE_CHECK)
-	@$(SED) -i -e 's|###BIGJOB_MODPATH###|$(BIGJOB_MODPATH)|ig;'          $(CSA_MODULE_CHECK)
+	@sed -i -e 's|###HOST_SETUP###| $(CSA_HOST_SETUP)|ig;'             $(CSA_MODULE_CHECK)
+	@sed -i -e 's|###SAGA_VERSION###|$(CSA_SAGA_VERSION)|ig;'          $(CSA_MODULE_CHECK)
+	@sed -i -e 's|###SAGA_LOCATION###|$(SAGA_LOCATION)|ig;'            $(CSA_MODULE_CHECK)
+	@sed -i -e 's|###SAGA_LDLIBPATH###|$(SAGA_ENV_LDPATH)|ig;'         $(CSA_MODULE_CHECK)
+	@sed -i -e 's|###SAGA_PATH###|$(SAGA_ENV_PATH)|ig;'                $(CSA_MODULE_CHECK)
+	@sed -i -e 's|###SAGA_MODPATH###|$(SAGA_PYTHON_MODPATH)|ig;'       $(CSA_MODULE_CHECK)
+	@sed -i -e 's|###PYTHON_PATH###|$(PYTHON_LOCATION)/bin/|ig;'       $(CSA_MODULE_CHECK)
+	@sed -i -e 's|###PYTHON_MODPATH###|$(PYTHON_MODPATH)|ig;'          $(CSA_MODULE_CHECK)
+	@sed -i -e 's|###SAGA_PYTHON###|$(PYTHON_LOCATION)/bin/python|ig;' $(CSA_MODULE_CHECK)
+	@sed -i -e 's|###SAGA_PYLOCATION###|$(PYTHON_LOCATION)|ig;'        $(CSA_MODULE_CHECK)
+	@sed -i -e 's|###SAGA_PYVERSION###|$(PYTHON_VERSION)|ig;'          $(CSA_MODULE_CHECK)
+	@sed -i -e 's|###SAGA_PYSVERSION###|$(PYTHON_SVERSION)|ig;'        $(CSA_MODULE_CHECK)
+	@sed -i -e 's|###CSA_LOCATION###|$(CSA_LOCATION)|ig;'              $(CSA_MODULE_CHECK)
+	@sed -i -e 's|###CC_NAME###|$(CC_NAME)|ig;'                        $(CSA_MODULE_CHECK)
+	@sed -i -e 's|###BIGJOB_MODPATH###|$(BIGJOB_MODPATH)|ig;'          $(CSA_MODULE_CHECK)
 ifdef CSA_LINK_INFO
 	@rm -f                      $(CSA_LOCATION)/module.saga
 	@ln -s  $(CSA_MODULE_CHECK) $(CSA_LOCATION)/module.saga
@@ -680,13 +735,13 @@ endif
 .PHONY: permissions
 permissions:
 	@echo "fixing permissions"
-	@-$(CHMOD) -R a+rX $(SAGA_LOCATION)
-	@-$(CHMOD) -R a+rX $(EXTDIR)
-	@-$(CHMOD)    a+rX $(CSA_LOCATION)
+	@-chmod -R a+rX $(SAGA_LOCATION)
+	@-chmod -R a+rX $(EXTDIR)
+	@-chmod    a+rX $(CSA_LOCATION)
 
 
 .PHONY: test
 test: info
-	@bash -c 'cd $(CSA_LOCATION) && source env.saga.sh && cd csa && ./csa_deploy.pl -r $(CSA_HOST) $(LOG) $(CSA_TESTS)' 2>&1 | tee -a $(LOG)
+	@bash -c '$(CSA_HOST_SETUP) ; cd $(CSA_LOCATION) && source env.saga.sh && $(CSA_ROOT)/csa_deploy.pl -r $(CSA_HOST) $(CSA_TESTS)' 2>&1 | tee -a $(LOG)
 
 
