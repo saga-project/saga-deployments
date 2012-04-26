@@ -86,15 +86,8 @@ CXX        = g++
 # gcc --version is stupidly formatted.  Worse, that format is inconsistent over
 # different distribution channels.  Thus this detour to get the version directly
 # via gcc compiler macros:
-new_cc_version=1
-ifeq "$(CSA_HOST)" "localhost"
- new_cc_version=0
-endif
-ifeq "$(CSA_HOST)" "thinkie"
- new_cc_version=0
-endif
 
-ifeq "$(new_cc_version)" "0"
+ifeq "$(CSA_HOST)" "thinkie"
  CC_VERSION  = $(shell (gcc --version | head -1 | rev | cut -f 1 -d ' '| rev))
 else
  CC_VERSION  = $(shell (rm -f cpp_version ; make cpp_version ; ./cpp_version) | tail -n 1)
