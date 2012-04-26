@@ -95,7 +95,7 @@ ifeq "$(CSA_HOST)" "thinkie"
 endif
 
 ifeq "$(new_cc_version)" "0"
- CC_VERSION  = $(shell (gcc --version | head -1 | rev | cut -f 1 -d ' '| rev))
+ CC_VERSION  = $(shell (gcc --version | head -1 | rev | cut -f 1 -d ' '| rev)
 else
  CC_VERSION  = $(shell (rm -f cpp_version ; make cpp_version ; ./cpp_version) | tail -n 1)
 endif
