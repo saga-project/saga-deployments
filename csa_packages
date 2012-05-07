@@ -34,6 +34,7 @@ version: 1.6
   externals               none                                                                         
   saga-core               https://svn.cct.lsu.edu/repos/saga/core/branches/egi-release                 
   saga-binding-python     https://svn.cct.lsu.edu/repos/saga/bindings/python/branches/egi-release      
+  saga-binding-bliss      git://github.com/saga-project/bliss.git
   saga-adaptor-x509       https://svn.cct.lsu.edu/repos/saga-adaptors/x509/branches/egi-release          !ranger
   saga-adaptor-globus     https://svn.cct.lsu.edu/repos/saga-adaptors/globus/branches/egi-release        !ranger
   saga-adaptor-ssh        https://github.com/saga-project/saga-adaptors-ssh.git/trunk/                 

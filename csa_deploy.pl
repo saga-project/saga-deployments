@@ -29,6 +29,7 @@ sub help (;$$)
        -l | --list  
        -d | --deploy 
        -c | --check all,job,file,... 
+       -C | --check target
             
        -e | --experimental 
        -g | --git-push
@@ -53,6 +54,7 @@ sub help (;$$)
     -l : list available target hosts
     -d : deploy version/modules on targets          (default:  off)
     -c : check csa deployment (unit tests)          (default:  off)
+    -C : check type (c++, python, bliss, cmd)       (default:  auto)
                                                                
   sapor operandi:                                            
     -e : experimental software deployment           (default:  off)
@@ -113,6 +115,7 @@ my $do_force    = 0;
 my $do_list     = 0;
 my $do_git_up   = 0;
 my $run_test    = 0;
+my $test_tgt    = "default";
 
 my $test_mode   = "";
 my $test_info   = "";
@@ -149,6 +152,11 @@ while (my $arg   = shift )
     @tests       = split (/,/, $tmp);
     $do_check    = 1;
     help (-2, "cannot parse checks '$tmp'") if $tmp =~ /^-/o; 
+  }
+  elsif ( $arg   =~ /^(-C|--CheckType)$/o )
+  {
+    $test_tgt    = shift || "default";
+    $do_check    = 1;
   }
   elsif ( $arg   =~ /^(-v|--version)$/o )
   {
@@ -773,8 +781,9 @@ if ( $do_check )
                     " CSA_LOCATION=$path" .
                     " CSA_SAGA_VERSION=$version" .
                     " CSA_TESTS=$tmp" .
+                    " CSA_TEST_TGT=$test_tgt" .
                     " $exp" .
-                    " $MAKE -C $path/csa/ test ' " ;
+                    " $MAKE -C $path/csa/ test-$test_tgt' " ;
 
           print " -- check: $cmd\n" if ( $verb || $noop );
           
@@ -884,6 +893,11 @@ if ( $run_test )
   printf "| %-12s | %-7s | %-10s | %-55s | res | \n", 'host', 'type', 'name', 'info';
   printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7,  '-'x10, '-'x55;
   
+  if ( defined $ENV{'SAGA_BLISS_LOCATION'} )
+  {
+    print "| running bliss tests\n";
+  }
+
   foreach my $test ( @tests)
   {
     my $host = $test->{'host'};
@@ -891,18 +905,30 @@ if ( $run_test )
     my $name = $test->{'name'};
     my $info = $test->{'info'};
 
-    my $cmd  = "bash -c '. $csa_root/../env.saga.sh ; python $csa_root/test/csa_test_$type.py $info true 2>&1'";
+    my $env_setup = ". $csa_root/../env.saga.sh";
+    my $cmd       = "bash -c '$env_setup ; python $csa_root/test/csa_test_$type.py $info true 2>&1'";
+
+    # for bliss based tests, we actually need a different test setup right now.
+    # Eventually both strands should be merged...
+    if ( defined $ENV{'SAGA_BLISS_LOCATION'} )
+    {
+      $env_setup = ". $csa_root/../saga/bliss/pyvirt/bin/activate";
+      $cmd       = "$csa_root/test/csa_test_bliss_$type.sh $info true 2>&1";
+    }
+
+
 
     print " -- test: $cmd\n" if ( $verb || $noop );
         
     my $out = "";
     unless ( $noop ) {
-      $out  = qx{$cmd};
+      $out = qx{$cmd};
+      $err = $!;
     }
 
     if ( ! defined $out )
     {
-      $out = "could not run test - [FAILURE]";
+      $out = "could not run test - $err - $cmd - [FAILURE]";
     }
 
     my $msg = $out;

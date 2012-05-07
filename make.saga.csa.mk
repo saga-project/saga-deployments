@@ -46,7 +46,7 @@ EXTDIR         = $(CSA_EXT_DIR)
 
 # DATE         = $(shell date '+%Y-%m-%d-%H-%M')
 DATE           = $(shell date '+%Y-%m-%d')
-LOG            = $(CSA_ROOT)/test/test.saga-$(CSA_SAGA_VERSION).$(CC_NAME).$(CSA_HOST)$(CSA_SUFFIX).$(DATE).log
+LOG            = $(CSA_ROOT)/test/test.saga-$(CSA_SAGA_VERSION).$(CC_NAME).$(CSA_HOST)$(CSA_SUFFIX).$(DATE).$(CSA_TEST_TGT).log
 
 # to be call'ed by individual tests.  The first check expects the call to
 # succeed, the second expects it to fail (like running /bin/false).  
@@ -143,7 +143,7 @@ ifeq "$(SVN)" ""
 endif
 
 
-GIT        = $(shell which svn 2>/dev/null)
+GIT        = $(shell which git 2>/dev/null)
 GITCO      = $(GIT) clone
 GITUP      = $(GIT) pull
 
@@ -184,11 +184,13 @@ saga-adaptors::            saga-adaptor-condor
 # 
 .PHONY: saga-bindings
 saga-bindings::            saga-binding-python
+saga-bindings::            saga-binding-bliss
 # saga-bindings::            saga-core
 
 # .PHONY: saga-binding-python
 # saga-binding-python::      python
-# 
+
+
 .PHONY: saga-clients saga-client-mandelbrot saga-client-bigjob
 saga-clients::             saga-client-mandelbrot saga-client-bigjob
 # saga-client-mandelbrot::   saga-core
@@ -378,6 +380,36 @@ $(SAGA_PYTHON_CHECK)$(FORCE):
 	@cd $(SRCDIR)/$(CSA_SAGA_TGT) ; \
     $(MK_CSA_HOST_SETUP) ; \
     env $(SAGA_ENV) ./configure && make clean && make $J && make install
+
+
+########################################################################
+#
+# bliss
+#
+# Bliss will not use the python from our stack, so we have to be careful to use
+# the standard user environment.
+#
+# SAGA_BLISS_CHECK    = $(SAGA_LOCATION)/share/saga/config/python.m4 
+  SAGA_BLISS_ROOT     = $(CSA_TGT_DIR)/bliss/
+  SAGA_BLISS_CHECK    = $(SAGA_BLISS_ROOT)/does/not/exist/
+  SAGA_BLISS_PYVIRT   = $(SAGA_BLISS_ROOT)/pyvirt/
+  SAGA_BLISS_SETUP    = . $(SAGA_BLISS_PYVIRT)/bin/activate; export SAGA_BLISS_LOCATION=$(SAGA_BLISS_ROOT)
+
+# SAGA_BLISS_MODPATH  = $(SAGA_LOCATION)/lib/python$(BLISS_VERSION)/site-packages/
+
+.PHONY: saga-binding-bliss
+saga-binding-bliss:: base $(SAGA_BLISS_CHECK)$(FORCE)
+
+$(SAGA_BLISS_CHECK)$(FORCE):
+	@echo "saga-binding-bliss        installing"
+	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && cd $(SRCDIR)/$(CSA_SAGA_TGT) && $(GITUP) ; true
+	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(GITCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
+	@cd $(SRCDIR)/$(CSA_SAGA_TGT) ; \
+		curl -s https://raw.github.com/pypa/virtualenv/master/virtualenv.py | python - $(SAGA_BLISS_PYVIRT); \
+    $(SAGA_BLISS_SETUP) ; \
+		python setup.py install ; \
+		rm -rf $(SAGA_BLISS_ROOT)/bliss/ ; \
+		cp -R $(SRCDIR)/$(CSA_SAGA_TGT) $(SAGA_BLISS_ROOT)/bliss/
 
 
 ########################################################################
@@ -750,6 +782,12 @@ permissions:
 
 .PHONY: test
 test: info
-	@bash -c '$(MK_CSA_HOST_SETUP) ; cd $(CSA_LOCATION) && source env.saga.sh && $(CSA_ROOT)/csa_deploy.pl -r $(CSA_HOST) $(CSA_TESTS)' 2>&1 | tee -a $(LOG)
+	@bash -c '$(MK_CSA_HOST_SETUP) ; cd $(CSA_LOCATION) && . env.saga.sh && $(CSA_ROOT)/csa_deploy.pl -r $(CSA_HOST) $(CSA_TESTS)' 2>&1 | tee -a $(LOG)
+	true
+
+.PHONY: test-bliss
+test-bliss: info
+	bash -c '$(SAGA_BLISS_SETUP) ; cd $(CSA_LOCATION) && $(CSA_ROOT)/csa_deploy.pl -r $(CSA_HOST) $(CSA_TESTS)' 2>&1 | tee -a $(LOG)
+	true
 
 
