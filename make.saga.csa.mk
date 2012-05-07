@@ -103,7 +103,7 @@ MAKE_VERSION = $(shell make --version | head -1)
 # we need special settings on some hosts: those need to be used when running
 # commands, and also need to be documented in the READMEs etc.
 #
-CSA_HOST_SETUP  = $(shell grep $(CSA_HOST) $(CSA_ROOT)/csa_hostenv | cut -f 2- -d : | sed 's/$$/\\n/')
+CSA_HOST_SETUP  = $(shell grep -e '^ *$(CSA_HOST):' $(CSA_ROOT)/csa_hostenv | cut -f 2- -d : | sed 's/$$/\\n/')
 
 ifeq "$(CSA_HOST_SETUP)" ""
   MK_CSA_HOST_SETUP = "true"
