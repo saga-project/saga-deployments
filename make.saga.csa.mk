@@ -681,7 +681,7 @@ $(SC_BIGJOB_CHECK)$(FORCE):
       $(TEST_ENV) $(PYTHON_CHECK) setup.py install --prefix=$(SAGA_LOCATION)
 	@cd $(SRCDIR) ; \
       $(MK_CSA_HOST_SETUP) ; \
-      $(TEST_ENV) $(PYTHON_LOCATION)/bin/easy_install -U --prefix=$(SAGA_LOCATION) bigjob
+      $(TEST_ENV) $(PYTHON_LOCATION)/bin/easy_install -U --prefix=$(SAGA_LOCATION) $(CSA_SAGA_SRC) bigjob
 	@sed -i $(SAGA_LOCATION)/lib/python$(PYTHON_SVERSION)/site-packages/easy-install.pth -e 's/^.*BigJob.*$$//g'
 
 #	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
@@ -785,11 +785,13 @@ permissions:
 .PHONY: test
 test: info
 	@bash -c '$(MK_CSA_HOST_SETUP) ; cd $(CSA_LOCATION) && . env.saga.sh && $(CSA_ROOT)/csa_deploy.pl -r $(CSA_HOST) $(CSA_TESTS)' 2>&1 | tee -a $(LOG)
-	true
+	@echo "test log: $(LOG)"
+	@true
 
 .PHONY: test-bliss
 test-bliss: info
-	bash -c '$(SAGA_BLISS_SETUP) ; cd $(CSA_LOCATION) && $(CSA_ROOT)/csa_deploy.pl -r $(CSA_HOST) $(CSA_TESTS)' 2>&1 | tee -a $(LOG)
-	true
+	@bash -c '$(SAGA_BLISS_SETUP) ; cd $(CSA_LOCATION) && $(CSA_ROOT)/csa_deploy.pl -r $(CSA_HOST) $(CSA_TESTS)' 2>&1 | tee -a $(LOG)
+	@echo "test log: $(LOG)"
+	@true
 
 

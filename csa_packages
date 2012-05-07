@@ -44,7 +44,7 @@ version: 1.6
   saga-adaptor-torque     https://svn.cct.lsu.edu/repos/saga-adaptors/torque/trunk                       !ranger !lonestar
   saga-adaptor-condor     https://svn.cct.lsu.edu/repos/saga-adaptors/condor/trunk                  esa
   saga-client-mandelbrot  https://svn.cct.lsu.edu/repos/saga-projects/applications/mandelbrot          
-  saga-client-bigjob      https://github.com/saga-project/BigJob/trunk/                                
+  saga-client-bigjob      --version-0.4.63
   documentation           none                                                                         
 
 version: 1.6.1
