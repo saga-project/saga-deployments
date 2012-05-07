@@ -60,20 +60,20 @@
   hotel         job    pbs+ssh    pbs+ssh://alamo.futuregrid.org/
   hotel         job    pbs+ssh    pbs+ssh://hotel.futuregrid.org/
 
-  alamo         job    ssh        ssh://localhost/
-  alamo         job    pbs        pbs://localhost/
-  alamo         job    ssh        ssh://india.futuregrid.org/
-  alamo         job    ssh        ssh://sierra.futuregrid.org/
-  alamo         job    ssh        ssh://hotel.futuregrid.org/
-  alamo         job    ssh        ssh://alamo.futuregrid.org/
-  alamo         job    pbs+ssh    pbs+ssh://india.futuregrid.org/
-  alamo         job    pbs+ssh    pbs+ssh://sierra.futuregrid.org/
-  alamo         job    pbs+ssh    pbs+ssh://alamo.futuregrid.org/
-  alamo         job    pbs+ssh    pbs+ssh://hotel.futuregrid.org/
+# alamo         job    ssh        ssh://localhost/
+# alamo         job    pbs        pbs://localhost/
+# alamo         job    ssh        ssh://india.futuregrid.org/
+# alamo         job    ssh        ssh://sierra.futuregrid.org/
+# alamo         job    ssh        ssh://hotel.futuregrid.org/
+# alamo         job    ssh        ssh://alamo.futuregrid.org/
+# alamo         job    pbs+ssh    pbs+ssh://india.futuregrid.org/
+# alamo         job    pbs+ssh    pbs+ssh://sierra.futuregrid.org/
+# alamo         job    pbs+ssh    pbs+ssh://alamo.futuregrid.org/
+# alamo         job    pbs+ssh    pbs+ssh://hotel.futuregrid.org/
 
 #################################################################################################
 
-  kraken        job    gsissh     gsissh://kraken-gsi.nics.utk.edu/
+# kraken        job    gsissh     gsissh://kraken-gsi.nics.utk.edu/
 # kraken        job    gram       gram://gridftp1.ls4.tacc.utexas.edu/jobmanager-fork
 # kraken        job    gram       gram://gridftp1.ls4.tacc.utexas.edu/jobmanager-pbs
   
@@ -83,11 +83,7 @@
   
 # queenbee      job    gsissh     gsissh://queenbee.teragrid.org/
   ranger        job    gsissh     gsissh://tg-login.ranger.tacc.teragrid.org/
-  blacklight    job    gsissh     gsissh://tg-login.blacklight.psc.teragrid.org/
-  trestles      job    gsissh     gsissh://trestles-login.sdsc.edu/
+# blacklight    job    gsissh     gsissh://tg-login.blacklight.psc.teragrid.org/
+# trestles      job    gsissh     gsissh://trestles-login.sdsc.edu/
 # steele        job    gsissh     gsissh://tg-steele.purdue.teragrid.org/
   
-  sierra        job    ssh        ssh://sierra.futuregrid.org/
-  hotel         job    ssh        ssh://hotel.futuregrid.org/
-  alamo         job    ssh        ssh://alamo.futuregrid.org/
-
