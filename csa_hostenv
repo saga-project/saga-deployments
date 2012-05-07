@@ -41,3 +41,5 @@ cyder:   export GLOBUS_LOCATION=/usr/
 cyder:   export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH
 cyder:   export PATH=$GLOBUS_LOCATION/bin/:$PATH
 
+india:   module load python
+
