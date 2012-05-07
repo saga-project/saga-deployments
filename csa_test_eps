@@ -2,19 +2,19 @@
   *             core   -          -    
   *             job    fork       fork://localhost/
 
- #thinkie       job    ssh        ssh://localhost/
- #thinkie       job    ssh        ssh://sierra.futuregrid.org/
- #thinkie       job    ssh        ssh://india.futuregrid.org/
- #thinkie       job    ssh        ssh://hotel.futuregrid.org/
- #thinkie       job    ssh        ssh://alamo.futuregrid.org/
+  thinkie       job    ssh        ssh://localhost/
+  thinkie       job    ssh        ssh://sierra.futuregrid.org/
+  thinkie       job    ssh        ssh://india.futuregrid.org/
+  thinkie       job    ssh        ssh://hotel.futuregrid.org/
+  thinkie       job    ssh        ssh://alamo.futuregrid.org/
   thinkie       job    gsissh     gsissh://kraken-gsi.nics.utk.edu/
- #thinkie       job    gsissh     gsissh://tg-login.lonestar.tacc.teragrid.org/
- #thinkie       job    gsissh     gsissh://tg-login.ranger.tacc.teragrid.org/
- #thinkie       job    gsissh     gsissh://tg-login.blacklight.psc.teragrid.org/
- #thinkie       job    gsissh     gsissh://trestles-login.sdsc.edu/
-##thinkie       job    gsissh     gsissh://tg-steele.purdue.teragrid.org/
-##thinkie       job    gsissh     gsissh://queenbee.teragrid.org/
- #thinkie       job    pbs+ssh    pbs+ssh://india.futuregrid.org/
+  thinkie       job    gsissh     gsissh://tg-login.lonestar.tacc.teragrid.org/
+  thinkie       job    gsissh     gsissh://tg-login.ranger.tacc.teragrid.org/
+  thinkie       job    gsissh     gsissh://tg-login.blacklight.psc.teragrid.org/
+  thinkie       job    gsissh     gsissh://trestles-login.sdsc.edu/
+# thinkie       job    gsissh     gsissh://tg-steele.purdue.teragrid.org/
+# thinkie       job    gsissh     gsissh://queenbee.teragrid.org/
+  thinkie       job    pbs+ssh    pbs+ssh://india.futuregrid.org/
 
   cyder         job    ssh        ssh://localhost/
   cyder         job    ssh        ssh://sierra.futuregrid.org/
@@ -27,20 +27,49 @@
 # cyder         job    gsissh     gsissh://queenbee.teragrid.org/
   cyder         job    pbs+ssh    pbs+ssh://india.futuregrid.org/
 
-  india         job    ssh        ssh://india.futuregrid.org/
   india         job    ssh        ssh://localhost/
+  india         job    pbs        pbs://localhost/
+  india         job    ssh        ssh://india.futuregrid.org/
   india         job    ssh        ssh://sierra.futuregrid.org/
   india         job    ssh        ssh://hotel.futuregrid.org/
   india         job    ssh        ssh://alamo.futuregrid.org/
-  india         job    gsissh     gsissh://kraken-gsi.nics.utk.edu/
-  india         job    gsissh     gsissh://tg-login.lonestar.tacc.teragrid.org/
-  india         job    gsissh     gsissh://tg-login.ranger.tacc.teragrid.org/
-  india         job    gsissh     gsissh://tg-login.blacklight.psc.teragrid.org/
-  india         job    gsissh     gsissh://trestles-login.sdsc.edu/
-# india         job    gsissh     gsissh://tg-steele.purdue.teragrid.org/
-# india         job    gsissh     gsissh://queenbee.teragrid.org/
-  india         job    pbs        pbs://localhost/
   india         job    pbs+ssh    pbs+ssh://india.futuregrid.org/
+  india         job    pbs+ssh    pbs+ssh://sierra.futuregrid.org/
+  india         job    pbs+ssh    pbs+ssh://alamo.futuregrid.org/
+  india         job    pbs+ssh    pbs+ssh://hotel.futuregrid.org/
+
+  sierra        job    ssh        ssh://localhost/
+  sierra        job    pbs        pbs://localhost/
+  sierra        job    ssh        ssh://india.futuregrid.org/
+  sierra        job    ssh        ssh://sierra.futuregrid.org/
+  sierra        job    ssh        ssh://hotel.futuregrid.org/
+  sierra        job    ssh        ssh://alamo.futuregrid.org/
+  sierra        job    pbs+ssh    pbs+ssh://india.futuregrid.org/
+  sierra        job    pbs+ssh    pbs+ssh://sierra.futuregrid.org/
+  sierra        job    pbs+ssh    pbs+ssh://alamo.futuregrid.org/
+  sierra        job    pbs+ssh    pbs+ssh://hotel.futuregrid.org/
+
+  hotel         job    ssh        ssh://localhost/
+  hotel         job    pbs        pbs://localhost/
+  hotel         job    ssh        ssh://india.futuregrid.org/
+  hotel         job    ssh        ssh://sierra.futuregrid.org/
+  hotel         job    ssh        ssh://hotel.futuregrid.org/
+  hotel         job    ssh        ssh://alamo.futuregrid.org/
+  hotel         job    pbs+ssh    pbs+ssh://india.futuregrid.org/
+  hotel         job    pbs+ssh    pbs+ssh://sierra.futuregrid.org/
+  hotel         job    pbs+ssh    pbs+ssh://alamo.futuregrid.org/
+  hotel         job    pbs+ssh    pbs+ssh://hotel.futuregrid.org/
+
+  alamo         job    ssh        ssh://localhost/
+  alamo         job    pbs        pbs://localhost/
+  alamo         job    ssh        ssh://india.futuregrid.org/
+  alamo         job    ssh        ssh://sierra.futuregrid.org/
+  alamo         job    ssh        ssh://hotel.futuregrid.org/
+  alamo         job    ssh        ssh://alamo.futuregrid.org/
+  alamo         job    pbs+ssh    pbs+ssh://india.futuregrid.org/
+  alamo         job    pbs+ssh    pbs+ssh://sierra.futuregrid.org/
+  alamo         job    pbs+ssh    pbs+ssh://alamo.futuregrid.org/
+  alamo         job    pbs+ssh    pbs+ssh://hotel.futuregrid.org/
 
 #################################################################################################
 

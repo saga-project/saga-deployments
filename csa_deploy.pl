@@ -1027,7 +1027,7 @@ if ( $run_test )
         }
 
 
-        # eval test result
+        # eval test result, format log output for failed tests
         my $msg = "";
         if ( 0 == $rc )
         {
@@ -1038,13 +1038,12 @@ if ( $run_test )
         {
           $tests_nok++;
           $msg = sprintf "| %-12s | %-7s | %-10s | %-55s | %3s |", $host, $type, $name, $info, "nok";
+          $log .= "$msg\n| $cmd\n| stdout / stderr: \n$out\n";
+          $log .= "|-----------------------------------------------------------------------------------------------------\n";
         }
 
         print "$msg\n";
 
-        # format log output
-        $log .= "$msg\n| $cmd\n| stdout / stderr: \n$out\n";
-        $log .= "|-----------------------------------------------------------------------------------------------------\n";
       }
     }
   }
@@ -1055,7 +1054,7 @@ if ( $run_test )
   printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x55;
   print  "\n\n";
   printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x55;
-  printf "| %-99s |\n", "DETAILED TEST LOG";
+  printf "| %-99s |\n", "DETAILED ERROR LOG";
   printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x55;
   print  "$log";
   printf "| %-99s |\n", "ok : $tests_ok";
