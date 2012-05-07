@@ -48,7 +48,7 @@ using /share1/projects/xsede/SAGA/csa///test/x509_test.pem as X509_USER_PROXY
 | lonestar     | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
 | bash -c '. /share1/projects/xsede/SAGA/csa///../saga/bliss/pyvirt/bin/activate ; bash /share1/projects/xsede/SAGA/csa///test/csa_test_bliss_job_01.sh gsissh://tg-login.lonestar.tacc.teragrid.org/'
 | stdout / stderr: 
-05/07/2012 06:17:07 PM - bliss.Runtime(0x10b44ef0) - ERROR - Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job'
+05/07/2012 06:42:03 PM - bliss.Runtime(0x123ecef0) - ERROR - Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job'
 
 ============================================
 The job seems to have FAILED!
@@ -81,7 +81,7 @@ https://github.com/saga-project/bliss/issues
 | lonestar     | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
 | bash -c '. /share1/projects/xsede/SAGA/csa///../saga/bliss/pyvirt/bin/activate ; bash /share1/projects/xsede/SAGA/csa///test/csa_test_bliss_job_02.sh gsissh://tg-login.lonestar.tacc.teragrid.org/'
 | stdout / stderr: 
-05/07/2012 06:17:07 PM - bliss.Runtime(0x1a9b9ef0) - ERROR - Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job'
+05/07/2012 06:42:03 PM - bliss.Runtime(0x5510ef0) - ERROR - Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job'
 
 ============================================
 The job seems to have FAILED!
@@ -114,7 +114,7 @@ https://github.com/saga-project/bliss/issues
 | lonestar     | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
 | bash -c '. /share1/projects/xsede/SAGA/csa///../saga/bliss/pyvirt/bin/activate ; bash /share1/projects/xsede/SAGA/csa///test/csa_test_bliss_job_03.sh gsissh://tg-login.lonestar.tacc.teragrid.org/'
 | stdout / stderr: 
-05/07/2012 06:17:08 PM - bliss.Runtime(0x1c600ef0) - ERROR - Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job'
+05/07/2012 06:42:03 PM - bliss.Runtime(0xed2bef0) - ERROR - Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job'
 
 ============================================
 The job seems to have FAILED!
@@ -147,7 +147,7 @@ https://github.com/saga-project/bliss/issues
 | lonestar     | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
 | bash -c '. /share1/projects/xsede/SAGA/csa///../saga/bliss/pyvirt/bin/activate ; bash /share1/projects/xsede/SAGA/csa///test/csa_test_bliss_job_04.sh gsissh://tg-login.lonestar.tacc.teragrid.org/'
 | stdout / stderr: 
-05/07/2012 06:17:08 PM - bliss.Runtime(0x9812ef0) - ERROR - Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job'
+05/07/2012 06:42:04 PM - bliss.Runtime(0xa1f5ef0) - ERROR - Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job'
 
 ============================================
 The job seems to have FAILED!
@@ -180,7 +180,7 @@ https://github.com/saga-project/bliss/issues
 | lonestar     | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
 | bash -c '. /share1/projects/xsede/SAGA/csa///../saga/bliss/pyvirt/bin/activate ; bash /share1/projects/xsede/SAGA/csa///test/csa_test_bliss_job_05.sh gsissh://tg-login.lonestar.tacc.teragrid.org/'
 | stdout / stderr: 
-05/07/2012 06:17:08 PM - bliss.Runtime(0xbacdef0) - ERROR - Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job'
+05/07/2012 06:42:04 PM - bliss.Runtime(0xc985ef0) - ERROR - Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job'
 
 ============================================
 The job seems to have FAILED!
