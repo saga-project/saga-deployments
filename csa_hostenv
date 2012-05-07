@@ -33,13 +33,19 @@
 
 #################################################################################
 
-thinkie: export GLOBUS_LOCATION=/usr/local/packages/globus-5.0.2
-thinkie: export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH
-thinkie: export PATH=$GLOBUS_LOCATION/bin/:$PATH
+thinkie:   export GLOBUS_LOCATION=/usr/local/packages/globus-5.0.2
+thinkie:   export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH
+thinkie:   export PATH=$GLOBUS_LOCATION/bin/:$PATH
 
-cyder:   export GLOBUS_LOCATION=/usr/
-cyder:   export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH
-cyder:   export PATH=$GLOBUS_LOCATION/bin/:$PATH
+cyder:     export GLOBUS_LOCATION=/usr/
+cyder:     export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH
+cyder:     export PATH=$GLOBUS_LOCATION/bin/:$PATH
 
-india:   module load python
+india:     module load python
+
+sierra:    module load git
+sierra:    module load python
+sierra:    module load torque
+sierra:    module load openmpi
+sierra:    export PBS_HOME=/opt/torque
 
