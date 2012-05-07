@@ -1,47 +1,50 @@
 
-  *             job    fork    fork://localhost/
+  *             job    fork       fork://localhost/
 
-  thinkie       job    ssh     ssh://localhost/
-  thinkie       job    ssh     ssh://sierra.futuregrid.org/
-  thinkie       job    ssh     ssh://india.futuregrid.org/
-  thinkie       job    ssh     ssh://hotel.futuregrid.org/
-  thinkie       job    ssh     ssh://alamo.futuregrid.org/
-  thinkie       job    gsissh  gsissh://kraken-gsi.nics.utk.edu/
-  thinkie       job    gsissh  gsissh://tg-login.lonestar.tacc.teragrid.org/
-  thinkie       job    gsissh  gsissh://tg-login.ranger.tacc.teragrid.org/
-  thinkie       job    gsissh  gsissh://tg-login.blacklight.psc.teragrid.org/
-  thinkie       job    gsissh  gsissh://trestles-login.sdsc.edu/
-# thinkie       job    gsissh  gsissh://tg-steele.purdue.teragrid.org/
-# thinkie       job    gsissh  gsissh://queenbee.teragrid.org/
+  thinkie       job    ssh        ssh://localhost/
+  thinkie       job    ssh        ssh://sierra.futuregrid.org/
+  thinkie       job    ssh        ssh://india.futuregrid.org/
+  thinkie       job    ssh        ssh://hotel.futuregrid.org/
+  thinkie       job    ssh        ssh://alamo.futuregrid.org/
+  thinkie       job    gsissh     gsissh://kraken-gsi.nics.utk.edu/
+  thinkie       job    gsissh     gsissh://tg-login.lonestar.tacc.teragrid.org/
+  thinkie       job    gsissh     gsissh://tg-login.ranger.tacc.teragrid.org/
+  thinkie       job    gsissh     gsissh://tg-login.blacklight.psc.teragrid.org/
+  thinkie       job    gsissh     gsissh://trestles-login.sdsc.edu/
+# thinkie       job    gsissh     gsissh://tg-steele.purdue.teragrid.org/
+# thinkie       job    gsissh     gsissh://queenbee.teragrid.org/
 
-  cyder         job    ssh     ssh://localhost/
-  cyder         job    ssh     ssh://sierra.futuregrid.org/
-  cyder         job    gsissh  gsissh://kraken-gsi.nics.utk.edu/
-  cyder         job    gsissh  gsissh://tg-login.lonestar.tacc.teragrid.org/
-  cyder         job    gsissh  gsissh://tg-login.ranger.tacc.teragrid.org/
-  cyder         job    gsissh  gsissh://tg-login.blacklight.psc.teragrid.org/
-  cyder         job    gsissh  gsissh://trestles-login.sdsc.edu/
-# cyder         job    gsissh  gsissh://tg-steele.purdue.teragrid.org/
-# cyder         job    gsissh  gsissh://queenbee.teragrid.org/
+  cyder         job    ssh        ssh://localhost/
+  cyder         job    ssh        ssh://sierra.futuregrid.org/
+  cyder         job    gsissh     gsissh://kraken-gsi.nics.utk.edu/
+  cyder         job    gsissh     gsissh://tg-login.lonestar.tacc.teragrid.org/
+  cyder         job    gsissh     gsissh://tg-login.ranger.tacc.teragrid.org/
+  cyder         job    gsissh     gsissh://tg-login.blacklight.psc.teragrid.org/
+  cyder         job    gsissh     gsissh://trestles-login.sdsc.edu/
+# cyder         job    gsissh     gsissh://tg-steele.purdue.teragrid.org/
+# cyder         job    gsissh     gsissh://queenbee.teragrid.org/
 
 #################################################################################################
 
-  kraken        job    gsissh  gsissh://kraken-gsi.nics.utk.edu/
-# kraken        job    gram    gram://gridftp1.ls4.tacc.utexas.edu/jobmanager-fork
-# kraken        job    gram    gram://gridftp1.ls4.tacc.utexas.edu/jobmanager-pbs
+  kraken        job    gsissh     gsissh://kraken-gsi.nics.utk.edu/
+# kraken        job    gram       gram://gridftp1.ls4.tacc.utexas.edu/jobmanager-fork
+# kraken        job    gram       gram://gridftp1.ls4.tacc.utexas.edu/jobmanager-pbs
   
-  lonestar      job    gsissh  gsissh://tg-login.lonestar.tacc.teragrid.org/
-# lonestar      job    gram    gram=gridftp1.ls4.tacc.utexas.edu:2119/jobmanager-fork
-# lonestar      job    gram    gram=gridftp1.ls4.tacc.utexas.edu:2119/jobmanager-sge
+  lonestar      job    gsissh     gsissh://tg-login.lonestar.tacc.teragrid.org/
+# lonestar      job    gram       gram=gridftp1.ls4.tacc.utexas.edu:2119/jobmanager-fork
+# lonestar      job    gram       gram=gridftp1.ls4.tacc.utexas.edu:2119/jobmanager-sge
   
-# queenbee      job    gsissh  gsissh://queenbee.teragrid.org/
-  ranger        job    gsissh  gsissh://tg-login.ranger.tacc.teragrid.org/
-  blacklight    job    gsissh  gsissh://tg-login.blacklight.psc.teragrid.org/
-  trestles      job    gsissh  gsissh://trestles-login.sdsc.edu/
-# steele        job    gsissh  gsissh://tg-steele.purdue.teragrid.org/
+# queenbee      job    gsissh     gsissh://queenbee.teragrid.org/
+  ranger        job    gsissh     gsissh://tg-login.ranger.tacc.teragrid.org/
+  blacklight    job    gsissh     gsissh://tg-login.blacklight.psc.teragrid.org/
+  trestles      job    gsissh     gsissh://trestles-login.sdsc.edu/
+# steele        job    gsissh     gsissh://tg-steele.purdue.teragrid.org/
   
-  sierra        job    ssh     ssh://sierra.futuregrid.org/
-  india         job    ssh     ssh://india.futuregrid.org/
-  hotel         job    ssh     ssh://hotel.futuregrid.org/
-  alamo         job    ssh     ssh://alamo.futuregrid.org/
+  sierra        job    ssh        ssh://sierra.futuregrid.org/
+  india         job    ssh        ssh://india.futuregrid.org/
+  hotel         job    ssh        ssh://hotel.futuregrid.org/
+  alamo         job    ssh        ssh://alamo.futuregrid.org/
+
+  india         job    pbs        pbs://india.futuregrid.org/
+  india         job    pbs+ssh    pbs+ssh://india.futuregrid.org/
 
