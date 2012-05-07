@@ -33,19 +33,41 @@
 
 #################################################################################
 
-thinkie:   export GLOBUS_LOCATION=/usr/local/packages/globus-5.0.2
-thinkie:   export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH
-thinkie:   export PATH=$GLOBUS_LOCATION/bin/:$PATH
+thinkie:      export GLOBUS_LOCATION=/usr/local/packages/globus-5.0.2
+thinkie:      export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH
+thinkie:      export PATH=$GLOBUS_LOCATION/bin/:$PATH
 
-cyder:     export GLOBUS_LOCATION=/usr/
-cyder:     export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH
-cyder:     export PATH=$GLOBUS_LOCATION/bin/:$PATH
+cyder:        export GLOBUS_LOCATION=/usr/
+cyder:        export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH
+cyder:        export PATH=$GLOBUS_LOCATION/bin/:$PATH
 
-india:     module load python
+hotel:        module load python
 
-sierra:    module load git
-sierra:    module load python
-sierra:    module load torque
-sierra:    module load openmpi
-sierra:    export PBS_HOME=/opt/torque
+india:        module load git
+india:        module load python
+
+sierra:       module load git
+sierra:       module load python
+sierra:       module load torque
+
+alamo:        module load git
+
+trestles:     module load python
+trestles:     module load globus
+
+blacklight:   module load git
+blacklight:   module load python
+blacklight:   module load globus
+
+kraken:       module load git
+kraken:       module load python
+kraken:       module load globus
+
+ranger:       module load git
+ranger:       module load python
+ranger:       module load globus
+
+lonestar:     module load git
+lonestar:     module load python
+lonestar:     module load globus
 
