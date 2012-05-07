@@ -405,6 +405,7 @@ $(SAGA_BLISS_CHECK)$(FORCE):
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && cd $(SRCDIR)/$(CSA_SAGA_TGT) && $(GITUP) ; true
 	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) || $(GITCO) $(CSA_SAGA_SRC) $(CSA_SAGA_TGT)
 	@cd $(SRCDIR)/$(CSA_SAGA_TGT) ; \
+    $(MK_CSA_HOST_SETUP) ; \
 		curl -s https://raw.github.com/pypa/virtualenv/master/virtualenv.py | python - $(SAGA_BLISS_PYVIRT); \
     $(SAGA_BLISS_SETUP) ; \
 		python setup.py install ; \
