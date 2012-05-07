@@ -28,7 +28,7 @@ sub help (;$$)
             
        -l | --list  
        -d | --deploy 
-       -c | --check all,job,file,... 
+       -c | --check all,core,job,file,... 
        -C | --check target
             
        -e | --experimental 
@@ -91,6 +91,7 @@ $csa_root =~ s/[^\/]+$//i;
 $csa_root =~ s/^\.\//$pwd\//i;
 
 my $CSA_HOSTS   = "$csa_root/csa_hosts";
+my $CSA_HOSTENV = "$csa_root/csa_hostenv";
 my $CSA_PACK    = "$csa_root/csa_packages";
 my $CSA_TEST    = "$csa_root/csa_tests";
 my $CSA_TESTEPS = "$csa_root/csa_test_eps";
@@ -148,8 +149,8 @@ while (my $arg   = shift )
   }
   elsif ( $arg   =~ /^(-c|--check)$/o )
   {
-    my $tmp      = shift || "job";
-    @tests       = split (/,/, $tmp);
+    my $tmp      = shift || "core,job";
+    @ttypes       = split (/,/, $tmp);
     $do_check    = 1;
     help (-2, "cannot parse checks '$tmp'") if $tmp =~ /^-/o; 
   }
@@ -432,6 +433,58 @@ else
 }
 
 
+################################################################################
+#
+# read and parse csa hostenv file
+#
+{
+  my $tmp = ();
+
+  open   (TMP, "<$CSA_HOSTENV") || die "ERROR  : cannot open '$CSA_HOSTENV': $!\n";
+  @tmp = <TMP>;
+  close  (TMP);
+  chomp  (@tmp);
+
+  foreach my $tmp ( @tmp )
+  {
+    if ( $tmp =~ /^\s*(?:#.*)?$/io )
+    {
+      # skip comment lines and empty lines
+    }
+    elsif ( $tmp =~ /^\s*(\S+):\s+(\S.*?)\s*$/io )
+    {
+      my $host    = $1;
+      my $envline = $2;
+
+      if ( ! exists ( $csa_hosts{$host} ) )
+      {
+        warn "WARNING: envline for unknown host $host\n";
+      }
+      else
+      {
+        push ( @{$csa_hosts {$1}{'envlines'}}, $envline);
+      }
+    }
+    else
+    {
+      warn "WARNING: Cannot parse csa host line '$tmp'\n";
+    }
+  }
+
+  foreach my $host ( keys %csa_hosts )
+  {
+    if ( exists $csa_hosts{$host}{'envlines'} )
+    {
+      $csa_hosts{$host}{'env'} = join ('; ', @{$csa_hosts{$host}{'envlines'}})
+    } 
+    else
+    {
+      $csa_hosts{$host}{'env'} = "true";
+    }
+  }
+}
+
+
 if ( grep (/all/, @modules) )
 {
   @modules = grep (!/all/, @modules);
@@ -488,7 +541,7 @@ my $checkstring = $do_check;
 if ( $do_check )
 {
   $checkstring .= " :";
-  foreach my $check ( @tests )
+  foreach my $check ( @ttypes )
   {
     $checkstring .= " $check";
   }
@@ -499,7 +552,7 @@ if ( $do_check )
 #
 # print summery of actions and parameters
 #
-#if ( ! $run_test )
+if ( ! $run_test )
 {
   print <<EOT;
 +------------------------------------------------------------------------------------------------------
@@ -575,6 +628,7 @@ if ( $do_exe )
       my $fqhn   = $csa_hosts{$host}{'fqhn'};
       my $path   = $csa_hosts{$host}{'path'};
       my $access = $csa_hosts{$host}{'access'};
+      my $env    = $csa_hosts{$host}{'env'};
       my $CPP    = "gcc-`$path/csa/cpp_version`";
 
     # my $exe    = "rm -rf $path/csa";
@@ -596,14 +650,14 @@ if ( $do_exe )
     #              "cd     $path/     ; test -d csa || git co https://git.cct.lsu.edu/repos/saga-projects/deployment/tg-csa csa ; " .
     #              "cd     $path/csa/ ; git pull";
     # my $exe    = "rm -rv $path/src/saga-adaptor-ssh-*";
-    # my $exe    = "rm -rv $path/csa/";
-      my $exe    = "git --version ; module load git ; git --version";
+      my $exe    = "rm -rv $path/csa/";
+    # my $exe    = "git --version ; module load git ; git --version";
 
       print "+-----------------+------------------------------------------+-------------------------------------+\n";
       printf "| %-15s | %-40s | %-35s |\n", $host, $fqhn, $path;
       print "+-----------------+------------------------------------------+-------------------------------------+\n";
 
-      my $cmd = "$access $fqhn '$exe'";
+      my $cmd = "$access $fqhn '$env ; $exe'";
 
       print " -- $cmd\n" if ( $verb || $noop );
       
@@ -640,6 +694,7 @@ if ( $do_deploy )
     }
     else
     {
+      my $env    = $csa_hosts{$host}{'env'};
       my $fqhn   = $csa_hosts{$host}{'fqhn'};
       my $path   = $csa_hosts{$host}{'path'};
       my $access = $csa_hosts{$host}{'access'};
@@ -660,7 +715,7 @@ if ( $do_deploy )
              ( grep (/\*/,      @mod_tgts) ||
                grep (/$host/,   @mod_tgts) )  )
         {
-          my $cmd = "$access $fqhn 'mkdir -p $path;" .
+          my $cmd = "$access $fqhn '$env ; mkdir -p $path ;" .
                                    " cd $path && test -d csa && (cd csa && git pull) || git clone $giturl csa;". 
                                    " $ENV" .
                                    " CSA_HOST=$host" .
@@ -683,7 +738,7 @@ if ( $do_deploy )
           {
             if ( $do_git_up )
             {
-              my $cmd = "$access $fqhn 'cd $path/csa/ &&" .
+              my $cmd = "$access $fqhn '$env ; cd $path/csa/ && " .
                                        " git add -f doc/README.saga-$version.*.$host* &&" .
                                        " git add -f mod/module.saga-$version.*.$host* &&" .
                                        " git add -f env/saga-$version.*.$host*.sh &&" .
@@ -741,6 +796,7 @@ if ( $do_check )
     }
     else
     {
+      my $env    = $csa_hosts{$host}{'env'};
       my $fqhn   = $csa_hosts{$host}{'fqhn'};
       my $path   = $csa_hosts{$host}{'path'};
       my $access = $csa_hosts{$host}{'access'};
@@ -773,17 +829,17 @@ if ( $do_check )
 
         # running the test suite ('make test')
         { 
-          my $tmp = join (',', @tests);
-          my $cmd = "$access $fqhn 'mkdir -p $path;" .
-                    " cd $path && test -d csa && (cd csa && git pull) || git clone $giturl csa;". 
-                    " $ENV" .
-                    " CSA_HOST=$host" .
-                    " CSA_LOCATION=$path" .
-                    " CSA_SAGA_VERSION=$version" .
-                    " CSA_TESTS=$tmp" .
-                    " CSA_TEST_TGT=$test_tgt" .
-                    " $exp" .
-                    " $MAKE -C $path/csa/ test-$test_tgt' " ;
+          my $tmp = join (',', @ttypes);
+          my $cmd = "$access $fqhn '$env ; mkdir -p $path;" .
+                                  " cd $path && test -d csa && (cd csa && git pull) || git clone $giturl csa;". 
+                                  " $ENV" .
+                                  " CSA_HOST=$host" .
+                                  " CSA_LOCATION=$path" .
+                                  " CSA_SAGA_VERSION=$version" .
+                                  " CSA_TESTS=$tmp" .
+                                  " CSA_TEST_TGT=$test_tgt" .
+                                  " $exp" .
+                                  " $MAKE -C $path/csa/ test-$test_tgt' " ;
 
           print " -- check: $cmd\n" if ( $verb || $noop );
           
@@ -797,7 +853,7 @@ if ( $do_check )
 
       if ( $do_git_up )
       {
-        my $cmd = "$access $fqhn ' cd $path/csa/ && " .
+        my $cmd = "$access $fqhn ' $env ; cd $path/csa/ && " .
                                  " git add -f test/test.saga-$version.*.$host* && " .
                                  " git commit -am \"automated update\" && " .
                                  " git push $giturl ' " ;
@@ -826,10 +882,10 @@ if ( $do_check )
 #
 if ( $run_test )
 {
-  my @tests      = ();
-  my $test_types = ();
+  my @tests  = ();
+  my @ttypes = split (/,/, $test_info );
 
-  my $x509       = "$csa_root/test/x509_test.pem";
+  my $x509  = "$csa_root/test/x509_test.pem";
 
   if ( -r $x509 )
   {
@@ -845,7 +901,6 @@ if ( $run_test )
     close  (TMP);
     chomp  (@tmp);
 
-    @test_infos = split (/,/, $test_info );
 
     foreach my $line ( @tmp )
     {
@@ -853,8 +908,7 @@ if ( $run_test )
       {
         # skip comment lines and empty lines
       }
-      elsif ( $line =~
-        /^\s*(\S+)\s+(job|file|core|bigjob)\s+(\S+)\s+(.*?)\s*$/io )
+      elsif ( $line =~ /^\s*(\S+)\s+(core|job|file|bigjob)\s+(\S+)\s+(.*?)\s*$/io )
       {
         my $host = $1;
         my $type = $2;
@@ -864,8 +918,8 @@ if ( $run_test )
         if ( $host eq $test_host ||
              $host eq '*'        )
         {
-          if ( grep ($type,    @test_infos) ||
-               grep (/^all$/,  @test_infos) )
+          if ( grep ($type,    @ttypes) ||
+               grep (/^all$/,  @ttypes) )
           {
             $info =~ s/\s+/ /iog;
 
@@ -886,84 +940,127 @@ if ( $run_test )
   my $tests_ok   = 0;
   my $tests_nok  = 0;
 
-  my $out        = "";
-  my $err        = "";
+  my $log        = "";
 
+  printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7,  '-'x10, '-'x55;
+  printf "| %-99s |\n", "TEST SUMMARY";
   printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7,  '-'x10, '-'x55;
   printf "| %-12s | %-7s | %-10s | %-55s | res | \n", 'host', 'type', 'name', 'info';
   printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7,  '-'x10, '-'x55;
   
   if ( defined $ENV{'SAGA_BLISS_LOCATION'} )
   {
-    print "| running bliss tests\n";
+    printf "| %-99s |\n", "running bliss tests";
   }
 
-  foreach my $test ( @tests)
+  my $env_setup = ". $csa_root/../env.saga.sh";
+
+  # for bliss based tests, we actually need a different test setup right now.
+  if ( defined $ENV{'SAGA_BLISS_LOCATION'} )
   {
-    my $host = $test->{'host'};
-    my $type = $test->{'type'};
-    my $name = $test->{'name'};
-    my $info = $test->{'info'};
+    $env_setup = ". $csa_root/../saga/bliss/pyvirt/bin/activate";
+  }
 
-    my $env_setup = ". $csa_root/../env.saga.sh";
-    my $cmd       = "bash -c '$env_setup ; python $csa_root/test/csa_test_$type.py $info true 2>&1'";
 
-    # for bliss based tests, we actually need a different test setup right now.
-    # Eventually both strands should be merged...
+  foreach my $ttype ( @ttypes )
+  {
+    # we ran all matching test scripts from the test directory
+    my @scripts = glob ("$csa_root/test/csa_test_python_$ttype*");
+
+    # use different scripts for bliss tests
     if ( defined $ENV{'SAGA_BLISS_LOCATION'} )
     {
-      $env_setup = ". $csa_root/../saga/bliss/pyvirt/bin/activate";
-      $cmd       = "$csa_root/test/csa_test_bliss_$type.sh $info true 2>&1";
+      @scripts  = glob ("$csa_root/test/csa_test_bliss_$ttype*");
     }
 
 
-
-    print " -- test: $cmd\n" if ( $verb || $noop );
-        
-    my $out = "";
-    unless ( $noop ) {
-      $out = qx{$cmd};
-      $err = $!;
-    }
-
-    if ( ! defined $out )
+    SCRIPT:
+    foreach my $script ( @scripts )
     {
-      $out = "could not run test - $err - $cmd - [FAILURE]";
-    }
-
-    my $msg = $out;
-
-    $out =~ s/^(.*)\s*\[SUCCESS\][\s\n]?$/$1/is;
-    $out =~ s/^(.*)\s*\[FAILURE\][\s\n]?$/$1/is;
-
-    $msg =~ s/^.*\s*\[SUCCESS\][\s\n]?$/ ok/iso;
-    $msg =~ s/^.*\s*\[FAILURE\][\s\n]?$/nok/iso;
-
-
-    printf "| %-12s | %-7s | %-10s | %-55s | %3s |\n", $host, $type, $name, $info, $msg;
-
-    if ( $msg eq ' ok' )
-    {
-      $tests_ok++;
-    }
-    else
-    {
-      $tests_nok++;
-
-      $err .= sprintf "| %-99s |\n", " Error for $host / $type / $name / $info : ";
-      foreach my $line ( split (/\n/, $out) )
+      my $command  = "";
+      if ( $script =~ /\.py$/io )
       {
-        $err .= sprintf "| %-99s |\n", $line;
+        $command = 'python';
       }
-      $err .= sprintf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+\n", '-'x12, '-'x7, '-'x10, '-'x55;
+      elsif ( $script =~ /\.sh$/io )
+      {
+        $command = 'bash';
+      }
+      else
+      {
+        print "| ERROR: cannot handle script type\n";
+        next SCRIPT
+      }
+
+      my $sname = $script;
+      $sname =~ s/.*\///ig;
+
+      printf "| %-99s |\n", " ";
+      printf "| %-99s |\n", $sname;
+
+      TEST:
+      foreach my $test ( @tests)
+      {
+        my $host = $test->{'host'};
+        my $type = $test->{'type'};
+        my $name = $test->{'name'};
+        my $info = $test->{'info'};
+
+        if ( $type ne $ttype )
+        {
+          next TEST;
+        }
+
+        my $cmd  = "bash -c '$env_setup ; $command $script $info'";
+        my $out  = "";
+        my $rc   = 0;
+
+        # run the test, and capture results
+        if ( $noop ) 
+        {
+          print " -- test: $cmd\n";
+        }
+        else
+        {
+          $out   = qx{$cmd 2>&1} || "";
+          $rc    = $? >> 8;
+        }
+
+
+        # eval test result
+        my $msg = "";
+        if ( 0 == $rc )
+        {
+          $tests_ok++;
+          $msg = sprintf "| %-12s | %-7s | %-10s | %-55s | %3s |", $host, $type, $name, $info, " ok";
+        }
+        else
+        {
+          $tests_nok++;
+          $msg = sprintf "| %-12s | %-7s | %-10s | %-55s | %3s |", $host, $type, $name, $info, "nok";
+        }
+
+        print "$msg\n";
+
+        # format log output
+        $log .= "$msg\n| $cmd\n| stdout / stderr: \n$out\n";
+        $log .= "|-----------------------------------------------------------------------------------------------------\n";
+      }
     }
   }
 
-
   printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x55;
-  print  $err;
   printf "| %-99s |\n", "ok : $tests_ok";
   printf "| %-99s |\n", "nok: $tests_nok";
   printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x55;
+  print  "\n\n";
+  printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x55;
+  printf "| %-99s |\n", "DETAILED TEST LOG";
+  printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x55;
+  print  "$log";
+  printf "| %-99s |\n", "ok : $tests_ok";
+  printf "| %-99s |\n", "nok: $tests_nok";
+  printf "+-%-12s-+-%-7s-+-%-10s-+-%-55s-+-----+ \n", '-'x12, '-'x7, '-'x10, '-'x55;
+
 }
 
