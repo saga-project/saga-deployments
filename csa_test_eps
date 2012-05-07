@@ -45,6 +45,6 @@
   hotel         job    ssh        ssh://hotel.futuregrid.org/
   alamo         job    ssh        ssh://alamo.futuregrid.org/
 
-  india         job    pbs        pbs://india.futuregrid.org/
+  india         job    pbs        pbs://localhost/
   india         job    pbs+ssh    pbs+ssh://india.futuregrid.org/
 
