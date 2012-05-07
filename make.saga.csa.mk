@@ -681,7 +681,7 @@ $(SC_BIGJOB_CHECK)$(FORCE):
       $(TEST_ENV) $(PYTHON_CHECK) setup.py install --prefix=$(SAGA_LOCATION)
 	@cd $(SRCDIR) ; \
       $(MK_CSA_HOST_SETUP) ; \
-      $(TEST_ENV) $(PYTHON_LOCATION)/bin/easy_install -U --prefix=$(SAGA_LOCATION) $(CSA_SAGA_SRC) bigjob
+      $(TEST_ENV) $(PYTHON_LOCATION)/bin/easy_install -U --prefix=$(SAGA_LOCATION) $(CSA_SAGA_SRC)
 	@sed -i $(SAGA_LOCATION)/lib/python$(PYTHON_SVERSION)/site-packages/easy-install.pth -e 's/^.*BigJob.*$$//g'
 
 #	@cd $(SRCDIR) ; test -d $(CSA_SAGA_TGT) && $(SVNUP)                 $(CSA_SAGA_TGT) ; true
