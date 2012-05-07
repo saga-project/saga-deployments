@@ -93,8 +93,8 @@ using /N/soft/SAGA/csa///test/x509_test.pem as X509_USER_PROXY
 | sierra       | job     | pbs+ssh    | pbs+ssh://alamo.futuregrid.org/                         | nok |
 | bash -c '. /N/soft/SAGA/csa///../saga/bliss/pyvirt/bin/activate ; bash /N/soft/SAGA/csa///test/csa_test_bliss_job_01.sh pbs+ssh://alamo.futuregrid.org/'
 | stdout / stderr: 
-05/07/2012 04:06:32 PM - bliss.PBSJobPlugin(0x2924b48) - ERROR - Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin)
-05/07/2012 04:06:32 PM - bliss.PBSJobPlugin(0x2924b48) - ERROR - Couldn't run job because: SAGA Exception (11): [saga.plugin.job.pbssh] Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin) 
+05/07/2012 04:31:46 PM - bliss.PBSJobPlugin(0x935cb48) - ERROR - Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin)
+05/07/2012 04:31:46 PM - bliss.PBSJobPlugin(0x935cb48) - ERROR - Couldn't run job because: SAGA Exception (11): [saga.plugin.job.pbssh] Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin) 
   *********************
   * BLISS STACK TRACE *
   *********************
@@ -178,8 +178,8 @@ https://github.com/saga-project/bliss/issues
 | sierra       | job     | pbs+ssh    | pbs+ssh://alamo.futuregrid.org/                         | nok |
 | bash -c '. /N/soft/SAGA/csa///../saga/bliss/pyvirt/bin/activate ; bash /N/soft/SAGA/csa///test/csa_test_bliss_job_02.sh pbs+ssh://alamo.futuregrid.org/'
 | stdout / stderr: 
-05/07/2012 04:07:28 PM - bliss.PBSJobPlugin(0x11ea8b48) - ERROR - Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin)
-05/07/2012 04:07:28 PM - bliss.PBSJobPlugin(0x11ea8b48) - ERROR - Couldn't run job because: SAGA Exception (11): [saga.plugin.job.pbssh] Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin) 
+05/07/2012 04:32:31 PM - bliss.PBSJobPlugin(0xb379b48) - ERROR - Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin)
+05/07/2012 04:32:31 PM - bliss.PBSJobPlugin(0xb379b48) - ERROR - Couldn't run job because: SAGA Exception (11): [saga.plugin.job.pbssh] Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin) 
   *********************
   * BLISS STACK TRACE *
   *********************
@@ -263,8 +263,8 @@ https://github.com/saga-project/bliss/issues
 | sierra       | job     | pbs+ssh    | pbs+ssh://alamo.futuregrid.org/                         | nok |
 | bash -c '. /N/soft/SAGA/csa///../saga/bliss/pyvirt/bin/activate ; bash /N/soft/SAGA/csa///test/csa_test_bliss_job_03.sh pbs+ssh://alamo.futuregrid.org/'
 | stdout / stderr: 
-05/07/2012 04:08:24 PM - bliss.PBSJobPlugin(0x32aeb48) - ERROR - Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin)
-05/07/2012 04:08:24 PM - bliss.PBSJobPlugin(0x32aeb48) - ERROR - Couldn't run job because: SAGA Exception (11): [saga.plugin.job.pbssh] Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin) 
+05/07/2012 04:33:27 PM - bliss.PBSJobPlugin(0x1b389b48) - ERROR - Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin)
+05/07/2012 04:33:27 PM - bliss.PBSJobPlugin(0x1b389b48) - ERROR - Couldn't run job because: SAGA Exception (11): [saga.plugin.job.pbssh] Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin) 
   *********************
   * BLISS STACK TRACE *
   *********************
@@ -348,8 +348,8 @@ https://github.com/saga-project/bliss/issues
 | sierra       | job     | pbs+ssh    | pbs+ssh://alamo.futuregrid.org/                         | nok |
 | bash -c '. /N/soft/SAGA/csa///../saga/bliss/pyvirt/bin/activate ; bash /N/soft/SAGA/csa///test/csa_test_bliss_job_04.sh pbs+ssh://alamo.futuregrid.org/'
 | stdout / stderr: 
-05/07/2012 04:09:16 PM - bliss.PBSJobPlugin(0x1fca9b48) - ERROR - Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin)
-05/07/2012 04:09:16 PM - bliss.PBSJobPlugin(0x1fca9b48) - ERROR - Couldn't run job because: SAGA Exception (11): [saga.plugin.job.pbssh] Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin) 
+05/07/2012 04:34:10 PM - bliss.PBSJobPlugin(0x7d92b48) - ERROR - Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin)
+05/07/2012 04:34:10 PM - bliss.PBSJobPlugin(0x7d92b48) - ERROR - Couldn't run job because: SAGA Exception (11): [saga.plugin.job.pbssh] Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin) 
   *********************
   * BLISS STACK TRACE *
   *********************
@@ -433,8 +433,8 @@ https://github.com/saga-project/bliss/issues
 | sierra       | job     | pbs+ssh    | pbs+ssh://alamo.futuregrid.org/                         | nok |
 | bash -c '. /N/soft/SAGA/csa///../saga/bliss/pyvirt/bin/activate ; bash /N/soft/SAGA/csa///test/csa_test_bliss_job_05.sh pbs+ssh://alamo.futuregrid.org/'
 | stdout / stderr: 
-05/07/2012 04:10:01 PM - bliss.PBSJobPlugin(0x1563cb48) - ERROR - Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin)
-05/07/2012 04:10:01 PM - bliss.PBSJobPlugin(0x1563cb48) - ERROR - Couldn't run job because: SAGA Exception (11): [saga.plugin.job.pbssh] Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin) 
+05/07/2012 04:34:53 PM - bliss.PBSJobPlugin(0x2e46b48) - ERROR - Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin)
+05/07/2012 04:34:53 PM - bliss.PBSJobPlugin(0x2e46b48) - ERROR - Couldn't run job because: SAGA Exception (11): [saga.plugin.job.pbssh] Couldn't find PBS command line tools on pbs+ssh://alamo.futuregrid.org/: which: no pbsnodes in (/usr/local/bin:/bin:/usr/bin) 
   *********************
   * BLISS STACK TRACE *
   *********************
