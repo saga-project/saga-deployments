@@ -1,0 +1,215 @@
+log file                  /share1/projects/xsede/SAGA/csa//test/test.saga-1.6.gcc-4.1.2.lonestar.2012-05-08.bliss.log
+hostname                  lonestar
+time stamp                2012-05-08
+csa  location             /share1/projects/xsede/SAGA
+csa  target               /share1/projects/xsede/SAGA/saga/
+saga version              1.6
+make version              GNU Make 3.81
+compiler version          gcc-4.1.2
+using /share1/projects/xsede/SAGA/csa///test/x509_test.pem as X509_USER_PROXY
++--------------+---------+------------+---------------------------------------------------------+-----+ 
+| TEST SUMMARY                                                                                        |
++--------------+---------+------------+---------------------------------------------------------+-----+ 
+| host         | type    | name       | info                                                    | res | 
++--------------+---------+------------+---------------------------------------------------------+-----+ 
+| running bliss tests                                                                                 |
+|                                                                                                     |
+| csa_test_bliss_core_00.py                                                                           |
+| lonestar     | core    | -          | -                                                       |  ok |
+|                                                                                                     |
+| csa_test_bliss_job_01.sh                                                                            |
+| lonestar     | job     | fork       | fork://localhost/                                       |  ok |
+| lonestar     | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
+|                                                                                                     |
+| csa_test_bliss_job_02.sh                                                                            |
+| lonestar     | job     | fork       | fork://localhost/                                       |  ok |
+| lonestar     | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
+|                                                                                                     |
+| csa_test_bliss_job_03.sh                                                                            |
+| lonestar     | job     | fork       | fork://localhost/                                       |  ok |
+| lonestar     | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
+|                                                                                                     |
+| csa_test_bliss_job_04.sh                                                                            |
+| lonestar     | job     | fork       | fork://localhost/                                       |  ok |
+| lonestar     | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
+|                                                                                                     |
+| csa_test_bliss_job_05.sh                                                                            |
+| lonestar     | job     | fork       | fork://localhost/                                       |  ok |
+| lonestar     | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
++--------------+---------+------------+---------------------------------------------------------+-----+ 
+| ok : 6                                                                                              |
+| nok: 5                                                                                              |
++--------------+---------+------------+---------------------------------------------------------+-----+ 
+
+
++--------------+---------+------------+---------------------------------------------------------+-----+ 
+| DETAILED ERROR LOG                                                                                  |
++--------------+---------+------------+---------------------------------------------------------+-----+ 
+| lonestar     | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
+| bash -c '. /share1/projects/xsede/SAGA/csa///../saga/bliss/pyvirt/bin/activate ; bash /share1/projects/xsede/SAGA/csa///test/csa_test_bliss_job_01.sh gsissh://tg-login.lonestar.tacc.teragrid.org/'
+| stdout / stderr: 
+05/08/2012 01:35:52 AM - bliss.Runtime(0x16d39ef0) - ERROR - Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job'
+
+============================================
+The job seems to have FAILED!
+============================================
+                                            
+SAGA Exception (NoSuccess): Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job' 
+  *********************
+  * BLISS STACK TRACE *
+  *********************
+  File "/share1/projects/xsede/SAGA/saga//bliss//bliss/test/compliance/job/01_run_remote_exe.py", line 130, in <module>
+    sys.exit(main())
+  File "/share1/projects/xsede/SAGA/saga//bliss//bliss/test/compliance/job/01_run_remote_exe.py", line 126, in main
+    return run(js_url, remoteusername, queue, project)
+  File "/share1/projects/xsede/SAGA/saga//bliss//bliss/test/compliance/job/01_run_remote_exe.py", line 21, in run
+    js = saga.job.Service(url)
+  File "/share1/projects/xsede/SAGA/saga/bliss/pyvirt/lib/python2.7/site-packages/bliss-0.1.21-py2.7.egg/bliss/saga/job/Service.py", line 57, in __init__
+    self._plugin = Object._get_plugin(self) # throws 'NoSuccess' on error
+  File "/share1/projects/xsede/SAGA/saga/bliss/pyvirt/lib/python2.7/site-packages/bliss-0.1.21-py2.7.egg/bliss/saga/Object.py", line 147, in _get_plugin
+    error = ("%s %s" % (str(ex), tback.get_traceback()))
+  File "/share1/projects/xsede/SAGA/saga/bliss/pyvirt/lib/python2.7/site-packages/bliss-0.1.21-py2.7.egg/bliss/utils/tback.py", line 14, in get_traceback
+    traceback.print_stack(file=fp)
+
+Please run this test again with SAGA_VERBOSE=5 
+and report the results at: 
+
+https://github.com/saga-project/bliss/issues
+
+
+|-----------------------------------------------------------------------------------------------------
+| lonestar     | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
+| bash -c '. /share1/projects/xsede/SAGA/csa///../saga/bliss/pyvirt/bin/activate ; bash /share1/projects/xsede/SAGA/csa///test/csa_test_bliss_job_02.sh gsissh://tg-login.lonestar.tacc.teragrid.org/'
+| stdout / stderr: 
+05/08/2012 01:35:52 AM - bliss.Runtime(0x1166ef0) - ERROR - Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job'
+
+============================================
+The job seems to have FAILED!
+============================================
+                                            
+SAGA Exception (NoSuccess): Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job' 
+  *********************
+  * BLISS STACK TRACE *
+  *********************
+  File "/share1/projects/xsede/SAGA/saga//bliss//bliss/test/compliance/job/02_run_shell_command_newline.py", line 134, in <module>
+    sys.exit(main())
+  File "/share1/projects/xsede/SAGA/saga//bliss//bliss/test/compliance/job/02_run_shell_command_newline.py", line 130, in main
+    return run(js_url, remoteusername, queue, project)
+  File "/share1/projects/xsede/SAGA/saga//bliss//bliss/test/compliance/job/02_run_shell_command_newline.py", line 22, in run
+    js = saga.job.Service(url)
+  File "/share1/projects/xsede/SAGA/saga/bliss/pyvirt/lib/python2.7/site-packages/bliss-0.1.21-py2.7.egg/bliss/saga/job/Service.py", line 57, in __init__
+    self._plugin = Object._get_plugin(self) # throws 'NoSuccess' on error
+  File "/share1/projects/xsede/SAGA/saga/bliss/pyvirt/lib/python2.7/site-packages/bliss-0.1.21-py2.7.egg/bliss/saga/Object.py", line 147, in _get_plugin
+    error = ("%s %s" % (str(ex), tback.get_traceback()))
+  File "/share1/projects/xsede/SAGA/saga/bliss/pyvirt/lib/python2.7/site-packages/bliss-0.1.21-py2.7.egg/bliss/utils/tback.py", line 14, in get_traceback
+    traceback.print_stack(file=fp)
+
+Please run this test again with SAGA_VERBOSE=5 
+and report the results at: 
+
+https://github.com/saga-project/bliss/issues
+
+
+|-----------------------------------------------------------------------------------------------------
+| lonestar     | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
+| bash -c '. /share1/projects/xsede/SAGA/csa///../saga/bliss/pyvirt/bin/activate ; bash /share1/projects/xsede/SAGA/csa///test/csa_test_bliss_job_03.sh gsissh://tg-login.lonestar.tacc.teragrid.org/'
+| stdout / stderr: 
+05/08/2012 01:35:53 AM - bliss.Runtime(0x46aaef0) - ERROR - Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job'
+
+============================================
+The job seems to have FAILED!
+============================================
+                                            
+SAGA Exception (NoSuccess): Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job' 
+  *********************
+  * BLISS STACK TRACE *
+  *********************
+  File "/share1/projects/xsede/SAGA/saga//bliss//bliss/test/compliance/job/03_run_shell_command_multiline.py", line 140, in <module>
+    sys.exit(main())
+  File "/share1/projects/xsede/SAGA/saga//bliss//bliss/test/compliance/job/03_run_shell_command_multiline.py", line 136, in main
+    return run(js_url, remoteusername, queue, project)
+  File "/share1/projects/xsede/SAGA/saga//bliss//bliss/test/compliance/job/03_run_shell_command_multiline.py", line 22, in run
+    js = saga.job.Service(url)
+  File "/share1/projects/xsede/SAGA/saga/bliss/pyvirt/lib/python2.7/site-packages/bliss-0.1.21-py2.7.egg/bliss/saga/job/Service.py", line 57, in __init__
+    self._plugin = Object._get_plugin(self) # throws 'NoSuccess' on error
+  File "/share1/projects/xsede/SAGA/saga/bliss/pyvirt/lib/python2.7/site-packages/bliss-0.1.21-py2.7.egg/bliss/saga/Object.py", line 147, in _get_plugin
+    error = ("%s %s" % (str(ex), tback.get_traceback()))
+  File "/share1/projects/xsede/SAGA/saga/bliss/pyvirt/lib/python2.7/site-packages/bliss-0.1.21-py2.7.egg/bliss/utils/tback.py", line 14, in get_traceback
+    traceback.print_stack(file=fp)
+
+Please run this test again with SAGA_VERBOSE=5 
+and report the results at: 
+
+https://github.com/saga-project/bliss/issues
+
+
+|-----------------------------------------------------------------------------------------------------
+| lonestar     | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
+| bash -c '. /share1/projects/xsede/SAGA/csa///../saga/bliss/pyvirt/bin/activate ; bash /share1/projects/xsede/SAGA/csa///test/csa_test_bliss_job_04.sh gsissh://tg-login.lonestar.tacc.teragrid.org/'
+| stdout / stderr: 
+05/08/2012 01:35:53 AM - bliss.Runtime(0x4c8def0) - ERROR - Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job'
+
+============================================
+The job seems to have FAILED!
+============================================
+                                            
+SAGA Exception (NoSuccess): Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job' 
+  *********************
+  * BLISS STACK TRACE *
+  *********************
+  File "/share1/projects/xsede/SAGA/saga//bliss//bliss/test/compliance/job/04_run_python_command_newline.py", line 133, in <module>
+    sys.exit(main())
+  File "/share1/projects/xsede/SAGA/saga//bliss//bliss/test/compliance/job/04_run_python_command_newline.py", line 129, in main
+    return run(js_url, remoteusername, queue, project)
+  File "/share1/projects/xsede/SAGA/saga//bliss//bliss/test/compliance/job/04_run_python_command_newline.py", line 21, in run
+    js = saga.job.Service(url)
+  File "/share1/projects/xsede/SAGA/saga/bliss/pyvirt/lib/python2.7/site-packages/bliss-0.1.21-py2.7.egg/bliss/saga/job/Service.py", line 57, in __init__
+    self._plugin = Object._get_plugin(self) # throws 'NoSuccess' on error
+  File "/share1/projects/xsede/SAGA/saga/bliss/pyvirt/lib/python2.7/site-packages/bliss-0.1.21-py2.7.egg/bliss/saga/Object.py", line 147, in _get_plugin
+    error = ("%s %s" % (str(ex), tback.get_traceback()))
+  File "/share1/projects/xsede/SAGA/saga/bliss/pyvirt/lib/python2.7/site-packages/bliss-0.1.21-py2.7.egg/bliss/utils/tback.py", line 14, in get_traceback
+    traceback.print_stack(file=fp)
+
+Please run this test again with SAGA_VERBOSE=5 
+and report the results at: 
+
+https://github.com/saga-project/bliss/issues
+
+
+|-----------------------------------------------------------------------------------------------------
+| lonestar     | job     | gsissh     | gsissh://tg-login.lonestar.tacc.teragrid.org/           | nok |
+| bash -c '. /share1/projects/xsede/SAGA/csa///../saga/bliss/pyvirt/bin/activate ; bash /share1/projects/xsede/SAGA/csa///test/csa_test_bliss_job_05.sh gsissh://tg-login.lonestar.tacc.teragrid.org/'
+| stdout / stderr: 
+05/08/2012 01:35:53 AM - bliss.Runtime(0x14f30ef0) - ERROR - Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job'
+
+============================================
+The job seems to have FAILED!
+============================================
+                                            
+SAGA Exception (NoSuccess): Couldn't find a plugin for URL scheme 'gsissh://' and API type 'saga.job' 
+  *********************
+  * BLISS STACK TRACE *
+  *********************
+  File "/share1/projects/xsede/SAGA/saga//bliss//bliss/test/compliance/job/05_run_python_command_multiline.py", line 139, in <module>
+    sys.exit(main())
+  File "/share1/projects/xsede/SAGA/saga//bliss//bliss/test/compliance/job/05_run_python_command_multiline.py", line 136, in main
+    return run(js_url, remoteusername, queue, project)
+  File "/share1/projects/xsede/SAGA/saga//bliss//bliss/test/compliance/job/05_run_python_command_multiline.py", line 21, in run
+    js = saga.job.Service(url)
+  File "/share1/projects/xsede/SAGA/saga/bliss/pyvirt/lib/python2.7/site-packages/bliss-0.1.21-py2.7.egg/bliss/saga/job/Service.py", line 57, in __init__
+    self._plugin = Object._get_plugin(self) # throws 'NoSuccess' on error
+  File "/share1/projects/xsede/SAGA/saga/bliss/pyvirt/lib/python2.7/site-packages/bliss-0.1.21-py2.7.egg/bliss/saga/Object.py", line 147, in _get_plugin
+    error = ("%s %s" % (str(ex), tback.get_traceback()))
+  File "/share1/projects/xsede/SAGA/saga/bliss/pyvirt/lib/python2.7/site-packages/bliss-0.1.21-py2.7.egg/bliss/utils/tback.py", line 14, in get_traceback
+    traceback.print_stack(file=fp)
+
+Please run this test again with SAGA_VERBOSE=5 
+and report the results at: 
+
+https://github.com/saga-project/bliss/issues
+
+
+|-----------------------------------------------------------------------------------------------------
+| ok : 6                                                                                              |
+| nok: 5                                                                                              |
++--------------+---------+------------+---------------------------------------------------------+-----+ 
