@@ -6,16 +6,13 @@ proc ModulesHelp { } {
   puts stderr "It is recommended to get approval for GRAM usage"
   puts stderr "Contact help@xsede.org for any questions"
 }
+
 module-whatis "Sets up environment for SAGA"
 module-whatis "It is recommended to get approval for GRAM usage"
 module-whatis "Contact help@xsede.org for any questions"
 
-setenv SAGA_LOCATION /home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga/1.6/gcc-4.4.5/
-
-prepend-path PATH :/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/python/2.7.1/gcc-4.4.5//bin/:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/boost/1.44.0/gcc-4.4.5//bin/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga/1.6/gcc-4.4.5//bin/:
-
-prepend-path LD_LIBRARY_PATH LD_LIBRARY_PATH=:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/python/2.7.1/gcc-4.4.5//lib/:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/boost/1.44.0/gcc-4.4.5//lib/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/postgresql/9.0.2/gcc-4.4.5//lib/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/sqlite3/3.6.13/gcc-4.4.5//lib/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga/1.6/gcc-4.4.5//lib/:
-
-
-prepend-path PYTHONPATH /home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga/1.6/gcc-4.4.5//lib/python2.7.1/site-packages/:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/python/2.7.1/gcc-4.4.5//lib/python2.7/site-packages/
+setenv       SAGA_LOCATION   /home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga//1.6/gcc-4.4.5/
+prepend-path PATH            :/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external//python/2.7.1/gcc-4.4.5//bin/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga//1.6/gcc-4.4.5//bin/:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external//python/2.7.1/gcc-4.4.5//bin/
+prepend-path LD_LIBRARY_PATH :/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/boost/1.44.0/gcc-4.4.5//lib/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/postgresql/9.0.2/gcc-4.4.5//lib/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/sqlite3/3.6.13/gcc-4.4.5//lib/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga//1.6/gcc-4.4.5//lib/:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external//python/2.7.1/gcc-4.4.5//lib/
+prepend-path PYTHONPATH      /home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga//1.6/gcc-4.4.5//lib/python2.7/site-packages/:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga//1.6/gcc-4.4.5//lib/python2.7/site-packages//BigJob-0.4.63-py2.7.egg/:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external//python/2.7.1/gcc-4.4.5//lib/2.7/site-packages/
 

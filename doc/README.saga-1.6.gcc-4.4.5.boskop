@@ -1,51 +1,94 @@
 
-The TeraGrid CSA SAGA installation
+---------------------------------------------------------------------------------
+
+Using this SAGA installation:
+=============================
+
+Quick Guide:
+------------
+
+ For using SAGA-C++, the following environment settings are required:
+
+     # export SAGA_LOCATION=/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga//1.6/gcc-4.4.5/
+     # export LD_LIBRARY_PATH=:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/boost/1.44.0/gcc-4.4.5//lib/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/postgresql/9.0.2/gcc-4.4.5//lib/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/sqlite3/3.6.13/gcc-4.4.5//lib/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga//1.6/gcc-4.4.5//lib/:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external//python/2.7.1/gcc-4.4.5//lib/:$LD_LIBRARY_PATH
+     # export PATH=:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external//python/2.7.1/gcc-4.4.5//bin/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga//1.6/gcc-4.4.5//bin/:$PATH
+
+ For using the SAGA Python bindings, the follwoing settings are additionally required:
+
+     # export PATH=/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external//python/2.7.1/gcc-4.4.5//bin/:$PATH
+     # export PYTHONPATH=/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga//1.6/gcc-4.4.5//lib/python2.7/site-packages/:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga//1.6/gcc-4.4.5//lib/python2.7/site-packages//BigJob-0.4.63-py2.7.egg/:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external//python/2.7.1/gcc-4.4.5//lib/2.7/site-packages/:$PYTHONPATH
+
+ Please use /home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external//python/2.7.1/gcc-4.4.5//bin/python as python interpreter (the setting 
+ above puts that first in your path when running 'python').
+
+
+---------------------------------------------------------------------------------
+
+Detailed Instructions:
+----------------------
+ 
+ This README describes an automated SAGA deployment.  In particular, 
+ this deployment of SAGA-C++ was installed via the SAGA CSA scripts 
+ (see https://svn.cct.lsu.edu/repos/saga-projects/deployment/tg-csa).
+
+ Note that this deployment is at this point not depending on system level
+ software, but instead includes all pre-requisites separately, in
+
+   /home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external
+
+ This host might nevertheless require some specific settings to use this
+ deployment -- if so, those are listed below:
+
+ 
+
+ The SAGA deployment and the accompanying dependencies can be used by setting
+ the following environment variables:
+
+
+   # SAGA_LOCATION points to the SAGA installation root
+   export SAGA_LOCATION=/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga//1.6/gcc-4.4.5/
+
+
+   # LD_LIBRARY_PATH allows to dynamically load shared libraries form this 
+   # path, such as SAGA package libs or adaptors.
+   export LD_LIBRARY_PATH=:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/boost/1.44.0/gcc-4.4.5//lib/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/postgresql/9.0.2/gcc-4.4.5//lib/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/sqlite3/3.6.13/gcc-4.4.5//lib/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga//1.6/gcc-4.4.5//lib/:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external//python/2.7.1/gcc-4.4.5//lib/:$LD_LIBRARY_PATH
+
+
+   # PATH is used for searching for executables and scripts.
+   # We usually have to use our own python installation, to ensure that it is
+   # compatible with boost-python, which is used for the SAGA python bindings.
+   export PATH=:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external//python/2.7.1/gcc-4.4.5//bin/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga//1.6/gcc-4.4.5//bin/:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external//python/2.7.1/gcc-4.4.5//bin/:$PATH
+
+
+   # PYTHONPATH points the pyton runtime to the location of the SAGA 
+   # python modules
+   export PYTHONPATH=/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga//1.6/gcc-4.4.5//lib/python2.7/site-packages/:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga//1.6/gcc-4.4.5//lib/python2.7/site-packages//BigJob-0.4.63-py2.7.egg/:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external//python/2.7.1/gcc-4.4.5//lib/2.7/site-packages/:$PYTHONPATH
+
+
+---------------------------------------------------------------------------------
+
+Further documentation and support:
 ----------------------------------
 
 
-  In order to use this installation of SAGA (version '1.6'), you
-  need to set the following environment variables:
+ For more information about SAGA-C++ and SAGA-Python, see 
+     
+   www : http://www.saga-project.org/
+
+
+ For general SAGA user support, please subscribe to the saga-users mailing
+ list:
+
+   www : https://mail.cct.lsu.edu/mailman/listinfo/saga-users
+   mail: saga-users@cct.lsu.edu
 
 
 
-  C++:
+ Please help to improve this software!  Report bugs and feature requests via
+ the TG ticket tracker (select SAGA component), or directly via the SAGA project 
+ tracker, at
   
-    Settings for C++ bindings
-  
-      export SAGA_LOCATION=/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga/1.6/gcc-4.4.5/
-      export LD_LIBRARY_PATH=:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/python/2.7.1/gcc-4.4.5//lib/:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/boost/1.44.0/gcc-4.4.5//lib/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/postgresql/9.0.2/gcc-4.4.5//lib/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/sqlite3/3.6.13/gcc-4.4.5//lib/::/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga/1.6/gcc-4.4.5//lib/:$LD_LIBRARY_PATH
+   www : http://faust.cct.lsu.edu/trac/saga/  (login/pass: guest/guest)
 
+---------------------------------------------------------------------------------
 
-
-  Python:
-
-    Please use /home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/python/2.7.1/gcc-4.4.5//bin/python as python interpreter.
-    BigJob is installed in /home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga/1.6/gcc-4.4.5/lib/python2.7.1/site-packages//bigjob .
-
-    Settings for Python bindings
-
-      export PYTHONPATH=/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/saga/1.6/gcc-4.4.5/lib/python2.7.1/site-packages/:/home/merzky/projects/saga/svn-saga-projects/deployment/tg-csa/deploy/external/python/2.7.1/gcc-4.4.5//lib/python2.7/site-packages/:$PYTHONPATH
-
-
-
-
-  For more information about SAGA-C++ and SAGA-Python, see 
-      
-    www : http://www.saga-project.org/
-
-
-
-  For general SAGA user support, please subscribe to the saga-users mailing
-  list:
-
-    www : https://mail.cct.lsu.edu/mailman/listinfo/saga-users
-    mail: saga-users@cct.lsu.edu
-
-
-
-  Please help to improve this software!  Report bugs and feature requests via
-  the TG ticket tracker (select SAGA component), or directly via the SAGA project 
-  tracker, at
-   
-    www : http://faust.cct.lsu.edu/trac/saga/  (login/pass: guest/guest)
- 
