@@ -257,8 +257,8 @@ if ( $do_git_up )
   my $gitauth = "";
   my $at      = "";
 
-  if ( $gitpass ) { $gitauth .= "$gitpass:"; $at = '@'; }
   if ( $gituser ) { $gitauth .= "$gituser";  $at = '@'; }
+  if ( $gitpass ) { $gitauth .= ":$gitpass"; $at = '@'; }
 
   $gitauth .= $at;
 

@@ -15,6 +15,9 @@
 # thinkie       job    gsissh     gsissh://tg-steele.purdue.teragrid.org/
 # thinkie       job    gsissh     gsissh://queenbee.teragrid.org/
   thinkie       job    pbs+ssh    pbs+ssh://india.futuregrid.org/
+  thinkie       job    pbs+ssh    pbs+ssh://hotel.futuregrid.org/
+  thinkie       job    pbs+ssh    pbs+ssh://alamo.futuregrid.org/
+  thinkie       job    pbs+ssh    pbs+ssh://sierra.futuregrid.org/
 
   cyder         job    ssh        ssh://localhost/
   cyder         job    ssh        ssh://sierra.futuregrid.org/
