@@ -1,9 +1,6 @@
 
 # host specific settings and modules
-    export GLOBUS_LOCATION=/usr/
-    export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH
-    export PATH=$GLOBUS_LOCATION/bin/:$PATH
-
+         export GLOBUS_LOCATION=/usr/;         export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH;         export PATH=$GLOBUS_LOCATION/bin/:$PATH;
 
 # SAGA core settings
 export SAGA_LOCATION=/home/amerzky/csa/saga//1.6/gcc-4.4.3/
@@ -12,8 +9,8 @@ export PATH=:/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//bin/::/home/ame
 
 # SAGA Python bindings settings
 export PATH=/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//bin/:$PATH
-export PYTHONPATH=/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages/:/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages//BigJob-0.4.61-py2.7.egg/:/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//lib/2.7/site-packages/:$PYTHONPATH
+export PYTHONPATH=/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages/:/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages//BigJob-0.4.63-py2.7.egg/:/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//lib/2.7/site-packages/:$PYTHONPATH
 
 # BigJob settings
-export PYTHONPATH=/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages//BigJob-0.4.61-py2.7.egg/:$PYTHONPATH
+export PYTHONPATH=/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages//BigJob-0.4.63-py2.7.egg/:$PYTHONPATH
 

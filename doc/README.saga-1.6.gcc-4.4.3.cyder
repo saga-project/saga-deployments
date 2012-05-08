@@ -16,7 +16,7 @@ Quick Guide:
  For using the SAGA Python bindings, the follwoing settings are additionally required:
 
      # export PATH=/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//bin/:$PATH
-     # export PYTHONPATH=/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages/:/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages//BigJob-0.4.61-py2.7.egg/:/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//lib/2.7/site-packages/:$PYTHONPATH
+     # export PYTHONPATH=/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages/:/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages//BigJob-0.4.63-py2.7.egg/:/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//lib/2.7/site-packages/:$PYTHONPATH
 
  Please use /home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//bin/python as python interpreter (the setting 
  above puts that first in your path when running 'python').
@@ -39,10 +39,7 @@ Detailed Instructions:
  This host might nevertheless require some specific settings to use this
  deployment -- if so, those are listed below:
 
-    export GLOBUS_LOCATION=/usr/
-    export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH
-    export PATH=$GLOBUS_LOCATION/bin/:$PATH
-
+         export GLOBUS_LOCATION=/usr/;         export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH;         export PATH=$GLOBUS_LOCATION/bin/:$PATH;
 
  The SAGA deployment and the accompanying dependencies can be used by setting
  the following environment variables:
@@ -65,7 +62,7 @@ Detailed Instructions:
 
    # PYTHONPATH points the pyton runtime to the location of the SAGA 
    # python modules
-   export PYTHONPATH=/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages/:/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages//BigJob-0.4.61-py2.7.egg/:/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//lib/2.7/site-packages/:$PYTHONPATH
+   export PYTHONPATH=/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages/:/home/amerzky/csa/saga//1.6/gcc-4.4.3//lib/python2.7/site-packages//BigJob-0.4.63-py2.7.egg/:/home/amerzky/csa/external//python/2.7.1/gcc-4.4.3//lib/2.7/site-packages/:$PYTHONPATH
 
 
 ---------------------------------------------------------------------------------
