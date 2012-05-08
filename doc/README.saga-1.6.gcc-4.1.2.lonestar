@@ -1,76 +1,94 @@
 
+---------------------------------------------------------------------------------
+
 Using this SAGA installation:
 =============================
 
 Quick Guide:
 ------------
 
-  For using SAGA-C++, the following environment settings are required:
+ For using SAGA-C++, the following environment settings are required:
 
-      export SAGA_LOCATION=/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2/
-      export LD_LIBRARY_PATH=:/share1/projects/xsede/SAGA/external/boost/1.44.0/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/external/postgresql/9.0.2/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/external/sqlite3/3.6.13/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//lib/:$LD_LIBRARY_PATH
-      export PATH=:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//bin/::/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//bin/:$PATH
+     # export SAGA_LOCATION=/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2/
+     # export LD_LIBRARY_PATH=:/share1/projects/xsede/SAGA/external/boost/1.44.0/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/external/postgresql/9.0.2/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/external/sqlite3/3.6.13/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//lib/:$LD_LIBRARY_PATH
+     # export PATH=:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//bin/::/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//bin/:$PATH
 
-  For using the SAGA Python bindings, the follwoing settings are additionally required:
+ For using the SAGA Python bindings, the follwoing settings are additionally required:
 
-      export PATH=/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//bin/:$PATH
-      export PYTHONPATH=/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/python2.7/site-packages/:/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/python2.7/site-packages//BigJob-0.4.50-py2.7.egg/:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//lib/2.7/site-packages/:$PYTHONPATH
+     # export PATH=/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//bin/:$PATH
+     # export PYTHONPATH=/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/python2.7/site-packages/:/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/python2.7/site-packages//BigJob-0.4.50-py2.7.egg/:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//lib/2.7/site-packages/:$PYTHONPATH
 
-  Please use /share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//bin/python as python interpreter (the setting 
-  above puts that first in your path when running 'python').
+ Please use /share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//bin/python as python interpreter (the setting 
+ above puts that first in your path when running 'python').
 
+
+---------------------------------------------------------------------------------
 
 Detailed Instructions:
 ----------------------
  
-  This README describes an automated SAGA deployment.  In particular, 
-  this installation of SAGA-C++ was installed via the SAGA CSA scripts 
-  (see https://svn.cct.lsu.edu/repos/saga-projects/deployment/tg-csa).
+ This README describes an automated SAGA deployment.  In particular, 
+ this deployment of SAGA-C++ was installed via the SAGA CSA scripts 
+ (see https://svn.cct.lsu.edu/repos/saga-projects/deployment/tg-csa).
 
-  Note that this installation procedure is at this point not depending 
-  on system level software, but is instead installing all pre-requisites
-  separately, in /share1/projects/xsede/SAGA/external.  The SAGA installation can
-  be used with those dependencies by setting the folllwing environment
-  variables:
+ Note that this deployment is at this point not depending on system level
+ software, but instead includes all pre-requisites separately, in
 
+   /share1/projects/xsede/SAGA/external
 
-    SAGA_LOCATION points to the SAGA installation root
-    # export SAGA_LOCATION=/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2/
+ This host might nevertheless require some specific settings to use this
+ deployment -- if so, those are listed below:
 
+      module load git;      module load python;      module load globus;
 
-    LD_LIBRARY_PATH allows to dynamically load shared libraries form this 
-    path, such as SAGA package libs or adaptors.
-    # export LD_LIBRARY_PATH=:/share1/projects/xsede/SAGA/external/boost/1.44.0/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/external/postgresql/9.0.2/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/external/sqlite3/3.6.13/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//lib/:$LD_LIBRARY_PATH
+ The SAGA deployment and the accompanying dependencies can be used by setting
+ the following environment variables:
 
 
-    PATH is used for searching for executables and scripts.
-    We usually have to use our own python installation, to ensure that it is
-    compatible with boost-python, which is used for our python bindings.
-    # export PATH=:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//bin/::/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//bin/:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//bin/:$PATH
+   # SAGA_LOCATION points to the SAGA installation root
+   export SAGA_LOCATION=/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2/
 
 
-    PYTHONPATH points the pyton runtime to the location of the SAGA python modules
-    # export PYTHONPATH=/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/python2.7/site-packages/:/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/python2.7/site-packages//BigJob-0.4.50-py2.7.egg/:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//lib/2.7/site-packages/:$PYTHONPATH
+   # LD_LIBRARY_PATH allows to dynamically load shared libraries form this 
+   # path, such as SAGA package libs or adaptors.
+   export LD_LIBRARY_PATH=:/share1/projects/xsede/SAGA/external/boost/1.44.0/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/external/postgresql/9.0.2/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/external/sqlite3/3.6.13/gcc-4.1.2//lib/::/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//lib/:$LD_LIBRARY_PATH
+
+
+   # PATH is used for searching for executables and scripts.
+   # We usually have to use our own python installation, to ensure that it is
+   # compatible with boost-python, which is used for the SAGA python bindings.
+   export PATH=:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//bin/::/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//bin/:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//bin/:$PATH
+
+
+   # PYTHONPATH points the pyton runtime to the location of the SAGA 
+   # python modules
+   export PYTHONPATH=/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/python2.7/site-packages/:/share1/projects/xsede/SAGA/saga//1.6/gcc-4.1.2//lib/python2.7/site-packages//BigJob-0.4.50-py2.7.egg/:/share1/projects/xsede/SAGA/external//python/2.7.1/gcc-4.1.2//lib/2.7/site-packages/:$PYTHONPATH
+
+
+---------------------------------------------------------------------------------
+
+Further documentation and support:
+----------------------------------
+
+
+ For more information about SAGA-C++ and SAGA-Python, see 
+     
+   www : http://www.saga-project.org/
+
+
+ For general SAGA user support, please subscribe to the saga-users mailing
+ list:
+
+   www : https://mail.cct.lsu.edu/mailman/listinfo/saga-users
+   mail: saga-users@cct.lsu.edu
 
 
 
-  For more information about SAGA-C++ and SAGA-Python, see 
-      
-    www : http://www.saga-project.org/
+ Please help to improve this software!  Report bugs and feature requests via
+ the TG ticket tracker (select SAGA component), or directly via the SAGA project 
+ tracker, at
+  
+   www : http://faust.cct.lsu.edu/trac/saga/  (login/pass: guest/guest)
 
-
-  For general SAGA user support, please subscribe to the saga-users mailing
-  list:
-
-    www : https://mail.cct.lsu.edu/mailman/listinfo/saga-users
-    mail: saga-users@cct.lsu.edu
-
-
-
-  Please help to improve this software!  Report bugs and feature requests via
-  the TG ticket tracker (select SAGA component), or directly via the SAGA project 
-  tracker, at
-   
-    www : http://faust.cct.lsu.edu/trac/saga/  (login/pass: guest/guest)
-
+---------------------------------------------------------------------------------
 
