@@ -71,3 +71,4 @@ lonestar:     module load git
 lonestar:     module load python
 lonestar:     module load globus
 
+queenbee:     eval "`/usr/local/packages/softenv-1.6.2/bin/soft-dec sh add +git`"

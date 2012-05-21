@@ -12,7 +12,7 @@ cyder        cyder.cct.lsu.edu                      /home/amerzky/csa/          
 dare         dare.cct.lsu.edu                       /home/cctsg/install/saga             'ssh -l cctsg   -q'    fork,bigjob                   ssh
 
 # TeraGrid / XSEDE
-queenbee     login1-qb.loni-lsu.teragrid.org        /project/tg_csa/saga/                'gsissh -q'            fork,bigjob                   ssh,gsissh,gram
+queenbee     login1-qb.loni-lsu.teragrid.org        /home/merzky/csa/                    'ssh -ttl merzky  -q'    fork,bigjob                   ssh,gsissh,gram
 kraken       kraken-gsi.nics.utk.edu                /lustre/scratch/proj/saga/           'gsissh -q'            fork,pbspro,bigjob            ssh,gsissh,gram
 ranger       tg-login.ranger.tacc.teragrid.org      /scratch/projects/tg/SAGA/           'gsissh -q'            fork,pbspro,bigjob            ssh,gsissh,gram
 lonestar     tg-login.lonestar.tacc.teragrid.org    /share1/projects/tg/SAGA/            'gsissh -q'            fork,bigjob                   ssh,gsissh,gram
@@ -31,4 +31,12 @@ hotel        hotel.futuregrid.org                   /N/soft/x86_64/el5/hotel/SAG
 # GIN
 
 # LONI
+
+qb           qb.loni.org                            /home/merzky/csa/                    'ssh -qA merzky@qb.loni.org ssh -ql merzky'   fork     ssh,gsissh
+eric         eric.loni.org                          /home/merzky/csa/                    'ssh -qA merzky@qb.loni.org ssh -ql merzky'   fork     ssh,gsissh
+poseido      poseidon.loni.org                      /home/merzky/csa/                    'ssh -qA merzky@qb.loni.org ssh -ql merzky'   fork     ssh,gsissh
+oliver       oliver.loni.org                        /home/merzky/csa/                    'ssh -qA merzky@qb.loni.org ssh -ql merzky'   fork     ssh,gsissh
+louie        louie.loni.org                         /home/merzky/csa/                    'ssh -qA merzky@qb.loni.org ssh -ql merzky'   fork     ssh,gsissh
+painter      painter.loni.org                       /home/merzky/csa/                    'ssh -qA merzky@qb.loni.org ssh -ql merzky'   fork     ssh,gsissh
+bluedawg     bluedawg.loni.org                      /home/merzky/csa/                    'ssh -qA merzky@qb.loni.org ssh -ql merzky'   fork     ssh,gsissh
 

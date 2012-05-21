@@ -1011,7 +1011,7 @@ if ( $run_test )
           next TEST;
         }
 
-        my $cmd  = "bash -c '$env_setup ; $command $script $info'";
+        my $cmd  = "bash -lc '$env_setup ; $command $script $info'";
         my $out  = "";
         my $rc   = 0;
 
