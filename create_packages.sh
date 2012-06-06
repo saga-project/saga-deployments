@@ -19,9 +19,9 @@ function create_rpm()
   url=$2
 
   echo     "svn co    $name"
-  svn co   $url > /dev/null
+  svn co   $url       $name
   echo     "package   $name"
-  make -C  $name rpm > /dev/null
+  make -C  $name rpm 
   ls -la   $name/$name*.rpm
   echo     "install   $name"
   sudo rpm -i $name/$name*.x86_64.rpm
@@ -36,18 +36,18 @@ function create_rpm()
 # arg 1: name of package
 # arg 2: svn repos url
 #
-function create_rpm()
+function create_deb()
 {
   name=$1
   url=$2
 
   echo     svn co    $name
-  svn co   $url > /dev/null
+  svn co   $url      $name
   echo     package   $name
-  make -C  $name rpm > /dev/null
-  ls -la   $name/$name*.rpm
+  make -C  $name deb 
+  ls -la   $name/$name*.deb
   echo     install   $name
-  sudo rpm -i $name/$name*.x86_64.rpm
+  sudo dpkg -i $name/$name*.deb
 }
 
 
