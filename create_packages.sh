@@ -3,7 +3,7 @@
 type=$1
 root=/tmp/saga/
 
-rm    -rf $root || exit -1
+rm    -rf $root/saga-{core,bindings,adaptors}*/
 mkdir -p  $root || exit -1
 cd        $root || exit -1
 
@@ -25,6 +25,7 @@ function create_rpm()
   make -C  $name rpm 
   ls -la   $name/$name*.rpm
   echo     "install   $name"
+  cp       $name/$name*.{rpm,tgz} $root
   sudo rpm -i $name/$name*.x86_64.rpm
 }
 
@@ -60,9 +61,13 @@ function create_deb()
 function do_rpm()
 {
   sudo rpm -e `rpm -qa | grep saga`
+  sudo rpm -i $root/*.x86_64.rpm
   echo "creating  rpm packages"
 
+
   create_rpm saga-core            https://svn.cct.lsu.edu/repos/saga/core/branches/egi-release
+  export SAGA_LOCATION=/usr
+
   create_rpm saga-bindings-python https://svn.cct.lsu.edu/repos/saga/bindings/python/branches/egi-release
   create_rpm saga-adaptors-x509   https://svn.cct.lsu.edu/repos/saga-adaptors/x509/branches/egi-release
   create_rpm saga-adaptors-globus https://svn.cct.lsu.edu/repos/saga-adaptors/globue/branches/egi-release
@@ -86,6 +91,8 @@ function do_deb ()
   echo "creating  deb packages"
 
   create_deb saga-core            https://svn.cct.lsu.edu/repos/saga/core/branches/egi-release
+  export SAGA_LOCATION=/usr
+
   create_deb saga-bindings-python https://svn.cct.lsu.edu/repos/saga/bindings/python/branches/egi-release
   create_deb saga-adaptors-x509   https://svn.cct.lsu.edu/repos/saga-adaptors/x509/branches/egi-release
   create_deb saga-adaptors-globus https://svn.cct.lsu.edu/repos/saga-adaptors/globue/branches/egi-release
