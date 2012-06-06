@@ -3,8 +3,9 @@
 type=$1
 root=/tmp/saga/
 
-mkdir -p $root
-cd       $root
+rm    -rf $root || exit -1
+mkdir -p  $root || exit -1
+cd        $root || exit -1
 
 ########################################################################
 #
@@ -103,20 +104,15 @@ function do_deb ()
 #
 # main routine: 
 #
-
-# First, clean out remnants from earlier installs
-sudo rm -rf $root
-
-
 # then we just check the requested type, and invoke the correct 
 # builder routine...
 if test "$type" == "rpm"; then 
-  do_rpm
+  do_rpm || exit -1
   exit 0
 fi
 
 if test "$type" == "deb"; then
-  do_deb
+  do_deb || exit -1
   exit 0
 fi
 
