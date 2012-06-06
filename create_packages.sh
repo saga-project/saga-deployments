@@ -3,6 +3,9 @@
 type=$1
 root=/tmp/saga/
 
+mkdir -p $root
+cd       $root
+
 ########################################################################
 #
 # create a single rpm
@@ -14,9 +17,6 @@ function create_rpm()
 {
   name=$1
   url=$2
-
-  mkdir -p $root/src
-  cd       $root/src
 
   echo     "svn co    $name"
   svn co   $url > /dev/null
@@ -41,9 +41,6 @@ function create_rpm()
   name=$1
   url=$2
 
-  mkdir -p $root/src
-  cd       $root/src
-
   echo     svn co    $name
   svn co   $url > /dev/null
   echo     package   $name
@@ -51,8 +48,6 @@ function create_rpm()
   ls -la   $name/$name*.rpm
   echo     install   $name
   sudo rpm -i $name/$name*.x86_64.rpm
-  
-
 }
 
 
@@ -73,6 +68,9 @@ function do_rpm()
   create_rpm saga-adaptors-ssh    https://svn.cct.lsu.edu/repos/saga-adaptors/ssh/branches/egi-release
   create_rpm saga-adaptors-bes    https://svn.cct.lsu.edu/repos/saga-adaptors/bes/branches/egi-release
   create_rpm saga-adaptors-glite  https://svn.cct.lsu.edu/repos/saga-adaptors/glite/branches/egi-release
+
+  mv $root/*.rpm $root/
+  mv $root/*.tgz $root/
 }
 
 
@@ -93,6 +91,9 @@ function do_deb ()
   create_deb saga-adaptors-ssh    https://svn.cct.lsu.edu/repos/saga-adaptors/ssh/branches/egi-release
   create_deb saga-adaptors-bes    https://svn.cct.lsu.edu/repos/saga-adaptors/bes/branches/egi-release
   create_deb saga-adaptors-glite  https://svn.cct.lsu.edu/repos/saga-adaptors/glite/branches/egi-release
+
+  mv $root/*.deb $root/
+  mv $root/*.tgz $root/
 }
 
 
