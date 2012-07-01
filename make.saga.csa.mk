@@ -13,6 +13,7 @@
 #
 
 # we explicitely load a login shell, so that modules are loaded correctly etc
+# We need to make sure that SHELL startup is silent (e.g. on module load)
 SHELL = /bin/bash -l
 
 ifndef CSA_LOCATION

@@ -41,34 +41,34 @@
   cyder:        export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib/:$LD_LIBRARY_PATH
   cyder:        export PATH=$GLOBUS_LOCATION/bin/:$PATH
   
-  hotel:        module load python
+# hotel:        module load python
   
   india:        module load git
-  india:        module load python
+# india:        module load python
   
   sierra:       module load git
-  sierra:       module load python
+# sierra:       module load python
   sierra:       module load torque
   
   alamo:        module load git
   
-  trestles:     module load python
+# trestles:     module load python
   trestles:     module load globus
   
   blacklight:   module load git
-  blacklight:   module load python
+# blacklight:   module load python
   blacklight:   module load globus
   
   kraken:       module load git
-  kraken:       module load python
+# kraken:       module load python
   kraken:       module load globus
   
   ranger:       module load git
-  ranger:       module load python
+# ranger:       module load python
   ranger:       module load globus
   
   lonestar:     module load git
-  lonestar:     module load python
+# lonestar:     module load python
   lonestar:     module load globus
   
   queenbee:     eval "`/usr/local/packages/softenv-1.6.2/bin/soft-dec sh add +git`"
