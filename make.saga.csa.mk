@@ -12,6 +12,9 @@
 # and won't be of much use otherwise...
 #
 
+# we explicitely load a login shell, so that modules are loaded correctly etc
+SHELL = /bin/bash -l
+
 ifndef CSA_LOCATION
  $(error CSA_LOCATION not set - should point to the CSA space allocated on this TG machine)
 endif
@@ -108,7 +111,7 @@ CSA_HOST_SETUP  = $(shell grep -e '^ *$(CSA_HOST):' $(CSA_ROOT)/csa_hostenv | cu
 ifeq "$(CSA_HOST_SETUP)" ""
   MK_CSA_HOST_SETUP = "true"
 else
-	# catch the las ';' with 'true'
+	# catch the last ';' with 'true'
   MK_CSA_HOST_SETUP = $(CSA_HOST_SETUP) true
 endif
 
