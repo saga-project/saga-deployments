@@ -650,7 +650,9 @@ if ( $do_exe )
     #              "cd     $path/     ; test -d csa || git co https://git.cct.lsu.edu/repos/saga-projects/deployment/tg-csa csa ; " .
     #              "cd     $path/csa/ ; git pull";
     # my $exe    = "rm -rv $path/src/saga-adaptor-ssh-*";
-      my $exe    = "rm -rv $path/csa/";
+    # my $exe    = "rm -r  $path/csa/ $path/saga $path/saga-esa $path/src $path/external $path/bliss* $path.README*";
+    # my $exe    = "rm -r  $path/csa/ $path/saga $path/saga-esa $path/src $path/external $path/bliss* $path.README*";
+      my $exe    = "ls -la $path/; rm -rf $path/*";
     # my $exe    = "git --version ; module load git ; git --version";
 
       print "+-----------------+------------------------------------------+-------------------------------------+\n";
