@@ -1,0 +1,66 @@
+A. Science Applications:
+
+We will decompose the Science applications into 2 categories: Single
+Kernel vs Multi-Kernel simulations: 1 and 2 are single kernel; 3 and 4
+are multi-kernel
+
+1. Data-Intensive (Bioinformatics) Workflows: (e.g, BWA, Bowtie,
+BFAST): There are an increasingly large number of data-intensive
+application workflows (our experience is coincidentally foucssed
+around bioinformatics/next-generation sequencing based applications),
+that require distribution due to a plethora of reasons. Some are due
+to the fact that the data is fundamentallly distributed but too large
+to move around efficiently. In such cases, placing the computational
+tasks to take advantage of existing data placement/localisation is not
+only a performance enhancer, but important. In other cases,
+distribution is important because localizing all the data-intensive
+computing onto 1 machine results in I/O sub-system saturation.
+
+We have been exploring standards-based interoperation for such
+data-intensive workflows using advances in data-cyberinfrastructure,
+such as iRODS, GFFS and SRM. However, too many distinct, incompatible
+and point solutions exist.
+
+2. High Performance High Throughput (HPHT): (Current XSEDE XRAC PIs:
+Bishop, Levy, Coveney). There are many molecular simulations that
+require multiple instances of the same kernel, either to implement
+algorithms that provide enhanced sampling or better statistics. Most
+examples involve zero coupling between the kernels (other than
+possible data dependencies), but some have weak dependencies between
+the kernels at runtime. 
+
+We have been working with multiple XSEDE PIs/users to support this
+increasingly important mode.
+
+3. Climate Modelling: Two levels of interoperation. The first is
+hydrometerological modelling, where there are a plethora of
+"components" and scientists want to execute these workflows using
+multiple XSEDE resources. The second is where the scientists want to
+couple resources between XSEDE and PRACE, because both the data-sets
+and the scientists are distributed across continents.
+
+4. Coastal Modelling: This particular application involves ensemble
+Kalman-Filter based Cactus simulations to study the interplay between
+coastal simulations in
+
+B. There are three modes of Interoperability and Federation that need
+examination.
+
+Type I. Interoperability across XSEDE resources: XSEDE resources are
+heterogeneous and distinct, both architecturally and the services they
+provide. In order to support the efficient utilization of these
+resources, the ability to map-and-match appropriately is required.
+
+Type II Federation EGI/OSG + XSEDE: There exist several scientific
+examples (see https://sites.google.com/site/extenci/) which require
+the combined utilization of the OSG style resources (and EGI) and
+XSEDE style resources.
+
+Type III Grid-Cloud Federation: An increasingly important, at least
+from an intellectual exploration point of view, if not necessarily
+from an obvious scientific capability / novelty point of view.
+
+C. Functional Areas: Each of the above science examples, needs to be
+decomposed along requirements/issues of, (i) remote execution, (ii)
+remote data access, (iii) resource/information discovery, (iv)
+data-management and (v) security
